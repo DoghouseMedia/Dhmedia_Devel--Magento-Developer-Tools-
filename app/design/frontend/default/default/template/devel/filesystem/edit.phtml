@@ -1,0 +1,60 @@
+<style>
+.CodeMirror { height: auto; clear:both; }
+.toolbar{ padding: 1ex; background-color: #eee; line-height: normal; border-bottom: 1px solid #ccc; }
+.toolbar span { margin: 0 1ex 0 0; }
+</style>
+
+<h1><?php echo $this->getFile()->getShortPath() ?></h1>
+
+<?php if ($this->getFile()->hasErrors()) : ?>
+	<ul class="messages">
+		<?php foreach($this->getFile()->getErrors() as $error) : ?>
+		<li class="error-msg"><?php echo $error ?></li>
+		<?php endforeach ?>
+	</ul>
+<?php endif ?>
+
+<?php if ($this->getFile()->exists()) : ?>
+	<?php if (! $this->getFile()->isThemeFile()) : ?>
+	<form action="<?php echo Mage::getUrl('*/*/copy') ?>" method="post">
+		<input type="hidden" name="type" value="<?php echo $this->getFile()->getType() ?>" />
+		<input type="hidden" name="<?php echo $this->getFile()->getType() ?>" value="<?php echo $this->getFile()->getShortPath() ?>" />
+		<input type="hidden" name="destination" value="<?php echo $this->getFile()->getThemePath() ?>" />
+		<div class="toolbar">
+			<span><input type="submit" value="Copy to theme" /></span>
+			<span><?php echo $this->getFile()->getThemePath() ?></span>
+		</div>
+	</form>
+	<?php endif ?>
+	
+	<form id="code-form" method="POST">
+		<div class="toolbar">
+			<?php if ($this->getFile()->isEditable()) : ?>
+			<span><input type="submit" value="Save" /></span>
+			<?php endif ?>
+			<span><em><?php echo $this->getFile()->getPath() ?></em></span>
+			<span>(uid: <?php echo $this->getFile()->getUid() ?> - mode: <?php echo $this->getFile()->getMode() ?>)</span>
+		</div>
+		
+	<textarea id="code" name="code"><?php echo $this->getFile()->getContents() ?></textarea>
+	</form> 
+	
+	<script type="text/javascript">
+	var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+	    lineNumbers: true,
+	    matchBrackets: true,
+	    mode: "application/x-httpd-php",
+	    indentUnit: 8,
+	    indentWithTabs: true,
+	    enterMode: "keep",
+	    tabMode: "shift"
+	});
+	
+	document.getElementById('code-form').onSubmit = function() {
+		editor.save();
+		return true;
+	}
+	</script>
+<?php else : ?>
+	<em>File does not exist!</em>
+<?php endif ?>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout version="0.1.0">
+    <default>
+        <reference name="after_body_start">
+            <block type="devel/frontend" name="devel_frontend" before="-" />
+        </reference>
+    </default>
+    
+    <devel_filesystem_edit>
+    	<reference name="root">
+            <action method="setTemplate"><template>devel/page/codemirror.phtml</template></action>
+        </reference>
+        <reference name="head">
+			<action method="removeItem"><type>js</type><name>prototype/validation.js</name></action>
+			<action method="removeItem"><type>js</type><name>scriptaculous/builder.js</name></action>
+			<action method="removeItem"><type>js</type><name>scriptaculous/effects.js</name></action>
+			<action method="removeItem"><type>js</type><name>scriptaculous/dragdrop.js</name></action>
+			<action method="removeItem"><type>js</type><name>scriptaculous/controls.js</name></action>
+			<action method="removeItem"><type>js</type><name>scriptaculous/slider.js</name></action>
+			<action method="removeItem"><type>js</type><name>varien/js.js</name></action>
+			<action method="removeItem"><type>js</type><name>varien/form.js</name></action>
+			<action method="removeItem"><type>js</type><name>varien/menu.js</name></action>
+			<action method="removeItem"><type>js</type><name>mage/cookies.js</name></action>
+			<action method="removeItem"><type>js</type><name>lib/ccard.js</name></action>
+			
+			<action method="removeItem"><type>css</type><name>styles.css</name></action>
+			<action method="removeItem"><type>css</type><name>widgets.css</name></action>
+        </reference>
+        <reference name="after_body_start">
+    		<remove name="devel_frontend"/>
+    	</reference>
+        <reference name="content">
+            <block type="devel/filesystem_edit" name="filesystem_edit" template="devel/filesystem/edit.phtml" />
+        </reference>
+    </devel_filesystem_edit>
+    
+    <devel_help_view>
+    	<reference name="root">
+            <action method="setTemplate"><template>page/empty.phtml</template></action>
+        </reference>
+        <reference name="after_body_start">
+    		<remove name="devel_frontend"/>
+    	</reference>
+        <reference name="content">
+            <block type="devel/help_view" name="help_view" />
+        </reference>
+    </devel_help_view>
+</layout>

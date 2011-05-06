@@ -1,0 +1,790 @@
+<style>
+
+/* Animations */
+@-webkit-keyframes devel-highlight {
+	0% {
+		opacity: 0;
+	}
+	3% {
+		opacity: 1;
+	}
+	6% {
+		opacity: 0;
+	}
+	9% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+/* Krumo */
+.krumo-root{ text-align: left; }
+
+/* Body */
+body{ padding-top: 4.5ex; }
+
+/* Toolbar */
+#dhmedia_devel_block_frontend {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+
+	z-index: 9990;
+
+	height: 4.5ex;
+
+	background-color: #222;
+	color: #ccc;
+
+	text-align: center;
+	line-height: normal;
+
+	box-shadow: 0 0 5px #999;
+
+	background-image: -webkit-gradient(
+		linear,
+		left bottom,
+		left top,
+		color-stop(0.37, rgb(0,0,0)),
+		color-stop(0.69, rgb(45,46,46))
+	);
+	background-image: -moz-linear-gradient(
+		center bottom,
+		rgb(0,0,0) 37%,
+		rgb(45,46,46) 69%
+	);
+
+	opacity: 0.5;
+
+	-webkit-transition: opacity 0.5s ease-in-out;
+}
+
+#dhmedia_devel_block_frontend:hover {
+	opacity: 1;
+}
+
+/* Links */
+#dhmedia_devel_block_frontend a {
+	text-decoration: none;
+	color: #1E7EC8;
+}
+
+/* Menu */
+#dhmedia_devel_block_frontend ul {
+	display: inline-block;
+}
+
+#dhmedia_devel_block_frontend ul li {
+	position: relative;
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+	float: left;
+
+	border-left: 1px solid #000;
+}
+#dhmedia_devel_block_frontend ul li:last-child {
+	border-right: 1px solid #000;
+}
+
+/* Menu links */
+#dhmedia_devel_block_frontend ul li a {
+	display: block;
+	padding: 1ex 3ex;
+}
+#dhmedia_devel_block_frontend ul li a:hover {
+	background-color: #000;
+}
+
+/* "Show on hover" divs */
+#dhmedia_devel_block_frontend ul li .show-on-hover {
+	position: absolute;
+	z-index: 99999;
+	display: none;
+
+	background-color: #000;
+	padding: 1em;
+	text-align: left; 
+
+	border-radius: 0 0 5px 5px;
+
+	box-shadow: 0 0 5px #333;
+}
+#dhmedia_devel_block_frontend ul li:hover .show-on-hover {
+	display: block;
+}
+
+#dhmedia_devel_block_frontend ul li .show-on-hover .result {
+	display: none;
+	clear: both;
+}
+
+#dhmedia_devel_block_frontend ul li .show-on-hover .result.show {
+	display: block;
+	border-top: 1px solid #999;
+	margin-top: 1em;
+	padding-top: 1em;
+}
+
+/* Tables */
+#dhmedia_devel_block_frontend table {
+	border-collapse: separate;
+	border-spacing: 0 1.5ex;
+}
+
+#dhmedia_devel_block_frontend table tr {
+	border-bottom: 1px solid #333;
+	background-color: #999;
+}
+#dhmedia_devel_block_frontend table tr:last-child {
+	border-bottom: none;
+}
+#dhmedia_devel_block_frontend table td {
+	padding: 0.5ex;
+	margin-left: -5px;
+	border-radius: 0 5px 5px 0;
+	color: #000;
+	box-shadow: 0 0 3px #ccc;
+}
+#dhmedia_devel_block_frontend table th {
+	padding: 0.5ex 2ex;
+	background-color: #222;
+	border-radius: 5px 0 0 5px;
+	text-align: center;
+	box-shadow: 0 0 3px #555;
+}
+
+/* Form elements */
+#dhmedia_devel_block_frontend form {
+	
+}
+#dhmedia_devel_block_frontend textarea {
+	background-color: #333;
+	border: 1px solid #666;
+	color: #ccc;
+
+	min-width: 40em;
+	min-height: 10em;
+	margin-bottom: 1em;
+	padding: 1ex;
+
+	border-radius: 5px;
+}
+#dhmedia_devel_block_frontend input[type='submit'] {
+	border-radius: 5px;
+	padding: 1ex;
+	float: right;
+}
+
+/* Doghouse Media link */
+#dhmedia_devel_block_frontend .dhlink {
+	float: right;
+	padding: 1ex 3ex;
+	border-left: 1px solid #000;
+}
+#dhmedia_devel_block_frontend .dhlink span {
+	color: #ccc;
+}
+#dhmedia_devel_block_frontend .dhlink:hover {
+	background-color: #000;
+}
+
+/* Update notifier box */
+#dhmedia_devel_block_frontend .update-notifier-box {
+	float: left;
+	font-weight: bold;
+	padding: 1ex 3ex;
+}
+#dhmedia_devel_block_frontend .update-notifier-box.has-update {
+	-webkit-animation: devel-highlight 15s infinite;
+}
+
+/* Clear fix */
+#dhmedia_devel_block_frontend .clear-fix{
+	clear:both;
+}
+
+
+
+/* Devel hints (see Core_Template_Block) */
+.devel-hint {
+	position: relative;
+	border: 1px dotted red;
+	margin: 6px 2px;
+	padding: 18px 2px 2px 2px;
+}
+.devel-hint .hints {
+	display: none;
+
+	position:absolute;
+	left:0;
+	top:-4px;
+
+	border-radius: 5px;
+
+	background-color: #222;
+	color: #fff;
+
+	box-shadow: 0 0 5px #ccc;
+
+	font:normal 11px Arial;
+	text-align:left !important;
+}
+.devel-hint:hover > .hints {
+	display: inline-block !important;
+	z-index: 999;
+}
+.devel-hint .hint {
+	padding: 1ex;
+	border-bottom: 1px solid #333;
+}
+.devel-hint .hint:last-child {
+	border: none;
+}
+.devel-hint .hide{
+	display: none;
+}
+
+
+/* Panel */
+.devel-panel{
+	display: block;
+
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 9990;
+
+	background-color: #fff;
+	text-align: left;
+
+	width: 0;
+	border-left: 3px solid #000;
+	box-shadow: -1px 0px 5px #000;
+
+	opacity: 0.9;
+
+	-webkit-transition: width 0.7s ease-in-out;
+}
+.devel-panel iframe{
+	height: 100%;
+	width: 100%;
+}
+
+.devel-panel.active{
+	width: 70em;
+	z-index: 9991;
+}
+
+.devel-panel.active.direct-content {
+	padding: 1em;
+	width: 68em;
+	overflow: auto;
+}
+
+/* Panel Buttons */
+.devel-panel-buttons {
+	position: fixed;
+	top: 10em;
+	right: 0;
+	z-index: 1001;
+	margin-right: 3px;
+
+	-webkit-transition: right 0.7s ease-in-out;
+}
+.devel-panel-buttons .button {
+	color: #fff;
+	background-color: #000;
+
+	width: 10ex;
+	height: 2ex;
+	line-height: 2ex;
+	padding: 1ex 3ex;
+	margin: 0 0 13ex 0;
+
+	border-style: solid;
+	border-color: #fff;
+	border-width: 2px 2px 0 2px;
+	
+	text-shadow: 0 0 2px #333;
+	box-shadow: 0px 0px 5px #000;
+
+	display: block;
+	-webkit-transform: rotate(-90deg);
+
+	cursor: pointer;
+
+	margin-right: -6ex;
+}
+.devel-panel-buttons .button:hover{
+	text-shadow: 0 0 12px #fff;
+}
+.devel-panel-buttons.active{
+	right: 70em;
+}
+.devel-panel-buttons .button.close {
+	color: #996666;
+}
+</style>
+
+<div id="dhmedia_devel_block_frontend">
+	
+	<a class="dhlink" href="http://www.dhmedia.com.au/?ref=magento-toolbar" target="_blank" title="Doghouse Media - Perth based web agency and Magento specialists"><span>by </span>Doghouse Media</a>
+	<div class="update-notifier-box"></div>
+	
+	<ul>
+		<li><a href="<?= $this->helper('core/url')->getHomeUrl() ?>devel/command/clearcache?return=<?= $this->helper('core/url')->getCurrentUrl() ?>">Clear cache</a></li>
+		<li><a href="<?= $this->helper('core/url')->getHomeUrl() ?>devel/command/reindex?return=<?= $this->helper('core/url')->getCurrentUrl() ?>">Re-index</a></li>
+		<li><a href="<?= $this->helper('core/url')->getHomeUrl() ?>devel/command/hintson?return=<?= $this->helper('core/url')->getCurrentUrl() ?>">Hints on</a></li>
+		<li><a href="<?= $this->helper('core/url')->getHomeUrl() ?>devel/command/hintsoff?return=<?= $this->helper('core/url')->getCurrentUrl() ?>">Hints off</a></li>
+		
+		<li><a href="http://docs.magentocommerce.com" onclick="DevelGlobals.PanelManager.open('dhmedia_devel_block_panel_docs', this.href); return false;">Docs</a></li>
+		
+		<li>
+			<a href="#">Execute PHP</a>
+			<div class="show-on-hover">
+				<form action="<?= $this->helper('core/url')->getHomeUrl() ?>devel/command/execphp">
+					<textarea name="php"></textarea>
+					<input type="submit" value="Execute" />
+					<div class="clear-fix"></div>
+					<div class="result"></div>
+				</form>
+			</div>
+		</li>
+		
+		<li>
+			<a href="#">Theme info</a>
+			<div class="show-on-hover">
+				<table>
+					<tr>
+						<th>Store</th>
+						<td><?php echo Mage::getDesign()->getStore()->getId() ?></td>
+					</tr>
+					<tr>	
+						<th>Area</th>
+						<td><?php echo Mage::getDesign()->getArea() ?></td>
+					</tr>
+					<tr>	
+						<th>Package</th>
+						<td><?php echo Mage::getDesign()->getPackageName() ?></td>
+					</tr>
+					<tr>
+						<th>Theme</th>
+						<td><?php echo Mage::getDesign()->getTheme('frontend') ?></td>
+					</tr>
+					<tr>
+						<th>Theme list</th>
+						<td><pre><?php print_r(Mage::getDesign()->getThemeList()) ?></pre></td>
+					</tr>
+					<tr>	
+						<th>Base dir</th>
+						<td><?php echo Mage::getBaseDir('design') ?></td>
+					</tr>
+					<tr>
+						<th>Skin url</th>
+						<td><?php echo $this->getSkinUrl('') ?></td>
+					</tr>
+				</table>
+			</div>
+		</li>
+		
+		<li><a href="<?= $this->helper('core/url')->getHomeUrl() ?>devel/filesystem/edit/type/layout?layout=local.xml" onclick="DevelGlobals.PanelManager.open('dhmedia_devel_block_panel_docs', this.href); return false;">local.xml</a></li>
+	</ul>
+	
+	<div class="clear-fix"></div>
+	
+</div>
+
+<div id="dhmedia_devel_block_panel_admin" class="devel-panel" title="Admin">
+	<iframe id="devel-admin" src="<?= $this->helper('core/url')->getHomeUrl() . $this->getAdminPath() ?>"></iframe>
+</div>
+
+<div id="dhmedia_devel_block_panel_docs" class="devel-panel" title="Docs">
+	<iframe id="devel-docs" src="http://docs.magentocommerce.com"></iframe>
+</div>
+
+<div id="dhmedia_devel_block_panel_editor" class="devel-panel" title="Editor">
+	<iframe id="devel-editor" src=""></iframe>
+</div>
+
+<div id="dhmedia_devel_block_panel_block" class="devel-panel direct-content" title="Block">
+
+</div>
+
+<div id="dhmedia_devel_block_panel_xml" class="devel-panel" title="Xml">
+<textarea id="layout-xml" name="layout-xml">
+<?php echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n" ?>
+<?php echo $this->getLayoutXml() ?>
+</textarea>
+
+</div>
+
+<script type="text/javascript">
+<!--
+
+/**
+ * DevelForms
+ */
+var DevelForms = Class.create();
+DevelForms.prototype =
+{
+	initialize: function(selector)
+	{
+		this.selector = selector;
+		this.submitListener = this.postJson.bindAsEventListener(this);
+		
+		$$(this.selector)
+			.invoke('observe', 'submit', this.submitListener); // add our observer
+	},
+	handleError: function()
+	{
+		console.log('DEVEL ERROR', data);
+		alert('Something went wrong. Check your console.');
+	},
+	postJson: function(e)
+	{	
+		var develForm = this;
+		var form = e.target;
+		
+		form.request({
+			onFailure: function(data) {
+				develForm.handleError(data);
+			},
+			onSuccess: function(data) {
+				if (! data.responseJSON.status) {
+					develForm.handleError(data);
+				}
+
+				/* @todo: do this better. format the json so it's foldable! */
+				console.log(data.responseJSON);
+				
+				//var result = form.select('.result')[0];
+				//result.addClassName('show');
+				//result.update('<pre>' + data.responseText.contents + '</pre>');
+			}
+		});
+
+		Event.stop(e); // stop the form from submitting
+	}
+};
+
+/**
+ * DevelUpdateNotifier
+ */
+var DevelUpdateNotifier = Class.create();
+DevelUpdateNotifier.prototype =
+{
+	initialize: function(selector)
+	{
+		var notifier = this;
+
+		$$(selector).each(function(el) {
+			notifier.getStatus(el);
+		});
+	},
+	getStatus: function(el)
+	{
+		new Ajax.Request('<?= $this->helper('core/url')->getHomeUrl() ?>devel/self/hasupdate', {
+			method:'get',
+			onSuccess: function(transport) {
+				if (transport.responseText == 'Y') {
+					var html = '<font style="color:#CC3333;">Update available!</font>';
+					el.addClassName('has-update');
+				} else if (transport.responseText == 'N') {
+					var html = '<font style="color:green;">Latest and greatest!</font>';
+				} else {
+					var html = '<font style="color:grey;">Could not check for updates...</font>';
+				}
+				
+				el.innerHTML = html;
+			}
+		});
+	}
+};
+
+/**
+ * DevelHint
+ */
+var DevelHint = Class.create();
+DevelHint.prototype =
+{
+	initialize: function(selector)
+	{
+		this.selector = selector;
+		this.clickListener = this.click.bindAsEventListener(this);
+
+		$$(this.selector)
+			.invoke('observe', 'click', this.clickListener); // add our observer
+		$$(this.selector).each(function(el) {
+			el.setStyle({cursor: 'pointer'});
+		});
+	},
+	click: function(e)
+	{	
+		console.log(e.target);
+		
+		Event.stop(e);
+	}
+};
+
+/**
+ * DevelHintBlock
+ */
+var DevelHintBlock = Class.create();
+DevelHintBlock.prototype = Object.extend(new DevelHint(),
+{
+	click: function(e)
+	{	
+		var el = e.target;
+		
+		var name = el.title;
+		var data = {
+			'docs': $(el).select('span[rel="docs"]')[0].innerHTML.evalJSON(),
+			'this': $(el).select('span[rel="this"]')[0].innerHTML.evalJSON(),
+			'vars': $(el).select('span[rel="vars"]')[0].innerHTML.evalJSON(),
+			'methods': $(el).select('span[rel="methods"]')[0].innerHTML.evalJSON(),
+			//'reflect': $(el).select('span[rel="reflect"]')[0].innerHTML.evalJSON(),
+			'layout': $(el).select('span[rel="layout"]')[0].innerHTML.evalJSON(),
+		}
+
+		//DevelGlobals.PanelManager.open('dhmedia_devel_block_panel_block', data.info.url);
+		DevelGlobals.PanelManager.load('dhmedia_devel_block_panel_docs', data.docs.url);
+
+		var content = '';
+		var editorIds = [];
+
+		content += '<h1>Block XML</h1>';
+		data.layout.each(function(layout){
+			content += '<h2>' + layout.file + '</h2>';
+			content += '<em>' + layout.path + '</em>';
+			content += ' - <a target="devel-editor" href="' + layout.url 
+				+ '" onclick="DevelGlobals.PanelManager.open(\'dhmedia_devel_block_panel_editor\');">Edit</a>';
+			layout.xml.each(function(xml, i){
+
+				xml = xml.replace(/\[\[/g, '<');
+				xml = xml.replace(/\]\]/g, '>');
+				xml = xml.replace(/\'\'/g, '"');
+
+				var editorId = layout.file + '-' + i;
+				
+				content += '<textarea id="' + editorId +'">';
+				content += xml;
+				content += '</textarea>';
+
+				editorIds.push(editorId);
+			});
+		});
+		
+		DevelGlobals.PanelManager.setContent('dhmedia_devel_block_panel_block', content);
+
+		editorIds.each(function(editorId){
+			CodeMirror.fromTextArea(document.getElementById(editorId), {
+			    lineNumbers: true,
+			    matchBrackets: true,
+			    mode: "application/xml",
+			    indentUnit: 8,
+			    indentWithTabs: true,
+			    enterMode: "keep",
+			    tabMode: "shift",
+			    //readOnly: true
+			});
+		});
+		
+		DevelGlobals.PanelManager.open('dhmedia_devel_block_panel_block');
+		
+		console.log('HINT BLOCK', name, data);
+		
+		Event.stop(e);
+	}
+});
+
+/**
+ * DevelHintTemplate
+ */
+var DevelHintTemplate = Class.create();
+DevelHintTemplate.prototype = Object.extend(new DevelHint(),
+{
+	click: function(e)
+	{	
+		var el = e.target;
+		
+		var name = el.title;
+		var data = {
+			'fileinfo': $(el).select('span[rel="fileinfo"]')[0].innerHTML.evalJSON(),
+			'editor': $(el).select('span[rel="editor"]')[0].innerHTML.evalJSON()
+		}
+
+		DevelGlobals.PanelManager.open('dhmedia_devel_block_panel_editor', data.editor.url);
+		
+		console.log('HINT TEMPLATE', name, data);
+		
+		Event.stop(e);
+	}
+});
+
+/**
+ * DevelPanelManager
+ */
+var DevelPanelManager = Class.create();
+DevelPanelManager.prototype =
+{
+	initialize: function(selector)
+	{
+		var panelManager = this;
+		this.panels = [];
+		
+		this.buttonContainer = document.createElement('div');
+		$(this.buttonContainer).addClassName('devel-panel-buttons');
+		$$('body')[0].appendChild(this.buttonContainer);
+		
+		$$(selector).each(function(panelDom) {
+			var panel = new DevelPanel(panelManager, panelDom);
+
+			panelManager.panels[panelDom.id] = panel;
+
+			panelManager.addButton(panel.getButton());
+		});
+
+		var btnClose = document.createElement('span');
+		btnClose.innerHTML = 'Close [x]';
+		$(btnClose).addClassName('button').addClassName('close');
+		$(btnClose).observe('click', function(e) {
+			panelManager.closeAll();
+			Event.stop(e); // stop the form from submitting
+		});
+
+		this.addButton(btnClose);
+	},
+	load: function (panelId, url)
+	{
+		this.panels[panelId].load(url);
+	},
+	open: function(panelId, url)
+	{
+		this.closeAll();
+		
+		this.panels[panelId].open(url);
+
+		this.openButtonContainer();
+	},
+	setContent: function(panelId, content) {
+		this.panels[panelId].setContent(content);
+	},
+	closeAll: function()
+	{
+		for(var panelId in this.panels) {
+			if (this.panels[panelId].className && this.panels[panelId].className == 'DevelPanel') {
+				this.panels[panelId].close();
+			}
+		}
+		this.closeButtonContainer();
+	},
+	addButton: function(button)
+	{
+		$(this.buttonContainer).appendChild(button);
+	},
+	openButtonContainer: function()
+	{
+		$(this.buttonContainer).addClassName('active');
+	},
+	closeButtonContainer: function()
+	{
+		$(this.buttonContainer).removeClassName('active');
+	}
+};
+
+/**
+ * DevelPanel
+ */
+var DevelPanel = Class.create();
+DevelPanel.prototype =
+{
+	className: 'DevelPanel',
+	
+	initialize: function(panelManager, panelDom) //this function is called as a constructor
+	{
+		this.panelDom = panelDom;
+		
+		this.button = document.createElement('span');
+		this.button.innerHTML = panelDom.title;
+		$(this.button).addClassName('button');
+		$(this.button).observe('click', function(e) {			
+			panelManager.open(panelDom.id);
+			
+			Event.stop(e); // stop the form from submitting
+		});
+	},
+	getButton: function() {
+		return this.button;
+	},
+	load: function(url) {
+		$(this.panelDom).select('iframe')[0].src = url;
+	},
+	open: function(url) {
+		$(this.panelDom).addClassName('active');
+
+		if (url) {
+			this.load(url);
+		}
+	},
+	setContent: function(content) {
+		$(this.panelDom).innerHTML = content;
+	},
+	close: function() {
+		$(this.panelDom).removeClassName('active');
+	}
+};
+
+document.observe("dom:loaded", function()
+{
+	new DevelForms('#dhmedia_devel_block_frontend form');
+
+	new DevelHintBlock('.devel-hint .hints .hint[rel="block"]');
+	new DevelHintTemplate('.devel-hint .hints .hint[rel="template"]');
+	
+	DevelGlobals.PanelManager = new DevelPanelManager('.devel-panel');
+
+	new DevelUpdateNotifier('#dhmedia_devel_block_frontend .update-notifier-box');
+});
+
+var DevelGlobals = {};
+		
+// -->
+</script>
+
+<style>
+	@import url("<?php echo Mage::getBaseUrl('js') ?>codemirror/lib/codemirror.css"); 
+	@import url("<?php echo Mage::getBaseUrl('js') ?>codemirror/mode/xml/xml.css");
+	@import url("<?php echo Mage::getBaseUrl('js') ?>codemirror/mode/javascript/javascript.css"); 
+	@import url("<?php echo Mage::getBaseUrl('js') ?>codemirror/mode/css/css.css");
+	@import url("<?php echo Mage::getBaseUrl('js') ?>codemirror/mode/clike/clike.css");
+
+	.CodeMirror { height: auto; }
+	#dhmedia_devel_block_panel_xml .CodeMirror { height: 100%; }
+</style>
+	
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl('js') ?>codemirror/lib/codemirror.js"></script> 
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl('js') ?>codemirror/mode/xml/xml.js"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl('js') ?>codemirror/mode/javascript/javascript.js"></script> 
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl('js') ?>codemirror/mode/css/css.js"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl('js') ?>codemirror/mode/clike/clike.js"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl('js') ?>codemirror/mode/php/php.js"></script>
+
+<script type="text/javascript">
+CodeMirror.fromTextArea(document.getElementById("layout-xml"), {
+    lineNumbers: true,
+    matchBrackets: true,
+    mode: "application/xml",
+    indentUnit: 8,
+    indentWithTabs: true,
+    enterMode: "keep",
+    tabMode: "shift",
+    readOnly: true
+});
+</script>
+
+
