@@ -17,6 +17,11 @@
 				</rewrite>
 			</page>
 		</blocks>
+		<helpers>
+			<devel>
+				<class>Dhmedia_Devel_Helper</class>
+			</devel>
+		</helpers>
 		<models>
 			<devel>
 				<rewrite>
