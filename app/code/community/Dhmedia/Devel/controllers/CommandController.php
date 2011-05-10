@@ -78,17 +78,20 @@ class Dhmedia_Devel_CommandController extends Mage_Core_Controller_Front_Action
 		$groupArrayHints = $this->configStringToArray('debug.fields.template_hints.value', $status);
 		$groupArrayHintsBlocks = $this->configStringToArray('debug.fields.template_hints_blocks.value', $status);
 		
+		$websiteId = Mage::app()->getWebsite()->getCode();
+		$storeId = Mage::app()->getStore()->getCode();
+		
 		Mage::getModel('adminhtml/config_data')
 			->setSection('dev')
-			->setWebsite(null)
-			->setStore(null)
+			->setWebsite($websiteId)
+			->setStore($storeId)
 			->setGroups($groupArrayHints)
 			->save();
 			
 		Mage::getModel('adminhtml/config_data')
 			->setSection('dev')
-			->setWebsite(null)
-			->setStore(null)
+			->setWebsite($websiteId)
+			->setStore($storeId)
 			->setGroups($groupArrayHintsBlocks)
 			->save();
 			
