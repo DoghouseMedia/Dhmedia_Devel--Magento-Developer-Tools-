@@ -2,6 +2,13 @@
 
 class Dhmedia_Devel_Helper_Url extends Mage_Core_Helper_Url
 {
+	public function getHelpUrl($topic)
+	{
+		return Mage::getBaseUrl() . 'devel/help/view?' . http_build_query(array(
+			'topic' => $topic
+		));
+	}
+	
 	public function getCurrentUrl()
 	{
 		$request = Mage::app()->getRequest();

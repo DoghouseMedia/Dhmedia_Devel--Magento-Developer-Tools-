@@ -273,6 +273,7 @@ body{ padding-top: 4.5ex; }
 .devel-panel iframe{
 	height: 100%;
 	width: 100%;
+	border: 0;
 }
 
 .devel-panel.active{
@@ -340,17 +341,17 @@ body{ padding-top: 4.5ex; }
 	<div class="update-notifier-box"></div>
 	
 	<ul>
-		<li><a href="<?= $this->helper('devel/url')->getHomeUrl() ?>devel/command/clearcache?return=<?= $this->helper('devel/url')->getCurrentUrl() ?>">Clear cache</a></li>
-		<li><a href="<?= $this->helper('devel/url')->getHomeUrl() ?>devel/command/reindex?return=<?= $this->helper('devel/url')->getCurrentUrl() ?>">Re-index</a></li>
-		<li><a href="<?= $this->helper('devel/url')->getHomeUrl() ?>devel/command/hintson?return=<?= $this->helper('devel/url')->getCurrentUrl() ?>">Hints on</a></li>
-		<li><a href="<?= $this->helper('devel/url')->getHomeUrl() ?>devel/command/hintsoff?return=<?= $this->helper('devel/url')->getCurrentUrl() ?>">Hints off</a></li>
+		<li><a href="<?= Mage::getBaseUrl() ?>devel/command/clearcache?return=<?= $this->helper('devel/url')->getCurrentUrl() ?>">Clear cache</a></li>
+		<li><a href="<?= Mage::getBaseUrl() ?>devel/command/reindex?return=<?= $this->helper('devel/url')->getCurrentUrl() ?>">Re-index</a></li>
+		<li><a href="<?= Mage::getBaseUrl() ?>devel/command/hintson?return=<?= $this->helper('devel/url')->getCurrentUrl() ?>">Hints on</a></li>
+		<li><a href="<?= Mage::getBaseUrl() ?>devel/command/hintsoff?return=<?= $this->helper('devel/url')->getCurrentUrl() ?>">Hints off</a></li>
 		
 		<li><a href="http://docs.magentocommerce.com" onclick="DevelGlobals.PanelManager.open('dhmedia_devel_block_panel_docs', this.href); return false;">Docs</a></li>
 		
 		<li>
 			<a href="#">Execute PHP</a>
 			<div class="show-on-hover">
-				<form action="<?= $this->helper('devel/url')->getHomeUrl() ?>devel/command/execphp">
+				<form action="<?= Mage::getBaseUrl() ?>devel/command/execphp">
 					<textarea name="php"></textarea>
 					<input type="submit" value="Execute" />
 					<div class="clear-fix"></div>
@@ -395,7 +396,7 @@ body{ padding-top: 4.5ex; }
 			</div>
 		</li>
 		
-		<li><a href="<?= $this->helper('devel/url')->getHomeUrl() ?>devel/filesystem/edit/type/layout?layout=local.xml" onclick="DevelGlobals.PanelManager.open('dhmedia_devel_block_panel_docs', this.href); return false;">local.xml</a></li>
+		<li><a href="<?= Mage::getBaseUrl() ?>devel/filesystem/edit/type/layout?layout=local.xml" onclick="DevelGlobals.PanelManager.open('dhmedia_devel_block_panel_docs', this.href); return false;">local.xml</a></li>
 	</ul>
 	
 	<div class="clear-fix"></div>
@@ -403,7 +404,7 @@ body{ padding-top: 4.5ex; }
 </div>
 
 <div id="dhmedia_devel_block_panel_admin" class="devel-panel" title="Admin">
-	<iframe id="devel-admin" src="<?= $this->helper('devel/url')->getHomeUrl() . $this->getAdminPath() ?>"></iframe>
+	<iframe id="devel-admin" src="<?= Mage::getBaseUrl() . $this->getAdminPath() ?>"></iframe>
 </div>
 
 <div id="dhmedia_devel_block_panel_docs" class="devel-panel" title="Docs">
@@ -411,11 +412,11 @@ body{ padding-top: 4.5ex; }
 </div>
 
 <div id="dhmedia_devel_block_panel_editor" class="devel-panel" title="Editor">
-	<iframe id="devel-editor" src=""></iframe>
+	<iframe id="devel-editor" src="<?= $this->helper('devel/url')->getHelpUrl('panels/editor/usage') ?>"></iframe>
 </div>
 
-<div id="dhmedia_devel_block_panel_block" class="devel-panel direct-content" title="Block">
-
+<div id="dhmedia_devel_block_panel_block" class="devel-panel" title="Block">
+	<iframe id="devel-block" src="<?= $this->helper('devel/url')->getHelpUrl('panels/block/usage') ?>"></iframe>
 </div>
 
 <div id="dhmedia_devel_block_panel_xml" class="devel-panel" title="Xml">
@@ -491,7 +492,7 @@ DevelUpdateNotifier.prototype =
 	},
 	getStatus: function(el)
 	{
-		new Ajax.Request('<?= $this->helper('devel/url')->getHomeUrl() ?>devel/self/hasupdate', {
+		new Ajax.Request('<?= Mage::getBaseUrl() ?>devel/self/hasupdate', {
 			method:'get',
 			onSuccess: function(transport) {
 				if (transport.responseText == 'Y') {
@@ -735,6 +736,7 @@ DevelPanel.prototype =
 		}
 	},
 	setContent: function(content) {
+		$(this.panelDom).addClassName('direct-content');
 		$(this.panelDom).innerHTML = content;
 	},
 	close: function() {

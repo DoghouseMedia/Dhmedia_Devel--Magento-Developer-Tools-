@@ -21,4 +21,9 @@ class Dhmedia_Devel_Block_Help_View extends Mage_Page_Block_Html
 	{
 		return false;
 	}
+	
+	public function getHelpUrl($topic)
+	{
+		return $this->helper('devel/url')->getHelpUrl($topic);
+	}
 }
