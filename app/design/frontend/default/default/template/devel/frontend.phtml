@@ -340,17 +340,17 @@ body{ padding-top: 4.5ex; }
 	<div class="update-notifier-box"></div>
 	
 	<ul>
-		<li><a href="<?= $this->helper('core/url')->getHomeUrl() ?>devel/command/clearcache?return=<?= $this->helper('core/url')->getCurrentUrl() ?>">Clear cache</a></li>
-		<li><a href="<?= $this->helper('core/url')->getHomeUrl() ?>devel/command/reindex?return=<?= $this->helper('core/url')->getCurrentUrl() ?>">Re-index</a></li>
-		<li><a href="<?= $this->helper('core/url')->getHomeUrl() ?>devel/command/hintson?return=<?= $this->helper('core/url')->getCurrentUrl() ?>">Hints on</a></li>
-		<li><a href="<?= $this->helper('core/url')->getHomeUrl() ?>devel/command/hintsoff?return=<?= $this->helper('core/url')->getCurrentUrl() ?>">Hints off</a></li>
+		<li><a href="<?= $this->helper('devel/url')->getHomeUrl() ?>devel/command/clearcache?return=<?= $this->helper('devel/url')->getCurrentUrl() ?>">Clear cache</a></li>
+		<li><a href="<?= $this->helper('devel/url')->getHomeUrl() ?>devel/command/reindex?return=<?= $this->helper('devel/url')->getCurrentUrl() ?>">Re-index</a></li>
+		<li><a href="<?= $this->helper('devel/url')->getHomeUrl() ?>devel/command/hintson?return=<?= $this->helper('devel/url')->getCurrentUrl() ?>">Hints on</a></li>
+		<li><a href="<?= $this->helper('devel/url')->getHomeUrl() ?>devel/command/hintsoff?return=<?= $this->helper('devel/url')->getCurrentUrl() ?>">Hints off</a></li>
 		
 		<li><a href="http://docs.magentocommerce.com" onclick="DevelGlobals.PanelManager.open('dhmedia_devel_block_panel_docs', this.href); return false;">Docs</a></li>
 		
 		<li>
 			<a href="#">Execute PHP</a>
 			<div class="show-on-hover">
-				<form action="<?= $this->helper('core/url')->getHomeUrl() ?>devel/command/execphp">
+				<form action="<?= $this->helper('devel/url')->getHomeUrl() ?>devel/command/execphp">
 					<textarea name="php"></textarea>
 					<input type="submit" value="Execute" />
 					<div class="clear-fix"></div>
@@ -395,7 +395,7 @@ body{ padding-top: 4.5ex; }
 			</div>
 		</li>
 		
-		<li><a href="<?= $this->helper('core/url')->getHomeUrl() ?>devel/filesystem/edit/type/layout?layout=local.xml" onclick="DevelGlobals.PanelManager.open('dhmedia_devel_block_panel_docs', this.href); return false;">local.xml</a></li>
+		<li><a href="<?= $this->helper('devel/url')->getHomeUrl() ?>devel/filesystem/edit/type/layout?layout=local.xml" onclick="DevelGlobals.PanelManager.open('dhmedia_devel_block_panel_docs', this.href); return false;">local.xml</a></li>
 	</ul>
 	
 	<div class="clear-fix"></div>
@@ -403,7 +403,7 @@ body{ padding-top: 4.5ex; }
 </div>
 
 <div id="dhmedia_devel_block_panel_admin" class="devel-panel" title="Admin">
-	<iframe id="devel-admin" src="<?= $this->helper('core/url')->getHomeUrl() . $this->getAdminPath() ?>"></iframe>
+	<iframe id="devel-admin" src="<?= $this->helper('devel/url')->getHomeUrl() . $this->getAdminPath() ?>"></iframe>
 </div>
 
 <div id="dhmedia_devel_block_panel_docs" class="devel-panel" title="Docs">
@@ -491,7 +491,7 @@ DevelUpdateNotifier.prototype =
 	},
 	getStatus: function(el)
 	{
-		new Ajax.Request('<?= $this->helper('core/url')->getHomeUrl() ?>devel/self/hasupdate', {
+		new Ajax.Request('<?= $this->helper('devel/url')->getHomeUrl() ?>devel/self/hasupdate', {
 			method:'get',
 			onSuccess: function(transport) {
 				if (transport.responseText == 'Y') {
