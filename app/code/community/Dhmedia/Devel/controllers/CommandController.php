@@ -50,6 +50,15 @@ class Dhmedia_Devel_CommandController extends Mage_Core_Controller_Front_Action
 	public function hintsonAction()
 	{
 		$this->setHints(true);
+		
+		/*
+		 * Add devel_check_hints_on param to return url
+		 */
+		$this->getRequest()->setParam('return',
+			$this->getRequest()->getParam('return') .
+			(strpos($this->getRequest()->getParam('return'), '?') ? '&' : '?') .
+			'devel_check_hints_on=1'
+		);
 	}
 	
 	public function hintsoffAction()
@@ -75,8 +84,8 @@ class Dhmedia_Devel_CommandController extends Mage_Core_Controller_Front_Action
 	
 	protected function setHints($status=true)
 	{
-		$groupArrayHints = $this->configStringToArray('debug.fields.template_hints.value', $status);
-		$groupArrayHintsBlocks = $this->configStringToArray('debug.fields.template_hints_blocks.value', $status);
+		$groupArrayHints = Mage::helper('devel/config')->stringToArray('debug.fields.template_hints.value', $status);
+		$groupArrayHintsBlocks = Mage::helper('devel/config')->stringToArray('debug.fields.template_hints_blocks.value', $status);
 		
 		$websiteId = Mage::app()->getWebsite()->getCode();
 		$storeId = Mage::app()->getStore()->getCode();
@@ -96,22 +105,5 @@ class Dhmedia_Devel_CommandController extends Mage_Core_Controller_Front_Action
 			->save();
 			
 		return true;
-	}
-	
-	protected function configStringToArray($dotSeparatedString, $value)
-	{
-		$array = array();
-		$currentArrayPointer =& $array;
-		
-		$parts = explode('.', $dotSeparatedString);
-		
-		while($part = array_shift($parts)) {
-			$currentArrayPointer[$part] = array();
-			$currentArrayPointer =& $currentArrayPointer[$part];
-		}
-		
-		$currentArrayPointer = $value;
-		
-		return $array;
 	}
 }

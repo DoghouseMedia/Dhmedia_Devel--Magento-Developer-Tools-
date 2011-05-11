@@ -4,6 +4,9 @@
         <reference name="after_body_start">
             <block type="devel/frontend" name="devel_frontend" before="-" />
         </reference>
+        <reference name="content">
+        	<block type="core/messages" name="messages" as="messages" before="-" />
+        </reference>
     </default>
     
     <devel_filesystem_edit>
