@@ -50,15 +50,6 @@ class Dhmedia_Devel_CommandController extends Mage_Core_Controller_Front_Action
 	public function hintsonAction()
 	{
 		$this->setHints(true);
-		
-		/*
-		 * Add devel_check_hints_on param to return url
-		 */
-		$this->getRequest()->setParam('return',
-			$this->getRequest()->getParam('return') .
-			(strpos($this->getRequest()->getParam('return'), '?') ? '&' : '?') .
-			'devel_check_hints_on=1'
-		);
 	}
 	
 	public function hintsoffAction()
