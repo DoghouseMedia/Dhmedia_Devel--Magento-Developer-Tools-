@@ -1,14 +1,3 @@
 /*
 /*.*
 
-!/app/code/community/Dmedia/Devel
-!/app/code/local/Mage/Core/Block/Template.php
-!/app/design/frontend/default/default/layout/devel
-!/app/design/frontend/default/default/template/devel
-!/app/design/adminhtml/default/default/layout/devel
-!/app/design/adminhtml/default/default/template/devel
-!/app/etc/module/Dhmedia_Devel.xml
-!/lib/krumo
-!/js/codemirror
-!/README.md
-!/.gitignore
