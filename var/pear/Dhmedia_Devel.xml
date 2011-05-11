@@ -1,0 +1,201 @@
+<_>
+   <form_key>8HSGdWK5BsxCrW74</form_key>
+   <name>Dhmedia_Devel</name>
+   <channel>connect.magentocommerce.com/community</channel>
+   <summary>Advanced Developer Tools</summary>
+   <description>ALPHA RELEASE! (*)
+
+- Inspect blocks
+- Copy templates to local theme
+- Quick edit local templates
+- Find all XML refering to block (just click the block)
+
+(*) Remember you&apos;ll need to change your stability settings in MagentoConnect in order to install this extension.</description>
+   <license>MIT License</license>
+   <license_uri>http://www.opensource.org/licenses/mit-license.php</license_uri>
+   <release_version>0.3.2</release_version>
+   <api_version>0.3.2</api_version>
+   <release_stability>alpha</release_stability>
+   <api_stability>alpha</api_stability>
+   <notes>Changelog:
+
+- Added Update available notifications
+- Fixed z-index issue
+- Fixes all known &quot;Missing argument&quot; errors
+- Fixes all known &quot;undefined index&quot; errors
+- Added Help controller
+- Added some help files
+
+--------------------------------------------------
+&quot;Release early, release often!&quot;
+
+Extension provided as-is by Jonathan Melnick from Doghouse Media (http://www.dhmedia.com.au) under the MIT license.
+
+Bundled software includes:
+
+# CodeMirror editor - http://codemirror.net/
+[MIT License] http://www.opensource.org/licenses/mit-license.php
+
+# Krumo - http://krumo.sourceforge.net/
+[LGPL 2.1] http://www.gnu.org/licenses/lgpl-2.1.html</notes>
+   <maintainers>
+      <role>
+         <role>lead</role>
+         <role>lead</role>
+      </role>
+      <name>
+         <name/>
+         <name>Jonathan Melnick</name>
+      </name>
+      <handle>
+         <handle/>
+         <handle>jonathan.dh</handle>
+      </handle>
+      <email>
+         <email/>
+         <email>jonathan@dhmedia.com.au</email>
+      </email>
+      <active>
+         <active>0</active>
+         <active>1</active>
+      </active>
+   </maintainers>
+   <depends_php_min>5.2.1</depends_php_min>
+   <depends_php_max>6.0.0</depends_php_max>
+   <depends_php_recommended>5.3</depends_php_recommended>
+   <depends_php_exclude/>
+   <depends>
+      <package>
+         <name>
+            <name/>
+         </name>
+         <channel>
+            <channel/>
+         </channel>
+         <min>
+            <min/>
+         </min>
+         <max>
+            <max/>
+         </max>
+         <recommended>
+            <recommended/>
+         </recommended>
+         <exclude>
+            <exclude/>
+         </exclude>
+         <type>
+            <type>required</type>
+         </type>
+      </package>
+      <subpackage>
+         <name>
+            <name/>
+         </name>
+         <channel>
+            <channel/>
+         </channel>
+         <min>
+            <min/>
+         </min>
+         <max>
+            <max/>
+         </max>
+         <recommended>
+            <recommended/>
+         </recommended>
+         <exclude>
+            <exclude/>
+         </exclude>
+         <type>
+            <type>required</type>
+         </type>
+      </subpackage>
+      <extension>
+         <name>
+            <name>Core</name>
+         </name>
+         <min>
+            <min/>
+         </min>
+         <max>
+            <max/>
+         </max>
+         <recommended>
+            <recommended/>
+         </recommended>
+         <exclude>
+            <exclude/>
+         </exclude>
+         <type>
+            <type>required</type>
+         </type>
+      </extension>
+   </depends>
+   <contents>
+      <role>
+         <role>magelocal</role>
+         <role>magelocal</role>
+         <role>magecommunity</role>
+         <role>magedesign</role>
+         <role>magedesign</role>
+         <role>mageetc</role>
+         <role>magelib</role>
+         <role>mage</role>
+         <role>magedesign</role>
+         <role>magedesign</role>
+      </role>
+      <path>
+         <path/>
+         <path>Mage/Core/Block/Template.php</path>
+         <path>Dhmedia/Devel</path>
+         <path>frontend/default/default/layout/devel</path>
+         <path>frontend/default/default/template/devel</path>
+         <path>modules/Dhmedia_Devel.xml</path>
+         <path>krumo</path>
+         <path>js/codemirror</path>
+         <path>adminhtml/default/default/layout/devel</path>
+         <path>adminhtml/default/default/template/devel</path>
+      </path>
+      <type>
+         <type>file</type>
+         <type>file</type>
+         <type>dir</type>
+         <type>dir</type>
+         <type>dir</type>
+         <type>file</type>
+         <type>dir</type>
+         <type>dir</type>
+         <type>dir</type>
+         <type>dir</type>
+      </type>
+      <include>
+         <include/>
+         <include/>
+         <include/>
+         <include/>
+         <include/>
+         <include/>
+         <include/>
+         <include/>
+         <include/>
+         <include/>
+      </include>
+      <ignore>
+         <ignore/>
+         <ignore/>
+         <ignore/>
+         <ignore/>
+         <ignore/>
+         <ignore/>
+         <ignore/>
+         <ignore/>
+         <ignore/>
+         <ignore/>
+      </ignore>
+   </contents>
+   <page>1</page>
+   <limit>200</limit>
+   <folder/>
+   <package/>
+</_>
