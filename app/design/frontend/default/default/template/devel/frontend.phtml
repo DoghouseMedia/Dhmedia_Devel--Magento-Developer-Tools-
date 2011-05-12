@@ -88,7 +88,29 @@ body{ padding-top: 4.5ex; }
 	padding: 0;
 	float: left;
 
-	border-left: 1px solid #000;
+	border-left: 1px solid #000000;
+	background-color: rgba(255, 255, 255, 0.05);
+
+	-webkit-box-shadow: inset 0 0 25px #000000;
+	-moz-box-shadow: inset 0 0 25px #000000;
+	box-shadow: inset 0 0 25px #000000;
+
+	-webkit-transition: all 1s ease-in-out;
+	-moz-transition: all 1s ease-in-out;
+	transition: all 1s ease-in-out;
+
+}
+
+#dhmedia_devel_block_frontend ul li:hover {
+	background-color: #000000;
+	-webkit-box-shadow: inset 0 0 25px #333333;
+	-moz-box-shadow: inset 0 0 25px #333333;
+	box-shadow: inset 0 0 25px #333333;
+
+	-webkit-transition: all 0.1s ease-in-out;
+	-moz-transition: all 0.1s ease-in-out;
+	transition: all 0.1s ease-in-out;
+
 }
 #dhmedia_devel_block_frontend ul li:last-child {
 	border-right: 1px solid #000;
@@ -98,9 +120,6 @@ body{ padding-top: 4.5ex; }
 #dhmedia_devel_block_frontend ul li a {
 	display: block;
 	padding: 1ex 3ex;
-}
-#dhmedia_devel_block_frontend ul li a:hover {
-	background-color: #000;
 }
 
 /* "Show on hover" divs */
