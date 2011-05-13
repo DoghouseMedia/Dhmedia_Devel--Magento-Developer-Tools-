@@ -265,9 +265,8 @@ body{ padding-top: 4.5ex; }
 	display: none;
 }
 
-
-/* Panel */
-.devel-panel{
+/* Panels */
+#dhmedia_devel_block_panels{
 	display: block;
 
 	position: fixed;
@@ -290,6 +289,23 @@ body{ padding-top: 4.5ex; }
 	-o-transition: width 0.7s ease-in-out;
 	transition: width 0.7s ease-in-out;
 }
+
+#dhmedia_devel_block_panels.active{
+	width: 70em;
+	z-index: 9991;
+}
+
+/* Panel */
+.devel-panel{
+	display: none;
+
+	width: 0;
+
+	-webkit-transition: width 0.7s ease-in-out;
+	-moz-transition: width 0.7s ease-in-out;
+	-o-transition: width 0.7s ease-in-out;
+	transition: width 0.7s ease-in-out;
+}
 .devel-panel iframe{
 	height: 100%;
 	width: 100%;
@@ -297,8 +313,8 @@ body{ padding-top: 4.5ex; }
 }
 
 .devel-panel.active{
-	width: 70em;
-	z-index: 9991;
+	display: block;
+	width: 100%;
 }
 
 .devel-panel.active.direct-content {
@@ -374,7 +390,7 @@ body{ padding-top: 4.5ex; }
 		<li><a href="<?= Mage::getBaseUrl() ?>devel/command/hintson?return=<?= $this->helper('devel/url')->getCurrentUrl() ?>">Hints on</a></li>
 		<li><a href="<?= Mage::getBaseUrl() ?>devel/command/hintsoff?return=<?= $this->helper('devel/url')->getCurrentUrl() ?>">Hints off</a></li>
 		
-		<li><a href="http://docs.magentocommerce.com" onclick="DevelGlobals.PanelManager.open('dhmedia_devel_block_panel_docs', this.href); return false;">Docs</a></li>
+		<li><a href="http://docs.magentocommerce.com" onclick="DevelGlobals.PanelManager.get('dhmedia_devel_block_panel_docs').open(this.href); return false;">Docs</a></li>
 		
 		<li>
 			<a href="#">Execute PHP</a>
@@ -424,35 +440,36 @@ body{ padding-top: 4.5ex; }
 			</div>
 		</li>
 		
-		<li><a href="<?= Mage::getBaseUrl() ?>devel/filesystem/edit/type/layout?layout=local.xml" onclick="DevelGlobals.PanelManager.open('dhmedia_devel_block_panel_docs', this.href); return false;">local.xml</a></li>
+		<li><a href="<?= Mage::getBaseUrl() ?>devel/filesystem/edit/type/layout?layout=local.xml" onclick="DevelGlobals.PanelManager.get('dhmedia_devel_block_panel_docs').open(this.href); return false;">local.xml</a></li>
 	</ul>
 	
 	<div class="clear-fix"></div>
 	
 </div>
 
-<div id="dhmedia_devel_block_panel_admin" class="devel-panel" title="Admin">
-	<iframe id="devel-admin" src="<?= Mage::getBaseUrl() . $this->getAdminPath() ?>"></iframe>
-</div>
-
-<div id="dhmedia_devel_block_panel_docs" class="devel-panel" title="Docs">
-	<iframe id="devel-docs" src="http://docs.magentocommerce.com"></iframe>
-</div>
-
-<div id="dhmedia_devel_block_panel_editor" class="devel-panel" title="Editor">
-	<iframe id="devel-editor" src="<?= $this->helper('devel/url')->getHelpUrl('panels/editor/usage') ?>"></iframe>
-</div>
-
-<div id="dhmedia_devel_block_panel_block" class="devel-panel" title="Block">
-	<iframe id="devel-block" src="<?= $this->helper('devel/url')->getHelpUrl('panels/block/usage') ?>"></iframe>
-</div>
-
-<div id="dhmedia_devel_block_panel_xml" class="devel-panel" title="Xml">
+<div id="dhmedia_devel_block_panels">
+	<div id="dhmedia_devel_block_panel_admin" class="devel-panel" title="Admin">
+		<iframe id="devel-admin" src="<?= Mage::getBaseUrl() . $this->getAdminPath() ?>"></iframe>
+	</div>
+	
+	<div id="dhmedia_devel_block_panel_docs" class="devel-panel" title="Docs">
+		<iframe id="devel-docs" src="http://docs.magentocommerce.com"></iframe>
+	</div>
+	
+	<div id="dhmedia_devel_block_panel_editor" class="devel-panel" title="Editor">
+		<iframe id="devel-editor" src="<?= $this->helper('devel/url')->getHelpUrl('panels/editor/usage') ?>"></iframe>
+	</div>
+	
+	<div id="dhmedia_devel_block_panel_block" class="devel-panel" title="Block">
+		<iframe id="devel-block" src="<?= $this->helper('devel/url')->getHelpUrl('panels/block/usage') ?>"></iframe>
+	</div>
+	
+	<div id="dhmedia_devel_block_panel_xml" class="devel-panel" title="Xml">
 <textarea id="layout-xml" name="layout-xml">
 <?php echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n" ?>
 <?php echo $this->getLayoutXml() ?>
 </textarea>
-
+	</div>
 </div>
 
 <script type="text/javascript">
@@ -583,8 +600,7 @@ DevelHintBlock.prototype = Object.extend(new DevelHint(),
 			'layout': $(el).select('span[rel="layout"]')[0].innerHTML.evalJSON(),
 		}
 
-		//DevelGlobals.PanelManager.open('dhmedia_devel_block_panel_block', data.info.url);
-		DevelGlobals.PanelManager.load('dhmedia_devel_block_panel_docs', data.docs.url);
+		DevelGlobals.PanelManager.get('dhmedia_devel_block_panel_docs').load(data.docs.url);
 
 		var content = '';
 		var editorIds = [];
@@ -594,7 +610,7 @@ DevelHintBlock.prototype = Object.extend(new DevelHint(),
 			content += '<h2>' + layout.file + '</h2>';
 			content += '<em>' + layout.path + '</em>';
 			content += ' - <a target="devel-editor" href="' + layout.url 
-				+ '" onclick="DevelGlobals.PanelManager.open(\'dhmedia_devel_block_panel_editor\');">Edit</a>';
+				+ '" onclick="DevelGlobals.PanelManager.get(\'dhmedia_devel_block_panel_editor\').open();">Edit</a>';
 			layout.xml.each(function(xml, i){
 
 				xml = xml.replace(/\[\[/g, '<');
@@ -611,7 +627,7 @@ DevelHintBlock.prototype = Object.extend(new DevelHint(),
 			});
 		});
 		
-		DevelGlobals.PanelManager.setContent('dhmedia_devel_block_panel_block', content);
+		DevelGlobals.PanelManager.get('dhmedia_devel_block_panel_block').setContent(content);
 
 		editorIds.each(function(editorId){
 			CodeMirror.fromTextArea(document.getElementById(editorId), {
@@ -626,7 +642,7 @@ DevelHintBlock.prototype = Object.extend(new DevelHint(),
 			});
 		});
 		
-		DevelGlobals.PanelManager.open('dhmedia_devel_block_panel_block');
+		DevelGlobals.PanelManager.get('dhmedia_devel_block_panel_block').open();
 		
 		console.log('HINT BLOCK', name, data);
 		
@@ -650,7 +666,7 @@ DevelHintTemplate.prototype = Object.extend(new DevelHint(),
 			'editor': $(el).select('span[rel="editor"]')[0].innerHTML.evalJSON()
 		}
 
-		DevelGlobals.PanelManager.open('dhmedia_devel_block_panel_editor', data.editor.url);
+		DevelGlobals.PanelManager.get('dhmedia_devel_block_panel_editor').open(data.editor.url);
 		
 		console.log('HINT TEMPLATE', name, data);
 		
@@ -664,10 +680,15 @@ DevelHintTemplate.prototype = Object.extend(new DevelHint(),
 var DevelPanelManager = Class.create();
 DevelPanelManager.prototype =
 {
-	initialize: function(selector)
+	initialize: function(containerSelector, selector)
 	{
 		var panelManager = this;
 		this.panels = [];
+
+		this.container = $$(containerSelector)[0];
+		console.log(this.container);
+
+		this.moveHandle = new DevelPanelMoveHandle();
 		
 		this.buttonContainer = document.createElement('div');
 		$(this.buttonContainer).addClassName('devel-panel-buttons');
@@ -691,20 +712,9 @@ DevelPanelManager.prototype =
 
 		this.addButton(btnClose);
 	},
-	load: function (panelId, url)
+	get: function(panelId)
 	{
-		this.panels[panelId].load(url);
-	},
-	open: function(panelId, url)
-	{
-		this.closeAll();
-		
-		this.panels[panelId].open(url);
-
-		this.openButtonContainer();
-	},
-	setContent: function(panelId, content) {
-		this.panels[panelId].setContent(content);
+		return this.panels[panelId];
 	},
 	closeAll: function()
 	{
@@ -714,6 +724,7 @@ DevelPanelManager.prototype =
 			}
 		}
 		this.closeButtonContainer();
+		this.closeContainer();
 	},
 	addButton: function(button)
 	{
@@ -726,6 +737,27 @@ DevelPanelManager.prototype =
 	closeButtonContainer: function()
 	{
 		$(this.buttonContainer).removeClassName('active');
+	},
+	openContainer: function()
+	{
+		$(this.container).addClassName('active');
+	},
+	closeContainer: function()
+	{
+		$(this.container).removeClassName('active');
+	}
+};
+
+
+/**
+ * DevelPanelMoveHandle
+ */
+var DevelPanelMoveHandle = Class.create();
+DevelPanelMoveHandle.prototype =
+{
+	initialize: function()
+	{
+
 	}
 };
 
@@ -744,9 +776,11 @@ DevelPanel.prototype =
 		this.button = document.createElement('span');
 		this.button.innerHTML = panelDom.title;
 		$(this.button).addClassName('button');
-		$(this.button).observe('click', function(e) {			
-			panelManager.open(panelDom.id);
-			
+		$(this.button).observe('click', function(e) {
+			panelManager.closeAll();			
+			panelManager.get(panelDom.id).open();
+			panelManager.openButtonContainer();
+			panelManager.openContainer();
 			Event.stop(e); // stop the form from submitting
 		});
 	},
@@ -779,7 +813,7 @@ document.observe("dom:loaded", function()
 	new DevelHintBlock('.devel-hint .hints .hint[rel="block"]');
 	new DevelHintTemplate('.devel-hint .hints .hint[rel="template"]');
 	
-	DevelGlobals.PanelManager = new DevelPanelManager('.devel-panel');
+	DevelGlobals.PanelManager = new DevelPanelManager('#dhmedia_devel_block_panels', '.devel-panel');
 
 	new DevelUpdateNotifier('#dhmedia_devel_block_frontend .update-notifier-box');
 });
