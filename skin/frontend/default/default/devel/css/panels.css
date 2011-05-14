@@ -1,0 +1,114 @@
+@CHARSET "UTF-8";
+
+/* Panels */
+#dhmedia_devel_block_panels{
+	display: block;
+
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 9990;
+
+	background-color: #fff;
+	text-align: left;
+
+	width: 0;
+	border-left: 3px solid #000;
+	box-shadow: -1px 0px 5px #000;
+
+	opacity: 0.9;
+
+	-webkit-transition: width 0.7s ease-in-out;
+	-moz-transition: width 0.7s ease-in-out;
+	-o-transition: width 0.7s ease-in-out;
+	transition: width 0.7s ease-in-out;
+}
+
+#dhmedia_devel_block_panels.active{
+	width: 70em;
+	z-index: 9991;
+}
+
+/* Panel */
+.devel-panel{
+	display: none;
+
+	width: 0;
+
+	-webkit-transition: width 0.7s ease-in-out;
+	-moz-transition: width 0.7s ease-in-out;
+	-o-transition: width 0.7s ease-in-out;
+	transition: width 0.7s ease-in-out;
+}
+.devel-panel iframe{
+	height: 100%;
+	width: 100%;
+	border: 0;
+}
+
+.devel-panel.active{
+	display: block;
+	width: 100%;
+}
+
+.devel-panel.active.direct-content {
+	padding: 1em;
+	width: 68em;
+	overflow: auto;
+}
+
+/* Panel Buttons */
+.devel-panel-buttons {
+	position: fixed;
+	top: 10em;
+	right: 0;
+	z-index: 1001;
+	margin-right: 3px;
+
+	-webkit-transition: right 0.7s ease-in-out;
+	-moz-transition: right 0.7s ease-in-out;
+	-o-transition: right 0.7s ease-in-out;
+	transition: right 0.7s ease-in-out;
+}
+.devel-panel-buttons .button {
+	color: #fff;
+	background-color: #000;
+
+	width: 10ex;
+	height: 2ex;
+	line-height: 2ex;
+	padding: 1ex 3ex;
+	margin: 0 0 13ex 0;
+
+	border-style: solid;
+	border-color: #fff;
+	border-width: 2px 2px 0 2px;
+	
+	text-shadow: 0 0 2px #333;
+	box-shadow: 0px 0px 5px #000;
+	-moz-box-shadow: 0px 0px 5px #000;
+	-o-box-shadow: 0px 0px 5px #000;
+
+	display: block;
+	-moz-transform: rotate(-90deg);
+	-webkit-transform: rotate(-90deg);
+	-o-transform: rotate(-90deg);
+	transform: rotate(-90deg);
+
+	cursor: pointer;
+
+	margin-right: -6ex;
+}
+.devel-panel-buttons .button:hover{
+	text-shadow: 0 0 12px #fff;
+}
+.devel-panel-buttons.active{
+	right: 70em;
+}
+.devel-panel-buttons .button.close {
+	color: #996666;
+}
+.devel-panel-buttons:not(.active) .close {
+	display: none;
+}

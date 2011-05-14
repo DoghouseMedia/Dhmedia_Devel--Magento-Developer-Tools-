@@ -1,0 +1,40 @@
+@CHARSET "UTF-8";
+
+/* Devel hints (see Core_Template_Block) */
+.devel-hint {
+	position: relative;
+	border: 1px dotted red;
+	margin: 6px 2px;
+	padding: 18px 2px 2px 2px;
+}
+.devel-hint .hints {
+	display: none;
+
+	position:absolute;
+	left:0;
+	top:-4px;
+
+	border-radius: 5px;
+
+	background-color: #222;
+	color: #fff;
+
+	box-shadow: 0 0 5px #ccc;
+
+	font:normal 11px Arial;
+	text-align:left !important;
+}
+.devel-hint:hover > .hints {
+	display: inline-block !important;
+	z-index: 999;
+}
+.devel-hint .hint {
+	padding: 1ex;
+	border-bottom: 1px solid #333;
+}
+.devel-hint .hint:last-child {
+	border: none;
+}
+.devel-hint .hide{
+	display: none;
+}
