@@ -10,7 +10,6 @@ DevelPanelManager.prototype =
 		panelManager.panels = [];
 
 		panelManager.container = $$(selector)[0];
-		console.log(this.container);
 
 		panelManager.moveHandle = new DevelPanelMoveHandle();
 		
@@ -20,21 +19,17 @@ DevelPanelManager.prototype =
 		
 		$$(options.panel.selector).each(function(panelDom) {
 			var panel = new DevelPanel(panelManager, panelDom);
-
 			panelManager.panels[panelDom.id] = panel;
-
-			panelManager.addButton(panel.getButton());
+			panelManager.addButton(panel.getButton().getDom());
 		});
 
-		var btnClose = document.createElement('span');
-		btnClose.innerHTML = 'Close [x]';
-		$(btnClose).addClassName('button').addClassName('close');
-		$(btnClose).observe('click', function(e) {
+		var btnClose = new DevelPanelButton('Close [x]', function(e) {
 			panelManager.closeAll();
 			Event.stop(e); // stop the form from submitting
 		});
+		$(btnClose.getDom()).addClassName('close');
 
-		panelManager.addButton(btnClose);
+		panelManager.addButton(btnClose.getDom());
 	},
 	get: function(panelId)
 	{
@@ -97,10 +92,7 @@ DevelPanel.prototype =
 	{
 		this.panelDom = panelDom;
 		
-		this.button = document.createElement('span');
-		this.button.innerHTML = panelDom.title;
-		$(this.button).addClassName('button');
-		$(this.button).observe('click', function(e) {
+		this.button = new DevelPanelButton(panelDom.title, function(e) {
 			panelManager.closeAll();			
 			panelManager.get(panelDom.id).open();
 			panelManager.openButtonContainer();
@@ -129,3 +121,20 @@ DevelPanel.prototype =
 		$(this.panelDom).removeClassName('active');
 	}
 };
+
+/**
+ * DevelPanelButton
+ */
+var DevelPanelButton = Class.create();
+DevelPanelButton.prototype =
+{
+	initialize: function(title, clickCallback) {
+		this.dom = document.createElement('span');
+		this.dom.innerHTML = title;
+		$(this.dom).addClassName('button');
+		$(this.dom).observe('click', clickCallback);
+	},
+	getDom: function() {
+		return this.dom;
+	}
+}
