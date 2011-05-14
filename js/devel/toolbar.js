@@ -70,7 +70,7 @@ DevelUpdateNotifier.prototype =
 				//	el.addClassName(classname);
 				//});
 				if (transport.responseText == 'Y') {
-					var html = '<font style="color:#CC3333;">Update available!</font>';
+					var html = '<font style="color:orange;">Update available!</font>';
 					el.addClassName('has-update');
 				} else if (transport.responseText == 'N') {
 					var html = '<font style="color:green;">Latest and greatest!</font>';
@@ -78,7 +78,10 @@ DevelUpdateNotifier.prototype =
 					var html = '<font style="color:grey;">Could not check for updates...</font>';
 				}
 				
-				el.innerHTML = html;
+				var span = document.createElement('span');
+				span.innerHTML = html;
+				el.appendChild(span);
+				//el.innerHTML = html;
 			}
 		});
 	}

@@ -191,10 +191,21 @@ body{ padding-top: 4.5ex; }
 #dhmedia_devel_block_frontend .update-notifier-box {
 	float: left;
 	font-weight: bold;
-	padding: 1ex 3ex;
+	padding: 0.5ex 3ex;
 }
 #dhmedia_devel_block_frontend .update-notifier-box.has-update {
 	-webkit-animation: devel-highlight 15s infinite;
+}
+#dhmedia_devel_block_frontend .update-notifier-box span {
+	display: inline-block;
+	vertical-align: middle;
+}
+#dhmedia_devel_block_frontend .update-notifier-box span.sprite-icon {
+	/*24px between each icon*/
+	background: url(../images/tango.sprite.png) -100px -204px;
+	width: 24px;
+	height: 24px;
+	margin-right: 0.5ex;
 }
 
 /* Clear fix */

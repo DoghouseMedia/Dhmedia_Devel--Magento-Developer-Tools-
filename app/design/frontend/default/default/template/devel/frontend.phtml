@@ -1,7 +1,7 @@
 <div id="dhmedia_devel_block_frontend">
 	
 	<a class="dhlink" href="http://www.dhmedia.com.au/?ref=magento-toolbar" target="_blank" title="Doghouse Media - Perth based web agency and Magento specialists"><span>by </span>Doghouse Media</a>
-	<div class="update-notifier-box"></div>
+	<div class="update-notifier-box has-sprite"></div>
 	
 	<ul>
 		<li><a href="<?= Mage::getBaseUrl() ?>devel/command/clearcache?return=<?= $this->helper('devel/url')->getCurrentUrl() ?>">Clear cache</a></li>
@@ -112,6 +112,8 @@ document.observe("dom:loaded", function()
 	});
 
 	new DevelUpdateNotifier('#dhmedia_devel_block_frontend .update-notifier-box', '<?= Mage::getBaseUrl() ?>devel/self/hasupdate');
+
+	new DevelSprites('.has-sprite');
 });
 
 var DevelGlobals = {};
