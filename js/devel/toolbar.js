@@ -64,7 +64,11 @@ DevelUpdateNotifier.prototype =
 		new Ajax.Request(this.hasUpdateUrl, {
 			method:'get',
 			onSuccess: function(transport) {
-				console.log(transport);
+				/* @todo: when backend implements JSON for notifiers, use something like this: */
+				//el.innerHtml = transport.responseJSON.text;
+				//transport.responseJSON.classes.each(function(classname){
+				//	el.addClassName(classname);
+				//});
 				if (transport.responseText == 'Y') {
 					var html = '<font style="color:#CC3333;">Update available!</font>';
 					el.addClassName('has-update');

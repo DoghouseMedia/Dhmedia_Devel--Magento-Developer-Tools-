@@ -105,7 +105,11 @@ document.observe("dom:loaded", function()
 	new DevelHintBlock('.devel-hint .hints .hint[rel="block"]');
 	new DevelHintTemplate('.devel-hint .hints .hint[rel="template"]');
 	
-	DevelGlobals.PanelManager = new DevelPanelManager('#dhmedia_devel_block_panels', '.devel-panel');
+	DevelGlobals.PanelManager = new DevelPanelManager('#dhmedia_devel_block_panels', {
+		panel: {
+			selector: '.devel-panel'
+		}
+	});
 
 	new DevelUpdateNotifier('#dhmedia_devel_block_frontend .update-notifier-box', '<?= Mage::getBaseUrl() ?>devel/self/hasupdate');
 });

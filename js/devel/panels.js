@@ -4,21 +4,21 @@
 var DevelPanelManager = Class.create();
 DevelPanelManager.prototype =
 {
-	initialize: function(containerSelector, selector)
+	initialize: function(selector, options)
 	{
 		var panelManager = this;
-		this.panels = [];
+		panelManager.panels = [];
 
-		this.container = $$(containerSelector)[0];
+		panelManager.container = $$(selector)[0];
 		console.log(this.container);
 
-		this.moveHandle = new DevelPanelMoveHandle();
+		panelManager.moveHandle = new DevelPanelMoveHandle();
 		
-		this.buttonContainer = document.createElement('div');
-		$(this.buttonContainer).addClassName('devel-panel-buttons');
-		$$('body')[0].appendChild(this.buttonContainer);
+		panelManager.buttonContainer = document.createElement('div');
+		$(panelManager.buttonContainer).addClassName('devel-panel-buttons');
+		$$('body')[0].appendChild(panelManager.buttonContainer);
 		
-		$$(selector).each(function(panelDom) {
+		$$(options.panel.selector).each(function(panelDom) {
 			var panel = new DevelPanel(panelManager, panelDom);
 
 			panelManager.panels[panelDom.id] = panel;
@@ -34,7 +34,7 @@ DevelPanelManager.prototype =
 			Event.stop(e); // stop the form from submitting
 		});
 
-		this.addButton(btnClose);
+		panelManager.addButton(btnClose);
 	},
 	get: function(panelId)
 	{
