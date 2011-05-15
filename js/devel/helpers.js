@@ -162,13 +162,3 @@ DevelHelpers.Resizeable.Slider.prototype =
 		this.options.onMouseMove(e);
 	}
 };
-
-/**
- * DevelHelpers.Window
- * 
- * @todo Make cross-browser (eg. IE uses different ways to get width/height)
- */
-DevelHelpers.WindowSize = Class.create({
-    width: window.innerWidth,
-    height: window.innerHeight
-});

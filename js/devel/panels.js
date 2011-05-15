@@ -138,12 +138,9 @@ DevelPanel.prototype =
 			this.panelDom.appendChild(this.loadingProtector);
 		}
 		
-		//$(this.loadingProtector).setStyle({display: 'block'});
-		//$(this.loadingProtector).setStyle({opacity: '1'});
 		this.loadingProtector.addClassName('active');
 	},
 	postLoad: function() {
-		//$(this.loadingProtector).setStyle({opacity: '0'});
 		this.loadingProtector.removeClassName('active');
 	},
 	open: function(url) {
