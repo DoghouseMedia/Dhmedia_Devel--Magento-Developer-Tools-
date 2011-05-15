@@ -4,8 +4,9 @@
     	<reference name="head">
     		<!-- Replace varien's js file with ours -->
     		<action method="removeItem"><type>js</type><name>varien/js.js</name></action>
-    		<action method="addJs"><script>devel/js.js</script></action>
+    		<action method="addJs"><script>devel/varien/js.js</script></action>
     		
+    		<action method="addJs"><script>devel/helpers.js</script></action>
     		<action method="addJs"><script>devel/toolbar.js</script></action>
 			<action method="addJs"><script>devel/hints.js</script></action>
 			<action method="addJs"><script>devel/panels.js</script></action>
@@ -42,6 +43,8 @@
 			<action method="removeItem"><type>js</type><name>varien/menu.js</name></action>
 			<action method="removeItem"><type>js</type><name>mage/cookies.js</name></action>
 			<action method="removeItem"><type>js</type><name>lib/ccard.js</name></action>
+			
+			<action method="removeItem"><type>js</type><name>devel/varien/js.js</name></action>
 			
 			<action method="removeItem"><type>css</type><name>styles.css</name></action>
 			<action method="removeItem"><type>css</type><name>widgets.css</name></action>
