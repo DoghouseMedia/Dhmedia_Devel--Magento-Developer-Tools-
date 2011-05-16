@@ -8,22 +8,24 @@ DevelPanelManager.prototype =
 	{
 		var panelManager = this;
 		panelManager.panels = [];
+		panelManager.options = Object.extend({
+			left: String($$('body')[0].getWidth()/2) + 'px'
+		}, options);
 
 		panelManager.container = $$(selector)[0];
-
+		
 		panelManager.buttonContainer = document.createElement('div');
 		$(panelManager.buttonContainer).addClassName('devel-panel-buttons');
 		panelManager.container.appendChild(panelManager.buttonContainer);
 		
-		$$(options.panel.selector).each(function(panelDom) {
+		$$(panelManager.options.panel.selector).each(function(panelDom) {
 			var panel = new DevelPanel(panelManager, panelDom);
 			panelManager.panels[panelDom.id] = panel;
 			panelManager.addButton(panel.getButton().getDom());
 		});
 
 		var btnClose = new DevelPanelButton('Close [x]', function(e) {
-			panelManager.closePanels();
-			panelManager.closeContainers();
+			panelManager.closeAll();
 			Event.stop(e); // stop the form from submitting
 		});
 		$(btnClose.getDom()).addClassName('close');
@@ -32,15 +34,28 @@ DevelPanelManager.prototype =
 		
 		panelManager.resizeable = new DevelHelpers.Resizeable(selector, {
 			onResize: function() {
-				panelManager.container.writeAttribute('lastwidth',
-					parseInt(panelManager.container.getStyle('width'))
-				);
+				var newWidth = parseInt(panelManager.container.getStyle('width'));
+				var newLeft = parseInt(panelManager.container.getStyle('left'));
+				
+				if (newWidth > 0) {
+					$(panelManager.buttonContainer).addClassName('active');
+				} else {
+					$(panelManager.buttonContainer).removeClassName('active');
+				}
+				
+				panelManager.container.writeAttribute('lastleft', newLeft);
 			}
 		});
+		
+		panelManager.container.setStyle(panelManager.options.container.css);
 	},
 	get: function(panelId)
 	{
 		return this.panels[panelId];
+	},
+	closeAll: function() {
+		this.closePanels();
+		this.closeContainers();
 	},
 	closePanels: function()
 	{
@@ -76,14 +91,16 @@ DevelPanelManager.prototype =
 	{
 		$(this.container).addClassName('active');
 		
-		var lastWidth = this.container.readAttribute('lastwidth');
-		if (lastWidth > 0) {
-			this.container.setStyle({width: lastWidth + 'px'});
+		var lastLeft = this.container.readAttribute('lastleft');
+		if (lastLeft > 0 || lastLeft === 0) {
+			this.container.setStyle({left: lastLeft + 'px'});
+		} else {
+			this.container.setStyle({left: this.options.left});
 		}
 	},
 	closeContainer: function()
 	{
-		this.container.setStyle({width: 0});
+		this.container.setStyle({left: String($$('body')[0].getWidth()) + 'px'});
 		
 		$(this.container).removeClassName('active');
 	}
@@ -103,7 +120,7 @@ DevelPanel.prototype =
 		this.panelDom = panelDom;
 		
 		this.button = new DevelPanelButton(panelDom.title, function(e) {
-			panelManager.get(panelDom.id).open();
+			panelManager.get(panelDom.id).toggle();
 			Event.stop(e); // stop the form from submitting
 		});
 	},
@@ -143,10 +160,18 @@ DevelPanel.prototype =
 	postLoad: function() {
 		this.loadingProtector.removeClassName('active');
 	},
+	toggle: function() {
+		if ($(this.panelDom).hasClassName('active')) {
+			this.panelManager.closeAll();
+		} else {
+			this.open();
+		}
+	},
 	open: function(url) {
 		this.panelManager.closePanels();
 		
 		$(this.panelDom).addClassName('active');
+		$(this.button.getDom()).addClassName('active');
 
 		if (url) {
 			this.load(url);
@@ -160,6 +185,7 @@ DevelPanel.prototype =
 	},
 	close: function() {
 		$(this.panelDom).removeClassName('active');
+		$(this.button.getDom()).removeClassName('active');
 	}
 };
 

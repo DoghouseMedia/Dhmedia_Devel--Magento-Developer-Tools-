@@ -4,25 +4,26 @@
 #dhmedia_devel_block_panels{
 	display: block;
 
-	position: fixed;
+	position: fixed !important;
 	top: 4.5ex;
-	right: 0;
-	bottom: 0;
+	right: 0 !important;
+	bottom: 0 !important;
+	left: 100%;
 	z-index: 9990;
 
 	background-color: #fff;
 	text-align: left;
 
-	width: 0;
 	border-left: 1ex solid #222;
+	
 	box-shadow: -1px 0px 5px #000;
 
 	opacity: 0.9;
 
-	-webkit-transition: width 0.7s ease-in-out;
-	-moz-transition: width 0.7s ease-in-out;
-	-o-transition: width 0.7s ease-in-out;
-	transition: width 0.7s ease-in-out;
+	-webkit-transition: all 0.7s ease-in-out;
+	-moz-transition: all 0.7s ease-in-out;
+	-o-transition: all 0.7s ease-in-out;
+	transition: all 0.7s ease-in-out;
 }
 #dhmedia_devel_block_panels.resizing{
 	-webkit-transition: none;
@@ -30,9 +31,14 @@
 	-o-transition: none;
 	transition: none;
 }
-
+#dhmedia_devel_block_panels.resized {
+	-webkit-transition: all 0.7s ease-in-out;
+	-moz-transition: all 0.7s ease-in-out;
+	-o-transition: all 0.7s ease-in-out;
+	transition: all 0.7s ease-in-out;
+}
 #dhmedia_devel_block_panels.active{
-	width: 50%;
+
 }
 
 /* Panel */
@@ -95,7 +101,7 @@
 	display: block;
 	
 	color: #fff;
-	background-color: #000;
+	background-color: #222;
 	
 	width: 10ex;
 	height: 2ex;
@@ -123,8 +129,11 @@
 
 	margin-right: -6ex;
 }
-.devel-panel-buttons .button:hover{
-	text-shadow: 0 0 12px #fff;
+.devel-panel-buttons .button:hover,
+.devel-panel-buttons .button.active {
+	text-shadow: 0px 0px 12px #fff;
+	background-color: #000;
+	
 }
 .devel-panel-buttons .button.close {
 	color: #996666;
