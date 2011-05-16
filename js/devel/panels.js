@@ -32,6 +32,8 @@ DevelPanelManager.prototype =
 
 		panelManager.addButton(btnClose.getDom());
 		
+		panelManager.sprites = new DevelSprites(selector + ' .devel-panel-buttons .button');
+		
 		panelManager.resizeable = new DevelHelpers.Resizeable(selector, {
 			onResize: function() {
 				var newWidth = parseInt(panelManager.container.getStyle('width'));
@@ -116,12 +118,17 @@ DevelPanel.prototype =
 	
 	initialize: function(panelManager, panelDom) //this function is called as a constructor
 	{
-		this.panelManager = panelManager;
-		this.panelDom = panelDom;
+		var panel = this;
+		panel.panelManager = panelManager;
+		panel.panelDom = panelDom;
 		
-		this.button = new DevelPanelButton(panelDom.title, function(e) {
+		panel.button = new DevelPanelButton(panelDom.title, function(e) {
 			panelManager.get(panelDom.id).toggle();
 			Event.stop(e); // stop the form from submitting
+		});
+		
+		String(panel.panelDom.readAttribute('data-button-class')).split(' ').each(function(className) {
+			panel.button.getDom().addClassName(className);
 		});
 	},
 	getButton: function() {

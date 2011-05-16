@@ -18,6 +18,7 @@
 			<action method="addCss"><stylesheet>devel/css/toolbar.css</stylesheet></action>
 			<action method="addCss"><stylesheet>devel/css/panels.css</stylesheet></action>
 			<action method="addCss"><stylesheet>devel/css/hints.css</stylesheet></action>
+			<action method="addCss"><stylesheet>devel/css/sprites.css</stylesheet></action>
     	</reference>
         <reference name="after_body_start">
             <block type="devel/frontend" name="devel_frontend" before="-" />

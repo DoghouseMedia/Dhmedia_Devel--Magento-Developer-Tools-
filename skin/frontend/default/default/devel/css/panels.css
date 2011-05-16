@@ -14,7 +14,7 @@
 	background-color: #fff;
 	text-align: left;
 
-	border-left: 1ex solid #222;
+	border-left: 1ex solid #000;
 	
 	box-shadow: -1px 0px 5px #000;
 
@@ -140,4 +140,9 @@
 }
 .devel-panel-buttons:not(.active) .close {
 	display: none;
+}
+
+.devel-panel-buttons .button .devel-sprite-icon {
+	float: left;
+	margin: -0.9ex;
 }

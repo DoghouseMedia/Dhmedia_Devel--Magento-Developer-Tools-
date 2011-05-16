@@ -92,6 +92,7 @@ body{ padding-top: 4.5ex; }
 #dhmedia_devel_block_frontend ul li a {
 	display: block;
 	padding: 1ex 3ex;
+	position: relative;
 }
 
 /* "Show on hover" divs */
@@ -122,6 +123,24 @@ body{ padding-top: 4.5ex; }
 	border-top: 1px solid #999;
 	margin-top: 1em;
 	padding-top: 1em;
+}
+
+/* Menu icons */
+/*
+ * @todo
+ * This works fine but we are not ready icons yet, so we hide them if any are set
+ * (by Jonathan, on 2011-05-16)
+ */
+#dhmedia_devel_block_frontend ul li a.sprite-small {
+	/*padding-left: 5ex;*/
+}
+#dhmedia_devel_block_frontend ul li a.sprite-small .devel-sprite-icon{
+	/*
+	position: absolute;
+	top: 0.3ex;
+	left: 1ex;
+	*/
+	display: none;
 }
 
 /* Tables */
@@ -200,11 +219,7 @@ body{ padding-top: 4.5ex; }
 	display: inline-block;
 	vertical-align: middle;
 }
-#dhmedia_devel_block_frontend .update-notifier-box span.sprite-icon {
-	/*24px between each icon*/
-	background: url(../images/tango.sprite.png) -100px -204px;
-	width: 24px;
-	height: 24px;
+#dhmedia_devel_block_frontend .update-notifier-box span.devel-sprite-icon {
 	margin-right: 0.5ex;
 }
 

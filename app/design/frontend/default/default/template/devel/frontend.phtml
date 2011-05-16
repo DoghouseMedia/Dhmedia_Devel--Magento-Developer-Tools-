@@ -1,20 +1,59 @@
 <div id="dhmedia_devel_block_frontend">
 	
-	<a class="dhlink" href="http://www.dhmedia.com.au/?ref=magento-toolbar" target="_blank" title="Doghouse Media - Perth based web agency and Magento specialists"><span>by </span>Doghouse Media</a>
-	<div class="update-notifier-box has-sprite"></div>
+	<a
+		class="dhlink"
+		target="_blank"
+		title="Doghouse Media - Perth based web agency and Magento specialists"
+		href="http://www.dhmedia.com.au/?ref=magento-toolbar">
+		<span>by </span>
+		Doghouse Media
+	</a>
+	
+	<div class="update-notifier-box has-sprite sprite-small icon-important"></div>
 	
 	<ul>
-		<li><a href="<?= Mage::getBaseUrl() ?>devel/command/clearcache?return=<?= $this->helper('devel/url')->getCurrentUrl() ?>">Clear cache</a></li>
-		<li><a href="<?= Mage::getBaseUrl() ?>devel/command/reindex?return=<?= $this->helper('devel/url')->getCurrentUrl() ?>">Re-index</a></li>
-		<li><a href="<?= Mage::getBaseUrl() ?>devel/command/hintson?return=<?= $this->helper('devel/url')->getCurrentUrl() ?>">Hints on</a></li>
-		<li><a href="<?= Mage::getBaseUrl() ?>devel/command/hintsoff?return=<?= $this->helper('devel/url')->getCurrentUrl() ?>">Hints off</a></li>
-		
-		<li><a href="http://docs.magentocommerce.com" onclick="DevelGlobals.PanelManager.get('dhmedia_devel_block_panel_docs').open(this.href); return false;">Docs</a></li>
+		<li>
+			<a
+				href="<?php echo Mage::getBaseUrl() ?>devel/command/clearcache?return=<?php echo $this->helper('devel/url')->getCurrentUrl() ?>"
+				class="has-sprite sprite-small icon-important">
+				Clear cache
+			</a>
+		</li>
+		<li>
+			<a
+				href="<?php echo Mage::getBaseUrl() ?>devel/command/reindex?return=<?php echo $this->helper('devel/url')->getCurrentUrl() ?>"
+				class="has-sprite sprite-small icon-reindex">
+				Re-index
+			</a>
+		</li>
+		<li>
+			<a
+				href="<?php echo Mage::getBaseUrl() ?>devel/command/hintson?return=<?php echo $this->helper('devel/url')->getCurrentUrl() ?>" 
+				class="has-sprite sprite-small icon-hints">
+				Hints on
+			</a>
+		</li>
+		<li>
+			<a
+				href="<?php echo Mage::getBaseUrl() ?>devel/command/hintsoff?return=<?php echo $this->helper('devel/url')->getCurrentUrl() ?>"
+				class="has-sprite sprite-small icon-hints">
+				Hints off
+			</a>
+		</li>
 		
 		<li>
-			<a href="#">Execute PHP</a>
+			<a
+				href="http://docs.magentocommerce.com"
+				onclick="DevelGlobals.PanelManager.get('dhmedia_devel_block_panel_docs').open(this.href); return false;"
+				class="has-sprite sprite-small icon-documentation">
+				Docs
+			</a>
+		</li>
+		
+		<li>
+			<a href="#"  class="has-sprite sprite-small icon-executephp">Execute PHP</a>
 			<div class="show-on-hover">
-				<form action="<?= Mage::getBaseUrl() ?>devel/command/execphp">
+				<form action="<?php echo Mage::getBaseUrl() ?>devel/command/execphp">
 					<textarea name="php"></textarea>
 					<input type="submit" value="Execute" />
 					<div class="clear-fix"></div>
@@ -24,7 +63,7 @@
 		</li>
 		
 		<li>
-			<a href="#">Theme info</a>
+			<a href="#" class="has-sprite sprite-small icon-themeinfo">Theme info</a>
 			<div class="show-on-hover">
 				<table>
 					<tr>
@@ -59,7 +98,14 @@
 			</div>
 		</li>
 		
-		<li><a href="<?= Mage::getBaseUrl() ?>devel/filesystem/edit/type/layout?layout=local.xml" onclick="DevelGlobals.PanelManager.get('dhmedia_devel_block_panel_editor').open(this.href); return false;">local.xml</a></li>
+		<li>
+			<a
+				href="<?php echo Mage::getBaseUrl() ?>devel/filesystem/edit/type/layout?layout=local.xml"
+				onclick="DevelGlobals.PanelManager.get('dhmedia_devel_block_panel_editor').open(this.href); return false;"
+				class="has-sprite sprite-small icon-layoutxml">
+				local.xml
+			</a>
+		</li>
 	</ul>
 	
 	<div class="clear-fix"></div>
@@ -67,23 +113,32 @@
 </div>
 
 <div id="dhmedia_devel_block_panels">
-	<div id="dhmedia_devel_block_panel_admin" class="devel-panel" title="Admin">
-		<iframe id="devel-admin" src="<?= Mage::getBaseUrl() . $this->getAdminPath() ?>"></iframe>
+	<div id="dhmedia_devel_block_panel_admin" class="devel-panel" title="Admin"
+		data-button-class="sprite-small icon-settings">
+		<iframe id="devel-admin" src="<?php echo Mage::getBaseUrl() . $this->getAdminPath() ?>"></iframe>
 	</div>
 	
-	<div id="dhmedia_devel_block_panel_docs" class="devel-panel" title="Docs">
+	<div id="dhmedia_devel_block_panel_docs" class="devel-panel" title="Docs"
+		data-button-class="sprite-small icon-documentation">
 		<iframe id="devel-docs" src="http://docs.magentocommerce.com"></iframe>
 	</div>
 	
-	<div id="dhmedia_devel_block_panel_editor" class="devel-panel" title="Editor">
-		<iframe id="devel-editor" src="<?= $this->helper('devel/url')->getHelpUrl('panels/editor/usage') ?>"></iframe>
+	<div id="dhmedia_devel_block_panel_editor" class="devel-panel" title="Editor"
+		data-button-class="sprite-small icon-editor">
+		<iframe id="devel-editor" 
+			src="<?php echo $this->helper('devel/url')->getHelpUrl('panels/editor/usage') ?>">
+		</iframe>
 	</div>
 	
-	<div id="dhmedia_devel_block_panel_block" class="devel-panel" title="Block">
-		<iframe id="devel-block" src="<?= $this->helper('devel/url')->getHelpUrl('panels/block/usage') ?>"></iframe>
+	<div id="dhmedia_devel_block_panel_block" class="devel-panel" title="Block" 
+		data-button-class="sprite-small icon-blocks">
+		<iframe id="devel-block"
+			src="<?php echo $this->helper('devel/url')->getHelpUrl('panels/block/usage') ?>">
+		</iframe>
 	</div>
 	
-	<div id="dhmedia_devel_block_panel_xml" class="devel-panel" title="Xml">
+	<div id="dhmedia_devel_block_panel_xml" class="devel-panel" title="Xml" 
+		data-button-class="sprite-small icon-layoutxml">
 <!--
 You can't tab or space the following textarea without 
 creating problems with the editor. Putting in all on
@@ -108,7 +163,6 @@ document.observe("dom:loaded", function()
 	DevelGlobals.PanelManager = new DevelPanelManager('#dhmedia_devel_block_panels', {
 		container: {
 			css: {
-				//left: '500px'
 				marginLeft: '-1ex'
 			}
 		},
@@ -117,7 +171,9 @@ document.observe("dom:loaded", function()
 		}
 	});
 
-	new DevelUpdateNotifier('#dhmedia_devel_block_frontend .update-notifier-box', '<?= Mage::getBaseUrl() ?>devel/self/hasupdate');
+	new DevelUpdateNotifier('#dhmedia_devel_block_frontend .update-notifier-box',
+		'<?php echo Mage::getBaseUrl() ?>devel/self/hasupdate'
+	);
 
 	new DevelSprites('.has-sprite');
 });

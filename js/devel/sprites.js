@@ -8,7 +8,7 @@ DevelSprites.prototype =
 	{
 		$$(selector).each(function(el){
 			var span = document.createElement('span');
-			$(span).addClassName('sprite-icon');
+			$(span).addClassName('devel-sprite-icon');
 			el.appendChild(span);
 		});
 	}
