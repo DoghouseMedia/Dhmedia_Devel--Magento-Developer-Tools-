@@ -2,10 +2,40 @@
 
 class Dhmedia_Devel_Helper_Url extends Mage_Core_Helper_Url
 {
+	public function getUrl($develPath, array $params = null)
+	{
+		$url = Mage::getBaseUrl() . 'devel/' . $develPath;
+		
+		if (is_array($params) AND count($params)) {
+			$url .= '?' . http_build_query($params); 
+		}
+		
+		return $url;
+	}
+	
+	public function getUrlReturn($develPath, $returnUrl=null)
+	{
+		if (! $returnUrl) {
+			$returnUrl = $this->getCurrentUrl();
+		}
+		
+		return $this->getUrl($develPath, array(
+			'return' => $returnUrl
+		));
+	}
+	
 	public function getHelpUrl($topic)
 	{
-		return Mage::getBaseUrl() . 'devel/help/view?' . http_build_query(array(
+		return $this->getUrl('help/view', array(
 			'topic' => $topic
+		));
+	}
+	
+	public function getEditUrl($type, $path)
+	{
+		return $this->getUrl('filesystem/edit', array(
+			'type' => $type,
+			'layout' => $path
 		));
 	}
 	

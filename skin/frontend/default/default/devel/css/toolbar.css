@@ -12,11 +12,11 @@ body{ padding-top: 4.5ex; }
 
 	z-index: 9991;
 
-	height: 4.5ex;
+	min-height: 4.5ex;
 
 	color: #ccc;
 
-	text-align: center;
+	text-align: left;
 	line-height: normal;
 	
 
@@ -56,12 +56,13 @@ body{ padding-top: 4.5ex; }
 
 /* Menu */
 #dhmedia_devel_block_frontend ul {
-	display: inline-block;
+	/*display: inline-block;*/
+	float: left;
 }
 
 #dhmedia_devel_block_frontend ul li {
 	position: relative;
-	display: inline-block;
+	display: block;
 	margin: 0;
 	padding: 0;
 	float: left;
@@ -74,18 +75,29 @@ body{ padding-top: 4.5ex; }
 	-moz-transition: all 1s ease-in-out;
 	transition: all 1s ease-in-out;
 
+	border-radius: inherit;
 }
 
+#dhmedia_devel_block_frontend ul li li {
+	margin: 1ex;
+	float: none;
+}
+
+/* 1rst level links - horizontal */
 #dhmedia_devel_block_frontend ul li:hover {
 	background-color: #000000;
 
 	-webkit-transition: all 0.1s ease-in-out;
 	-moz-transition: all 0.1s ease-in-out;
 	transition: all 0.1s ease-in-out;
-
 }
-#dhmedia_devel_block_frontend ul li:last-child {
+#dhmedia_devel_block_frontend > ul > li:last-child {
 	border-right: 1px solid #000;
+}
+
+/* 2nd+ level links - vertical */
+#dhmedia_devel_block_frontend ul li ul li:hover {
+	background-color: #ccc;
 }
 
 /* Menu links */
@@ -93,9 +105,12 @@ body{ padding-top: 4.5ex; }
 	display: block;
 	padding: 1ex 3ex;
 	position: relative;
+	/*float: left;*/
+	white-space: nowrap;
+	clear: both;
 }
 
-/* "Show on hover" divs */
+/* "Show on hover" */
 #dhmedia_devel_block_frontend ul li .show-on-hover {
 	position: absolute;
 	z-index: 99999;
@@ -108,9 +123,30 @@ body{ padding-top: 4.5ex; }
 	border-radius: 0 0 5px 5px;
 
 	box-shadow: 0 0 5px #333;
+
+	top: 100%;
+	left: 0;
 }
-#dhmedia_devel_block_frontend ul li:hover .show-on-hover {
+#dhmedia_devel_block_frontend ul li ul.show-on-hover {
+	padding: 0;
+	top: 100%;
+}
+#dhmedia_devel_block_frontend ul li ul.show-on-hover * {
+	border-radius: 5px;
+}
+/* Sub - "Show on hover" */
+#dhmedia_devel_block_frontend ul li ul .show-on-hover {
+	top: -5px;
+	left: 100%;
+	box-shadow: 0 0 10px #000;
+}
+#dhmedia_devel_block_frontend ul li:hover > .show-on-hover {
 	display: block;
+}
+
+
+#dhmedia_devel_block_frontend ul li a.has-more:after {
+	content: "+"
 }
 
 #dhmedia_devel_block_frontend ul li .show-on-hover .result {
@@ -195,7 +231,7 @@ body{ padding-top: 4.5ex; }
 
 /* Doghouse Media link */
 #dhmedia_devel_block_frontend .dhlink {
-	float: right;
+	float: left;
 	padding: 1ex 3ex;
 	border-left: 1px solid #000;
 }
@@ -208,7 +244,7 @@ body{ padding-top: 4.5ex; }
 
 /* Update notifier box */
 #dhmedia_devel_block_frontend .update-notifier-box {
-	float: left;
+	float: right;
 	font-weight: bold;
 	padding: 0.5ex 3ex;
 }

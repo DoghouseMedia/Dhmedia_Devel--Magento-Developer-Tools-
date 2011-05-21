@@ -13,98 +13,214 @@
 	
 	<ul>
 		<li>
-			<a
-				href="<?php echo Mage::getBaseUrl() ?>devel/command/clearcache?return=<?php echo $this->helper('devel/url')->getCurrentUrl() ?>"
-				class="has-sprite sprite-small icon-important">
-				Clear cache
+			<a href="#" onclick="return false;">
+				Devel
 			</a>
+			<ul class="show-on-hover">
+				<li>
+					<a href="#" onclick="return false;" class="has-more">
+						Hints
+					</a>
+					<ul class="show-on-hover">
+						<li>
+							<a href="<?php echo $this->helper('devel/url')->getUrlReturn('command/hintson') ?>">
+								On
+							</a>
+						</li>
+						<li>
+							<a href="<?php echo $this->helper('devel/url')->getUrlReturn('command/hintsoff') ?>">
+								Off
+							</a>
+						</li>
+						<li>
+							<a href="#" onclick="return false;">
+								Toggle display (no page reload)
+							</a>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a href="#" onclick="return false;" class="has-more">
+						Page properties
+					</a>
+					<ul class="show-on-hover">
+						<li>
+							<a href="#" onclick="return false;">
+								View layout (xml)
+							</a>
+						</li>
+						<li>
+							<a href="#" onclick="return false;">
+								...
+							</a>
+						</li>
+						<li>
+							<a href="#" onclick="return false;">
+								...
+							</a>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a href="#" onclick="return false;" class="has-more">
+						Themes
+					</a>
+					<ul class="show-on-hover">
+						<li>
+							<a href="<?php echo $this->helper('devel/url')->getEditUrl('layout', 'local.xml') ?>">
+								Edit local.xml
+							</a>
+						</li>
+						<li>
+							<a href="#" onclick="return false;">
+								Switch
+							</a>
+						</li>
+						<li>
+							<a href="#" onclick="return false;" class="has-more">
+								Theme info
+							</a>
+							<div class="show-on-hover">
+								<table>
+									<tr>
+										<th>Store</th>
+										<td><?php echo Mage::getDesign()->getStore()->getId() ?></td>
+									</tr>
+									<tr>	
+										<th>Area</th>
+										<td><?php echo Mage::getDesign()->getArea() ?></td>
+									</tr>
+									<tr>	
+										<th>Package</th>
+										<td><?php echo Mage::getDesign()->getPackageName() ?></td>
+									</tr>
+									<tr>
+										<th>Theme</th>
+										<td><?php echo Mage::getDesign()->getTheme('frontend') ?></td>
+									</tr>
+									<tr>
+										<th>Theme list</th>
+										<td><pre><?php print_r(Mage::getDesign()->getThemeList()) ?></pre></td>
+									</tr>
+									<tr>	
+										<th>Base dir</th>
+										<td><?php echo Mage::getBaseDir('design') ?></td>
+									</tr>
+									<tr>
+										<th>Skin url</th>
+										<td><?php echo $this->getSkinUrl('') ?></td>
+									</tr>
+								</table>
+							</div>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a href="#" onclick="return false;" class="has-more">
+						Tools
+					</a>
+					<ul class="show-on-hover">
+						<li>
+							<a href="#" onclick="return false;" class="has-more">
+								Execute PHP
+							</a>
+							<div class="show-on-hover">
+								<form action="<?php echo $this->helper('devel/url')->getUrl('command/execphp') ?>">
+									<textarea name="php"></textarea>
+									<input type="submit" value="Execute" />
+									<div class="clear-fix"></div>
+									<div class="result"></div>
+								</form>
+							</div>
+						</li>
+						<li>
+							<a href="#" onclick="return false;">
+								View phpinfo.php
+							</a>
+						</li>
+						<li>
+							<a href="#" onclick="return false;">
+								Edit .htaccess
+							</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
 		</li>
 		<li>
-			<a
-				href="<?php echo Mage::getBaseUrl() ?>devel/command/reindex?return=<?php echo $this->helper('devel/url')->getCurrentUrl() ?>"
-				class="has-sprite sprite-small icon-reindex">
-				Re-index
+			<a href="#" onclick="return false;">
+				Admin
 			</a>
+			<ul class="show-on-hover">
+				<li>
+					<a href="<?php echo Mage::getBaseUrl() . $this->getAdminPath() ?>"
+						onclick="DevelGlobals.PanelManager.get('dhmedia_devel_block_panel_admin').open(this.href); return false;">
+						Open admin
+					</a>
+				</li>
+				</li>
+				<li>
+					<a href="<?php echo $this->helper('devel/url')->getUrlReturn('command/clearcache') ?>">
+						Clear cache
+					</a>
+				</li>
+				<li>
+					<a href="<?php echo $this->helper('devel/url')->getUrlReturn('command/reindex') ?>">
+						Re-index
+					</a>
+				</li>
+				<li>
+					<a href="#" onclick="return false;" class="has-more">
+						Config
+					</a>
+					<ul class="show-on-hover">
+						<li>
+							<a href="#" onclick="return false;">Diff</a>
+						</li>
+						<li>
+							<a href="#" onclick="return false;">Profiles</a>
+						</li>
+						<li>
+							<a href="#" onclick="return false;">...</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
 		</li>
 		<li>
-			<a
-				href="<?php echo Mage::getBaseUrl() ?>devel/command/hintson?return=<?php echo $this->helper('devel/url')->getCurrentUrl() ?>" 
-				class="has-sprite sprite-small icon-hints">
-				Hints on
+			<a href="#" onclick="return false;">
+				Help
 			</a>
-		</li>
-		<li>
-			<a
-				href="<?php echo Mage::getBaseUrl() ?>devel/command/hintsoff?return=<?php echo $this->helper('devel/url')->getCurrentUrl() ?>"
-				class="has-sprite sprite-small icon-hints">
-				Hints off
-			</a>
-		</li>
-		
-		<li>
-			<a
-				href="http://docs.magentocommerce.com"
-				onclick="DevelGlobals.PanelManager.get('dhmedia_devel_block_panel_docs').open(this.href); return false;"
-				class="has-sprite sprite-small icon-documentation">
-				Docs
-			</a>
-		</li>
-		
-		<li>
-			<a href="#"  class="has-sprite sprite-small icon-executephp">Execute PHP</a>
-			<div class="show-on-hover">
-				<form action="<?php echo Mage::getBaseUrl() ?>devel/command/execphp">
-					<textarea name="php"></textarea>
-					<input type="submit" value="Execute" />
-					<div class="clear-fix"></div>
-					<div class="result"></div>
-				</form>
-			</div>
-		</li>
-		
-		<li>
-			<a href="#" class="has-sprite sprite-small icon-themeinfo">Theme info</a>
-			<div class="show-on-hover">
-				<table>
-					<tr>
-						<th>Store</th>
-						<td><?php echo Mage::getDesign()->getStore()->getId() ?></td>
-					</tr>
-					<tr>	
-						<th>Area</th>
-						<td><?php echo Mage::getDesign()->getArea() ?></td>
-					</tr>
-					<tr>	
-						<th>Package</th>
-						<td><?php echo Mage::getDesign()->getPackageName() ?></td>
-					</tr>
-					<tr>
-						<th>Theme</th>
-						<td><?php echo Mage::getDesign()->getTheme('frontend') ?></td>
-					</tr>
-					<tr>
-						<th>Theme list</th>
-						<td><pre><?php print_r(Mage::getDesign()->getThemeList()) ?></pre></td>
-					</tr>
-					<tr>	
-						<th>Base dir</th>
-						<td><?php echo Mage::getBaseDir('design') ?></td>
-					</tr>
-					<tr>
-						<th>Skin url</th>
-						<td><?php echo $this->getSkinUrl('') ?></td>
-					</tr>
-				</table>
-			</div>
-		</li>
-		
-		<li>
-			<a
-				href="<?php echo Mage::getBaseUrl() ?>devel/filesystem/edit/type/layout?layout=local.xml"
-				onclick="DevelGlobals.PanelManager.get('dhmedia_devel_block_panel_editor').open(this.href); return false;"
-				class="has-sprite sprite-small icon-layoutxml">
-				local.xml
-			</a>
+			<ul class="show-on-hover">
+				<li>
+					<a href="http://docs.magentocommerce.com"
+						onclick="DevelGlobals.PanelManager.get('dhmedia_devel_block_panel_docs').open(this.href); return false;">
+						Magento Docs
+					</a>
+				</li>
+				<li>
+					<a href="#" onclick="return false;" class="has-more">
+						Devel Docs
+					</a>
+					<ul class="show-on-hover">
+						<li>
+							<a href="#" onclick="return false;">
+								Topic ...
+							</a>
+						</li>
+						<li>
+							<a href="#" onclick="return false;">
+								Topic ...
+							</a>
+						</li>
+						<li>
+							<a href="#" onclick="return false;">
+								Topic ...
+							</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
 		</li>
 	</ul>
 	
@@ -172,7 +288,7 @@ document.observe("dom:loaded", function()
 	});
 
 	new DevelUpdateNotifier('#dhmedia_devel_block_frontend .update-notifier-box',
-		'<?php echo Mage::getBaseUrl() ?>devel/self/hasupdate'
+		'<?php echo $this->helper('devel/url')->getUrl('self/hasupdate') ?>'
 	);
 
 	new DevelSprites('.has-sprite');
