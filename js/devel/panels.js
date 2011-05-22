@@ -124,7 +124,7 @@ DevelPanel.prototype =
 		
 		panel.button = new DevelPanelButton(panelDom.title, function(e) {
 			panelManager.get(panelDom.id).toggle();
-			Event.stop(e); // stop the form from submitting
+			Event.stop(e); // stop the click
 		});
 		
 		String(panel.panelDom.readAttribute('data-button-class')).split(' ').each(function(className) {

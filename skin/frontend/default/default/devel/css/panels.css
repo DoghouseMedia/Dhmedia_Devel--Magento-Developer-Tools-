@@ -5,8 +5,8 @@
 	display: block;
 
 	position: fixed !important;
-	top: 4.5ex;
-	right: 0 !important;
+	top: 5ex;
+	right: 12em !important;
 	bottom: 0 !important;
 	left: 100%;
 	z-index: 9990;
@@ -91,48 +91,61 @@
 
 /* Panel Buttons */
 .devel-panel-buttons {
-	position: absolute;
+	position: absolute;`
 	top: 5em;
-	/* Left is some weird combo of widths/heights, margins, paddings, and borders */
-	left: -11.5ex;
+	right: -12em;
 	z-index: 1001;
+	width: 12em;
+
+	opacity: 0.3;
+
+	-webkit-transition: all 0.7s ease-in-out;
+	-moz-transition: all 0.7s ease-in-out;
+	-o-transition: all 0.7s ease-in-out;
+	transition: all 0.7s ease-in-out;
+}
+.devel-panel-buttons:hover,
+.devel-panel-buttons.active {
+	opacity: 0.9;
 }
 .devel-panel-buttons .button {
+	positon: relative;
 	display: block;
 	
 	color: #fff;
 	background-color: #222;
 	
-	width: 10ex;
+	width: 80%;
 	height: 2ex;
 	line-height: 2ex;
-	padding: 1ex 3ex;
-	margin: 0 0 13ex 0;
-
-	border-style: solid;
-	border-color: #fff;
-	border-width: 2px 2px 0 2px;
+	padding: 5% 10%;
 
 	text-align: center;
+
+	opacity: 0.7;
 	
 	text-shadow: 0 0 2px #333;
 	box-shadow: 0px 0px 5px #000;
 	-moz-box-shadow: 0px 0px 5px #000;
 	-o-box-shadow: 0px 0px 5px #000;
 
+	-webkit-transition: all 0.1s ease-in-out;
+	-moz-transition: all 0.1s ease-in-out;
+	-o-transition: all 0.1s ease-in-out;
+	transition: all 0.1s ease-in-out;
+	/*
 	-moz-transform: rotate(-90deg);
 	-webkit-transform: rotate(-90deg);
 	-o-transform: rotate(-90deg);
 	transform: rotate(-90deg);
-
+	*/
 	cursor: pointer;
-
-	margin-right: -6ex;
 }
 .devel-panel-buttons .button:hover,
 .devel-panel-buttons .button.active {
-	text-shadow: 0px 0px 12px #fff;
+	text-shadow: 2px 2px 12px #cff;
 	background-color: #000;
+	opacity: 1;
 	
 }
 .devel-panel-buttons .button.close {
