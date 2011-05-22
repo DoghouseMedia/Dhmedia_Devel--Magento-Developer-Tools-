@@ -14,7 +14,8 @@ DevelHelpers.Resizeable.prototype =
 		var helper = this;
 		helper.elements = [];
 		helper.options = Object.extend({
-			onResize: function(e){ /* do something by default? */ }
+			onResize: function(e){ /* do something by default? */ },
+			windowContained: true
 		}, options);
 		
 		$$(selector).each(function(el) {
@@ -22,6 +23,19 @@ DevelHelpers.Resizeable.prototype =
 			helper.initSliders(el)
 			helper.elements.push(el);
 		});
+		
+		if (helper.options.windowContained) {
+			Element.observe(window, 'resize', function(e){
+				helper.elements.each(function(el) {
+					var newHeight = window.innerHeight 
+						- $('dhmedia_devel_block_frontend').getHeight();
+					
+					el.setStyle({
+						height: String(newHeight) + 'px'
+					});
+				});
+			});
+		}
 	},
 	getDimensions: function(el, update) {
 		if (! el.getHeight())

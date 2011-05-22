@@ -109,6 +109,11 @@ body{ padding-top: 4.5ex; }
 	white-space: nowrap;
 	clear: both;
 }
+#dhmedia_devel_block_frontend ul li a.disabled {
+	opacity: 0.6;
+	color: #666;
+	text-decoration: line-through;
+}
 
 /* "Show on hover" */
 #dhmedia_devel_block_frontend ul li .show-on-hover {

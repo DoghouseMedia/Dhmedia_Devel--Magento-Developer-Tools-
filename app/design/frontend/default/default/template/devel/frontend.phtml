@@ -33,7 +33,7 @@
 							</a>
 						</li>
 						<li>
-							<a href="#" onclick="return false;">
+							<a href="#" class="disabled" onclick="return false;">
 								Toggle display (no page reload)
 							</a>
 						</li>
@@ -45,17 +45,17 @@
 					</a>
 					<ul class="show-on-hover">
 						<li>
-							<a href="#" onclick="return false;">
+							<a href="#" class="disabled" onclick="return false;">
 								View layout (xml)
 							</a>
 						</li>
 						<li>
-							<a href="#" onclick="return false;">
+							<a href="#" class="disabled" onclick="return false;">
 								...
 							</a>
 						</li>
 						<li>
-							<a href="#" onclick="return false;">
+							<a href="#" class="disabled" onclick="return false;">
 								...
 							</a>
 						</li>
@@ -67,12 +67,13 @@
 					</a>
 					<ul class="show-on-hover">
 						<li>
-							<a href="<?php echo $this->helper('devel/url')->getEditUrl('layout', 'local.xml') ?>">
+							<a href="<?php echo $this->helper('devel/url')->getEditUrl('layout', 'local.xml') ?>"
+								onclick="DevelGlobals.PanelManager.create('Browser', 'local.xml', ['icon-edit']).open(this.href); return false;">
 								Edit local.xml
 							</a>
 						</li>
 						<li>
-							<a href="#" onclick="return false;">
+							<a href="#" onclick="return false;" class="disabled">
 								Switch
 							</a>
 						</li>
@@ -134,12 +135,16 @@
 							</div>
 						</li>
 						<li>
-							<a href="#" onclick="return false;">
+							<a href="#" class="disabled"
+								onclick="return false;"
+								_onclick="DevelGlobals.PanelManager.create('Browser', this.innerText).open(this.href); return false;">
 								View phpinfo.php
 							</a>
 						</li>
 						<li>
-							<a href="#" onclick="return false;">
+							<a href="#" class="disabled"
+								onclick="return false;"
+								_onclick="DevelGlobals.PanelManager.create('Browser', this.innerText).open(this.href); return false;">
 								Edit .htaccess
 							</a>
 						</li>
@@ -154,8 +159,8 @@
 			<ul class="show-on-hover">
 				<li>
 					<a href="<?php echo Mage::getBaseUrl() . $this->getAdminPath() ?>"
-						onclick="DevelGlobals.PanelManager.get('dhmedia_devel_block_panel_admin').open(this.href); return false;">
-						Open admin
+						onclick="DevelGlobals.PanelManager.create('Browser', this.innerText).open(this.href); return false;">
+						Admin Panel
 					</a>
 				</li>
 				</li>
@@ -175,13 +180,13 @@
 					</a>
 					<ul class="show-on-hover">
 						<li>
-							<a href="#" onclick="return false;">Diff</a>
+							<a href="#" class="disabled" onclick="return false;">Diff</a>
 						</li>
 						<li>
-							<a href="#" onclick="return false;">Profiles</a>
+							<a href="#" class="disabled" onclick="return false;">Profiles</a>
 						</li>
 						<li>
-							<a href="#" onclick="return false;">...</a>
+							<a href="#" class="disabled" onclick="return false;">...</a>
 						</li>
 					</ul>
 				</li>
@@ -194,7 +199,7 @@
 			<ul class="show-on-hover">
 				<li>
 					<a href="http://docs.magentocommerce.com"
-						onclick="DevelGlobals.PanelManager.get('dhmedia_devel_block_panel_docs').open(this.href); return false;">
+						onclick="DevelGlobals.PanelManager.create('Browser', this.innerText).open(this.href); return false;">
 						Magento Docs
 					</a>
 				</li>
@@ -204,17 +209,23 @@
 					</a>
 					<ul class="show-on-hover">
 						<li>
-							<a href="#" onclick="return false;">
+							<a href="#" class="disabled"
+								onclick="return false;"
+								_onclick="DevelGlobals.PanelManager.create('Browser', this.innerText).open(this.href); return false;">
 								Topic ...
 							</a>
 						</li>
 						<li>
-							<a href="#" onclick="return false;">
+							<a href="#" class="disabled"
+								onclick="return false;"
+								_onclick="DevelGlobals.PanelManager.create('Browser', this.innerText).open(this.href); return false;">
 								Topic ...
 							</a>
 						</li>
 						<li>
-							<a href="#" onclick="return false;">
+							<a href="#" class="disabled"
+								onclick="return false;"
+								_onclick="DevelGlobals.PanelManager.create('Browser', this.innerText).open(this.href); return false;">
 								Topic ...
 							</a>
 						</li>
@@ -229,15 +240,8 @@
 </div>
 
 <div id="dhmedia_devel_block_panels">
-	<div id="dhmedia_devel_block_panel_admin" class="devel-panel" title="Admin"
-		data-button-class="sprite-small icon-settings">
-		<iframe id="devel-admin" src="<?php echo Mage::getBaseUrl() . $this->getAdminPath() ?>"></iframe>
-	</div>
 	
-	<div id="dhmedia_devel_block_panel_docs" class="devel-panel" title="Docs"
-		data-button-class="sprite-small icon-documentation">
-		<iframe id="devel-docs" src="http://docs.magentocommerce.com"></iframe>
-	</div>
+	<!--  These blocks are only here for reference. Remove when panel refactoring is done. -->
 	
 	<div id="dhmedia_devel_block_panel_editor" class="devel-panel" title="Editor"
 		data-button-class="sprite-small icon-editor">
@@ -281,9 +285,6 @@ document.observe("dom:loaded", function()
 			css: {
 				marginLeft: '-1ex'
 			}
-		},
-		panel: {
-			selector: '.devel-panel'
 		}
 	});
 

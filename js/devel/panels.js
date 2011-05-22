@@ -4,10 +4,11 @@
 var DevelPanelManager = Class.create();
 DevelPanelManager.prototype =
 {
+	panels: [],
+	
 	initialize: function(selector, options)
 	{
 		var panelManager = this;
-		panelManager.panels = [];
 		panelManager.options = Object.extend({
 			left: String($$('body')[0].getWidth()/2) + 'px'
 		}, options);
@@ -17,21 +18,7 @@ DevelPanelManager.prototype =
 		panelManager.buttonContainer = document.createElement('div');
 		$(panelManager.buttonContainer).addClassName('devel-panel-buttons');
 		panelManager.container.appendChild(panelManager.buttonContainer);
-		
-		$$(panelManager.options.panel.selector).each(function(panelDom) {
-			var panel = new DevelPanel(panelManager, panelDom);
-			panelManager.panels[panelDom.id] = panel;
-			panelManager.addButton(panel.getButton().getDom());
-		});
 
-		var btnClose = new DevelPanelButton('Close [x]', function(e) {
-			panelManager.closeAll();
-			Event.stop(e); // stop the form from submitting
-		});
-		$(btnClose.getDom()).addClassName('close');
-
-		panelManager.addButton(btnClose.getDom());
-		
 		panelManager.sprites = new DevelSprites(selector + ' .devel-panel-buttons .button');
 		
 		panelManager.resizeable = new DevelHelpers.Resizeable(selector, {
@@ -50,10 +37,40 @@ DevelPanelManager.prototype =
 		});
 		
 		panelManager.container.setStyle(panelManager.options.container.css);
+		
+		panelManager.checkEmpty();
+	},
+	checkEmpty: function()
+	{
+		if (this.panels.length && this.buttonContainer.hasClassName('empty')) {
+			this.buttonContainer.removeClassName('empty');
+		} else if (! this.panels.length && ! this.buttonContainer.hasClassName('empty')) {
+			this.buttonContainer.addClassName('empty');
+		}
 	},
 	get: function(panelId)
 	{
 		return this.panels[panelId];
+	},
+	create: function(type, title, iconClasses)
+	{
+		var panelManager = this;
+
+		eval('var panel = new DevelPanel' + type + '(panelManager, title, iconClasses);');
+		panelManager.panels[panel.panelId] = panel;
+		
+		panelManager.container.appendChild(panel.panelDom);
+		
+		panelManager.addButton(panel.getButton().getDom());
+		panelManager.sprites.add(panel.getButton().getDom());
+		
+		panelManager.checkEmpty();
+		
+		return panel;
+	},
+	remove: function(panelId)
+	{
+		delete this.panels[panelId];
 	},
 	closeAll: function() {
 		this.closePanels();
@@ -94,7 +111,7 @@ DevelPanelManager.prototype =
 		$(this.container).addClassName('active');
 		
 		var lastLeft = this.container.readAttribute('lastleft');
-		if (lastLeft > 0 || lastLeft === 0) {
+		if (lastLeft > 0 || lastLeft === 0 || lastLeft === '0') {
 			this.container.setStyle({left: lastLeft + 'px'});
 		} else {
 			this.container.setStyle({left: this.options.left});
@@ -116,31 +133,44 @@ DevelPanel.prototype =
 {
 	className: 'DevelPanel',
 	
-	initialize: function(panelManager, panelDom) //this function is called as a constructor
+	initialize: function(panelManager, title, iconClasses) //this function is called as a constructor
 	{
+		if (!panelManager) return; // stop subclasses from triggering stuff
+		
 		var panel = this;
 		panel.panelManager = panelManager;
-		panel.panelDom = panelDom;
+		panel.panelDom = document.createElement('div');
+		panel.panelDom.addClassName('devel-panel');
 		
-		panel.button = new DevelPanelButton(panelDom.title, function(e) {
-			panelManager.get(panelDom.id).toggle();
-			Event.stop(e); // stop the click
-		});
+		panel.panelId = panel.panelManager.panels.length + 1;
 		
-		String(panel.panelDom.readAttribute('data-button-class')).split(' ').each(function(className) {
-			panel.button.getDom().addClassName(className);
-		});
+		panel.button = new DevelPanelButton(panel, title);
+		
+		if (iconClasses) {
+			if (iconClasses.length) {
+				panel.button.getDom().addClassName('sprite-small');
+			}
+		
+			iconClasses.each(function(iconClass) {
+				panel.button.getDom().addClassName(iconClass);
+			});
+		}
+		
+		return panel;
 	},
 	getButton: function() {
 		return this.button;
 	},
 	load: function(url) {
-		var iframe = $(this.panelDom).select('iframe')[0];
+		if (! this.iframe) {
+			this.iframe = document.createElement('iframe');
+			this.panelDom.appendChild(this.iframe);
+		}
 		
+		Event.observe(this.iframe, 'load', this.postLoad.bind(this));
 		this.preLoad();
-		Event.observe(iframe, 'load', this.postLoad.bind(this));
 		
-		iframe.src = url;
+		this.iframe.src = url;
 	},
 	preLoad: function() {
 		if (! this.loadingProtector) {
@@ -174,11 +204,15 @@ DevelPanel.prototype =
 			this.open();
 		}
 	},
+	isOpen: function()
+	{
+		return $(this.panelDom).hasClassName('active');
+	},
 	open: function(url) {
 		this.panelManager.closePanels();
 		
 		$(this.panelDom).addClassName('active');
-		$(this.button.getDom()).addClassName('active');
+		this.button.open();
 
 		if (url) {
 			this.load(url);
@@ -192,7 +226,12 @@ DevelPanel.prototype =
 	},
 	close: function() {
 		$(this.panelDom).removeClassName('active');
-		$(this.button.getDom()).removeClassName('active');
+		this.button.close();
+	},
+	remove: function() {
+		this.panelManager.remove();
+		$(this.panelDom).remove();
+		this.button.remove();
 	}
 };
 
@@ -202,13 +241,74 @@ DevelPanel.prototype =
 var DevelPanelButton = Class.create();
 DevelPanelButton.prototype =
 {
-	initialize: function(title, clickCallback) {
-		this.dom = document.createElement('span');
-		this.dom.innerHTML = title;
-		$(this.dom).addClassName('button');
-		$(this.dom).observe('click', clickCallback);
+	initialize: function(panel, title, clickCallback)
+	{
+		var button = this;
+		
+		if (! clickCallback) {
+			var clickCallback = button.onClick; 
+		}
+		
+		button.panel = panel;
+		button.dom = document.createElement('span');
+		button.dom.innerHTML = title;
+		button.dom.title = title;
+		$(button.dom).addClassName('button');
+		$(button.dom).observe('click', clickCallback.bind(button));
+		
+		button.closeBtn = document.createElement('span');
+		$(button.closeBtn)
+			.addClassName('sprite-small')
+			.addClassName('icon-close')
+			.addClassName('close')
+			.observe('click', this.onCloseClick.bind(button));
+		button.panel.panelManager.sprites.add(button.closeBtn);
+		button.dom.appendChild(button.closeBtn);
 	},
-	getDom: function() {
+	onClick: function(e)
+	{
+		this.panel.toggle();
+		
+		Event.stop(e); // stop the click
+	},
+	onCloseClick: function(e)
+	{
+		if (this.panel.isOpen()) {
+			this.panel.toggle();
+		} else {
+			this.panel.remove();
+		}
+
+		Event.stop(e); // stop the click
+	},
+	getDom: function()
+	{
 		return this.dom;
+	},
+	isOpen: function()
+	{
+		return $(this.getDom()).hasClassName('active');
+	},
+	open: function()
+	{
+		$(this.getDom()).addClassName('active');
+	},
+	close: function()
+	{
+		$(this.getDom()).removeClassName('active');
+	},
+	remove: function()
+	{
+		$(this.getDom()).remove();
 	}
 }
+
+/**
+ * DevelPanelBrowser
+ */
+var DevelPanelBrowser = Class.create();
+DevelPanelBrowser.prototype = Object.extend(new DevelPanel(),
+{
+	
+});
+
