@@ -171,6 +171,8 @@ DevelPanel.prototype =
 		this.preLoad();
 		
 		this.iframe.src = url;
+		
+		return this; // chainable
 	},
 	preLoad: function() {
 		if (! this.loadingProtector) {
@@ -193,9 +195,13 @@ DevelPanel.prototype =
 		}
 		
 		this.loadingProtector.addClassName('active');
+		
+		return this; // chainable
 	},
 	postLoad: function() {
 		this.loadingProtector.removeClassName('active');
+		
+		return this; // chainable
 	},
 	toggle: function() {
 		if ($(this.panelDom).hasClassName('active')) {
@@ -203,6 +209,8 @@ DevelPanel.prototype =
 		} else {
 			this.open();
 		}
+		
+		return this; // chainable
 	},
 	isOpen: function()
 	{
@@ -216,22 +224,44 @@ DevelPanel.prototype =
 
 		if (url) {
 			this.load(url);
+			this.setType('url');
 		}
 		
 		this.panelManager.openContainers();
+		
+		return this; // chainable
+	},
+	setType: function(type) {
+		if (type == 'content') {
+			$(this.panelDom).addClassName('direct-content');
+		} else {
+			$(this.panelDom).removeClassName('direct-content');
+		}
+		
+		return this; // chainable
 	},
 	setContent: function(content) {
-		$(this.panelDom).addClassName('direct-content');
+		this.setType('content');
 		$(this.panelDom).innerHTML = content;
+		
+		return this; // chainable
+	},
+	setTitle: function(title) {
+		this.button.setTitle(title);
+		
+		return this; // chainable
 	},
 	close: function() {
 		$(this.panelDom).removeClassName('active');
 		this.button.close();
+		
+		return this; // chainable
 	},
 	remove: function() {
 		this.panelManager.remove();
 		$(this.panelDom).remove();
 		this.button.remove();
+		delete this;
 	}
 };
 
@@ -251,8 +281,7 @@ DevelPanelButton.prototype =
 		
 		button.panel = panel;
 		button.dom = document.createElement('span');
-		button.dom.innerHTML = title;
-		button.dom.title = title;
+		button.setTitle(title);
 		$(button.dom).addClassName('button');
 		$(button.dom).observe('click', clickCallback.bind(button));
 		
@@ -300,6 +329,11 @@ DevelPanelButton.prototype =
 	remove: function()
 	{
 		$(this.getDom()).remove();
+	},
+	setTitle: function(title)
+	{
+		this.dom.innerHTML = title;
+		this.dom.title = title;
 	}
 }
 
