@@ -23,18 +23,15 @@
 
 	font:normal 11px Arial;
 	text-align:left !important;
+
+	padding: 1ex 3ex;
+
+	cursor: pointer;
 }
 .devel-hint:hover > .hints {
 	display: inline-block !important;
 	z-index: 999;
 }
 .devel-hint .hint {
-	padding: 1ex;
-	border-bottom: 1px solid #333;
-}
-.devel-hint .hint:last-child {
-	border: none;
-}
-.devel-hint .hide{
 	display: none;
 }

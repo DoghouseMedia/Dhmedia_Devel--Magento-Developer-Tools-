@@ -277,8 +277,10 @@ document.observe("dom:loaded", function()
 {
 	new DevelForms('#dhmedia_devel_block_frontend form');
 
-	new DevelHintBlock('.devel-hint .hints .hint[rel="block"]');
-	new DevelHintTemplate('.devel-hint .hints .hint[rel="template"]');
+	new DevelHints('.devel-hint .hints');
+	
+	//new DevelHintBlock('.devel-hint .hints .hint[rel="block"]');
+	//new DevelHintTemplate('.devel-hint .hints .hint[rel="template"]');
 	
 	DevelGlobals.PanelManager = new DevelPanelManager('#dhmedia_devel_block_panels', {
 		container: {

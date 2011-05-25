@@ -200,114 +200,17 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
         // already defined variables
         extract ($this->_viewVars, EXTR_SKIP);
         $do = $this->getDirectOutput();
-
-        $includeFilePath = realpath($this->_viewDir . DS . $fileName);
         
         if (!$do) {
             ob_start();
         }
         if ($this->getShowTemplateHints()) {
             echo '<div class="devel-hint">';
-            echo '<div class="hints" style="display:none;">';
-            
-            // Template hint
-            $dataFileinfo = Zend_Json::encode(array(
-            	'filename' => $fileName,
-            	'template' => $this->getTemplate(),
-            	'viewPath' => $this->_viewDir,
-            	'path' => $includeFilePath
-            ));
-            $dataEditor = Zend_Json::encode(array(
-            	'url' => Mage::getBaseUrl() . 'devel/filesystem/edit/type/template?template=' . urlencode($this->getTemplate())
-            ));
-            echo '<div class="hint template-hint" rel="template" title="'.$fileName.'">';
-            	echo $fileName;
-            	echo '<span class="hide" rel="fileinfo">';
-                	echo $dataFileinfo;
-                echo '</span>';
-                echo '<span class="hide" rel="editor">';
-                	echo $dataEditor;
-                echo '</span>';
-            echo '</div>';
-            
-            // Block hint
-            if (self::$_showTemplateHintsBlocks) {
-                $thisClass = get_class($this);
-                $dataVars = Zend_Json::encode(get_defined_vars());
-                $dataThis = Zend_Json::encode(get_object_vars($this));
-                $dataMethods = Zend_Json::encode(get_class_methods($this));
-                $dataDocs = Zend_Json::encode(array(
-                	'url' => $this->getDocsUrl()
-                ));
-
-                /* Detect xml layouts - START */
-                $layout = Mage::getSingleton('core/layout');
-                $update = $layout->getUpdate();
-                $xml = $update->asSimplexml();
-                
-                $xmlLayoutData = array();
-                
-                $dresults = $xml->xpath('//devel[xml//@name="' . $this->getNameInLayout() . '"]');
-                
-                //echo "\n\nXPATH\n\n";
-                //echo $this->getNameInLayout() . "\n\n";
-                foreach($dresults as $dresult) {
-                	//echo 'FILE: ' . $dresult->file . "\n";
-                	
-                	$_xmlLayoutData = array(
-                		'file' => (string) $dresult->file,
-                		'path' => (string) $dresult->filename,
-                		'url' => Mage::getBaseUrl() . 'devel/filesystem/edit/type/layout?layout=' . urlencode($dresult->file),
-                		'xml' => array()
-                	);
-                	
-                	$res = $dresult->xpath('xml//*[@name="' . $this->getNameInLayout() . '"]');
-                	foreach($res as $r) {
-                		//echo $r->asXML() . "\n";
-                		$_xmlLayoutData['xml'][] = $this->protectXmlInJson($r->asXML());
-                	}
-                	
-                	$xmlLayoutData[] = $_xmlLayoutData;
-                }
-                
-                $dataLayout = Zend_Json::encode($xmlLayoutData);
-				/* Detect xml layouts - END */
-                
-                //$this->allowRenderView(false);
-                //$dataReflect = Zend_Json::encode($this->buildReflect($this));
-                //$this->allowRenderView(true);
-                
-                echo '<div class="hint block-hint" rel="block" title="'.$thisClass.'">';
-                	echo $thisClass;
-                	echo '<span class="hide" rel="this">';
-                		echo $dataThis;
-                	echo '</span>';
-                	echo '<span class="hide" rel="vars">';
-                		echo $dataVars;
-                	echo '</span>';
-                	echo '<span class="hide" rel="methods">';
-                		echo $dataMethods;
-                	echo '</span>';
-                	echo '<span class="hide" rel="docs">';
-                		echo $dataDocs;
-                	echo '</span>';
-                	echo '<span class="hide" rel="reflect">';
-                		//echo $dataReflect;
-                	echo '</span>';
-                	echo '<span class="hide" rel="layout">';
-                		echo $dataLayout;
-                	echo '</span>';
-                echo '</div>';
-                
-                if (count($this->_viewVars) AND function_exists('krumo')) {
-                	echo '<div class="hint block-hint" rel="block" title="'.$thisClass.'">';
-                	krumo($this->_viewVars);
-                	echo '</div>';
-                }
-            }
-            echo '</div>';
         }
 
+        $exception = null;
+        $includeFilePath = realpath($this->_viewDir . DS . $fileName);
+        
         try {
             if (strpos($includeFilePath, realpath($this->_viewDir)) === 0) {
                 include $includeFilePath;
@@ -317,13 +220,81 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
 
         } catch (Exception $e) {
             ob_get_clean();
-            throw $e;
+            $exception = $e;
         }
 
         if ($this->getShowTemplateHints()) {
+        	echo '<div class="hints" style="display:none;">';
+            
+        	echo '<div class="tooltip">Inspect</div>';
+        	
+            /*
+             * Template hint
+             */  
+            echo $this->getDevelHintAsHtml('Template', 'Template (.html)', array(
+            	'filename' => $fileName,
+            	'template' => $this->getTemplate(),
+            	'viewPath' => $this->_viewDir,
+            	'path' => $includeFilePath,
+            	'editorUrl'=> Mage::getBaseUrl() 
+            		. 'devel/filesystem/edit/type/template?template=' 
+            		. urlencode($this->getTemplate())
+            ));
+            
+            /*
+             * Layout hint
+             */  
+            echo $this->getDevelHintAsHtml('Layout', 'Layout (xml)', array(
+            	'xmlLayout' => $this->getDevelDataXmlLayout()
+            ));
+            
+            /*
+             * Class hint
+             */  
+            echo $this->getDevelHintAsHtml('Class', 'Class info', array(
+            	'className' => get_class($this),
+            	'classMethods' => Zend_Json::encode(get_class_methods($this)),
+            	/*
+            	 * @todo
+            	 * classVars break display since we moved them to after the include.
+            	 * There probably tons of tasty info here!
+            	 */
+            	//'classVars' => Zend_Json::encode(get_object_vars($this)),
+            	'localVars' => Zend_Json::encode(get_defined_vars()),
+            	'classDocsUrl' => $this->getDocsUrl(),
+            	/*
+            	 * Was trying to recurse all object/properties/methods of block.
+            	 * Never worked.  Start by figuring out what's in 'classVars'.
+            	 * @see self::getDevelDataClassReflectAll()
+            	 */
+            	//'classReflectAll' => $this->getDevelDataClassReflectAll()
+            ));
+
+            /*
+             * Krump hint
+             * 
+             * Krumo hints is special since it doesn''t return but echoes.
+             * We could handle this with output buffering, but we would have to detect
+             * whether or not it was already on.
+             */  
+            echo '<div class="hint" rel="Krumo" title="Captured Vars">';
+            	echo 'Captures Vars';
+            	echo '<span class="devel-data-json">';
+            	krumo($this->_viewVars);
+            	echo '</span>';
             echo '</div>';
+            
+            /*
+             * Close HINTS
+             */
+            echo '</div>'; // close .hints
+            echo '</div>'; // close .devel-hint
         }
 
+        if ($exception) {
+        	throw $exception;
+        }
+        
         if (!$do) {
             $html = ob_get_clean();
         } else {
@@ -340,9 +311,12 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
      */
     public function renderView()
     {
-//    	if (! $this->allowRenderView()) {
-//    		return;
-//    	}
+    	/*
+    	 * @see self::getDevelDataClassReflectAll()
+    	 */
+		//if (! $this->allowRenderView()) {
+		//	return;
+		//}
     	
         $this->setScriptPath(Mage::getBaseDir('design'));
         $html = $this->fetchView($this->getTemplateFile());
@@ -434,6 +408,70 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
     	}
     }
     
+    public function getDevelDataXmlLayout()
+    {
+    	$xml = Mage::getSingleton('core/layout')
+    		->getUpdate()
+    		->asSimpleXml();
+
+        $data = array();
+
+        $xpathQueries = array(
+        	'develRefs' => '//devel[xml//@name="' . $this->getNameInLayout() . '"]',
+        	'relativeRefs' => 'xml//*[@name="' . $this->getNameInLayout() . '"]'
+        );
+
+        foreach($xml->xpath($xpathQueries['develRefs']) as $res) {
+            $_data = array(
+            	'file' => (string) $res->file,
+               	'path' => (string) $res->filename,
+              	'url' => Mage::getBaseUrl() 
+            		. 'devel/filesystem/edit/type/layout?layout=' 
+					. urlencode($res->file),
+               	'xml' => array()
+            );
+
+            foreach($res->xpath($xpathQueries['relativeRefs']) as $resXml) {
+				$_data['xml'][] = $this->getDevelProtectedXmlInJson($resXml->asXML());
+            }
+               
+           	$data[] = $_data;
+        }
+                
+        return Zend_Json::encode($data);
+    }
+    
+    public function getDevelHintAsHtml($type, $title, $data=array(), $dataType='json')
+    {
+    	$o  = '<div class="hint" rel="' . $type . '" title="' . $title . '">';
+        	$o .= $title;
+        	$o .= '<span class="devel-data-json">';
+        		switch($dataType) {
+        			case 'html': $o .= $data; break;
+        			
+        			default:
+        			case 'json': $o .= Zend_Json::encode($data); break; 
+        		}
+	        $o .= '</span>';
+        $o .= '</div>';
+        
+        return $o;
+    }
+    
+    public function getDevelDataClassReflectAll()
+    {
+        /*
+         * We were trying to cycle through all properties and methods
+         * of the block, had problems with recursion and memory, and have
+         * given up for the moment.
+         */
+        //$this->allowRenderView(false);
+        //$dataReflect = Zend_Json::encode($this->buildReflect($this));
+        //$this->allowRenderView(true);
+        
+    	return null;
+    }
+    
 //    public function buildReflect(stdClass $class)
 //    {
 //    	set_error_handler(function($errno, $errstr, $errfile, $errline){
@@ -463,7 +501,7 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
 //    		);
 //    	}
 //    	
-//   		foreach($reflectionClass->getMethods() as $method) {
+//   	foreach($reflectionClass->getMethods() as $method) {
 //    		if (!$method->isPublic() OR $method->isConstructor() OR $method->isDestructor() OR $method->isAbstract() OR $method->isFinal())
 //    			continue;
 //    		
@@ -520,7 +558,7 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
 //    	return (bool) static::$allowRenderView; 
 //    }
 
-    	protected function protectXmlInJson($xml)
+    	protected function getDevelProtectedXmlInJson($xml)
     	{
     		$xml = str_replace('<', '[[', $xml);
     		$xml = str_replace('>', ']]', $xml);
