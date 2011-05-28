@@ -224,14 +224,16 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
         }
 
         if ($this->getShowTemplateHints()) {
-        	echo '<div class="hints" style="display:none;">';
+        	echo '<div class="hints" title="' 
+        		. get_class($this) 
+        		. '" style="display:none;">';
             
-        	echo '<div class="tooltip">Inspect</div>';
+        	echo '<div class="tooltip">Inspect ' . get_class($this) . '</div>';
         	
             /*
              * Template hint
-             */  
-            echo $this->getDevelHintAsHtml('Template', 'Template (.html)', array(
+             */
+            echo $this->getDevelHintAsHtml('Template', 'Template (.phtml)', array(
             	'filename' => $fileName,
             	'template' => $this->getTemplate(),
             	'viewPath' => $this->_viewDir,
@@ -250,24 +252,30 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
             
             /*
              * Class hint
-             */  
+             */
             echo $this->getDevelHintAsHtml('Class', 'Class info', array(
             	'className' => get_class($this),
-            	'classMethods' => Zend_Json::encode(get_class_methods($this)),
+            	'classMethods' => $this->getDevelDataClassMethods(),
             	/*
             	 * @todo
             	 * classVars break display since we moved them to after the include.
             	 * There probably tons of tasty info here!
             	 */
-            	//'classVars' => Zend_Json::encode(get_object_vars($this)),
-            	'localVars' => Zend_Json::encode(get_defined_vars()),
-            	'classDocsUrl' => $this->getDocsUrl(),
+            	//'classVars' => get_object_vars($this),
+            	'localVars' => get_defined_vars(),
             	/*
             	 * Was trying to recurse all object/properties/methods of block.
             	 * Never worked.  Start by figuring out what's in 'classVars'.
             	 * @see self::getDevelDataClassReflectAll()
             	 */
             	//'classReflectAll' => $this->getDevelDataClassReflectAll()
+            ));
+            
+            /*
+             * Docs hint
+             */  
+            echo $this->getDevelHintAsHtml('Docs', 'Class documentation', array(
+            	'classDocsUrl' => $this->getDocsUrl()
             ));
 
             /*
@@ -276,13 +284,15 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
              * Krumo hints is special since it doesn''t return but echoes.
              * We could handle this with output buffering, but we would have to detect
              * whether or not it was already on.
-             */  
-            echo '<div class="hint" rel="Krumo" title="Captured Vars">';
-            	echo 'Captures Vars';
-            	echo '<span class="devel-data-json">';
-            	krumo($this->_viewVars);
-            	echo '</span>';
-            echo '</div>';
+             */
+            if (function_exists('krumo')) :  
+	            echo '<div class="hint" rel="Krumo" title="Captured Vars">';
+	            	echo 'Captures Vars';
+	            	echo '<span class="devel-data-json">';
+	            	krumo($this->_viewVars);
+	            	echo '</span>';
+	            echo '</div>';
+            endif;
             
             /*
              * Close HINTS
@@ -438,7 +448,7 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
            	$data[] = $_data;
         }
                 
-        return Zend_Json::encode($data);
+        return $data;
     }
     
     public function getDevelHintAsHtml($type, $title, $data=array(), $dataType='json')
@@ -456,6 +466,13 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
         $o .= '</div>';
         
         return $o;
+    }
+    
+    public function getDevelDataClassMethods()
+    {
+		$classMethods = get_class_methods($this);
+		sort($classMethods);
+		return $classMethods;
     }
     
     public function getDevelDataClassReflectAll()

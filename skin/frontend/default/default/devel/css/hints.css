@@ -22,11 +22,7 @@
 	box-shadow: 0 0 5px #ccc;
 
 	font:normal 11px Arial;
-	text-align:left !important;
-
-	padding: 1ex 3ex;
-
-	cursor: pointer;
+	text-align:left !important;	
 }
 .devel-hint:hover > .hints {
 	display: inline-block !important;
@@ -34,4 +30,8 @@
 }
 .devel-hint .hint {
 	display: none;
+}
+.devel-hint .tooltip {
+	padding: 1ex 3ex;
+	cursor: pointer;
 }

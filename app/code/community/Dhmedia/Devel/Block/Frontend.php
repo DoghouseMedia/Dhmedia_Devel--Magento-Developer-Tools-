@@ -20,10 +20,12 @@ class Dhmedia_Devel_Block_Frontend extends Mage_Core_Block_Template
 		)) {
 			Mage::getSingleton('core/session')->addError(
 				"You NEED to restart PHP (APC, ZendServer, etc...) for hints to display after installing!
-			"); 
+			");
 		}
 		
 		parent::_construct();
+		$this->insert(new Dhmedia_Devel_Block_Frontend_Menu(), 'menu', null, 'menu');
+		
 		$this->setTemplate('devel/frontend.phtml');
 		
 		$this->initKrumo();

@@ -40,6 +40,19 @@
 #dhmedia_devel_block_panels.active{
 
 }
+#dhmedia_devel_block_panels .devel-grippie {
+	position: absolute;
+	top: 0;
+	left: -1ex;
+	width: 1ex;
+	height: 100%;
+	background: url(../images/x-grippie.png) 0 50% no-repeat;
+	opacity: 0.8;
+	display: none;
+}
+#dhmedia_devel_block_panels.active .devel-grippie {
+	display: block;
+}
 
 /* Panel */
 .devel-panel{
@@ -72,6 +85,7 @@
 .devel-panel.active.direct-content {
 	padding: 1.5%;
 	width: 97%;
+	height: 97%;
 	overflow: auto;
 }
 

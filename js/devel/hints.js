@@ -38,13 +38,28 @@ DevelHintContainer.prototype =
 		});
 	},
 	clickTooltip: function(e)
-	{	
-		console.log('INSPECT', e.target, this.hints);
+	{
+		var div = document.createElement('div');
+		var h1 = document.createElement('h1');
+			h1.innerHTML = this.dom.title;
+		var ul = document.createElement('ul');
 		
 		$(this.hints).each(function(hint){
-			console.log(hint.getTitle(), hint.getData());
+			var li = document.createElement('li');
+			var a = document.createElement('a');
+			
+			a.innerHTML = hint.getTitle();
+			a.href = '#';
+			$(a).observe('click', hint.click.bind(hint));
+			
+			li.appendChild(a);
+			ul.appendChild(li);
 		});
 		
+		div.appendChild(h1);
+		div.appendChild(ul);
+		
+		DevelGlobals.PanelManager.create('Browser', 'Block info').setContent(div).open();
 		
 		Event.stop(e);
 	}
@@ -84,30 +99,30 @@ DevelHintLayout.prototype = Object.extend(new DevelHint(),
 	{	
 		var el = e.target;
 		
-		console.log(this.getData());
-		
-		return;
-		
 		var name = el.title;
-
-		DevelGlobals.PanelManager.get('dhmedia_devel_block_panel_docs').load(data.docs.url);
-
 		var content = '';
 		var editorIds = [];
-
+		var data = this.getData();
+		
 		content += '<h1>Block XML</h1>';
-		data.layout.each(function(layout){
+		data.xmlLayout.each(function(layout) {
 			content += '<h2>' + layout.file + '</h2>';
 			content += '<em>' + layout.path + '</em>';
 			content += ' - <a target="devel-editor" href="' + layout.url 
-				+ '" onclick="DevelGlobals.PanelManager.get(\'dhmedia_devel_block_panel_editor\').open();">Edit</a>';
-			layout.xml.each(function(xml, i){
-
+				+ '" onclick="DevelGlobals.PanelManager.create(\'Browser\', this.innerHTML).open(this.href);">Edit</a>';
+			
+			layout.xml.each(function(xml, i) {
 				xml = xml.replace(/\[\[/g, '<');
 				xml = xml.replace(/\]\]/g, '>');
 				xml = xml.replace(/\'\'/g, '"');
 
-				var editorId = layout.file + '-' + i;
+				/**
+				 * @todo Change method to ensure id uniqueness without using random 
+				 * 
+				 * This could have a (global) counter to increment ids
+				 * to ensure having a unique id without having to use random.
+				 */
+				var editorId = 'editor-' + layout.file + '-' + i + '-' + Math.random(0,999);
 				
 				content += '<textarea id="' + editorId +'">';
 				content += xml;
@@ -117,7 +132,9 @@ DevelHintLayout.prototype = Object.extend(new DevelHint(),
 			});
 		});
 		
-		DevelGlobals.PanelManager.get('dhmedia_devel_block_panel_block').setContent(content);
+		
+		var blockXmlPanel = DevelGlobals.PanelManager.create('Browser', 'Block XML')
+			.setContent(content);
 
 		editorIds.each(function(editorId){
 			CodeMirror.fromTextArea(document.getElementById(editorId), {
@@ -132,9 +149,9 @@ DevelHintLayout.prototype = Object.extend(new DevelHint(),
 			});
 		});
 		
-		DevelGlobals.PanelManager.get('dhmedia_devel_block_panel_block').open();
+		blockXmlPanel.open();
 		
-		console.log('HINT BLOCK', name, data);
+		console.log('HINT BLOCK XML', name, data);
 		
 		Event.stop(e);
 	}
@@ -151,59 +168,33 @@ DevelHintClass.prototype = Object.extend(new DevelHint(),
 		var el = e.target;
 		
 		var name = el.title;
-		var data = {
-			'docs': $(el).select('span[rel="docs"]')[0].innerHTML.evalJSON(),
-			'this': $(el).select('span[rel="this"]')[0].innerHTML.evalJSON(),
-			'vars': $(el).select('span[rel="vars"]')[0].innerHTML.evalJSON(),
-			'methods': $(el).select('span[rel="methods"]')[0].innerHTML.evalJSON(),
-			//'reflect': $(el).select('span[rel="reflect"]')[0].innerHTML.evalJSON()
-		}
-
-		DevelGlobals.PanelManager.get('dhmedia_devel_block_panel_docs').load(data.docs.url);
-
 		var content = '';
 		var editorIds = [];
-
-		content += '<h1>Block XML</h1>';
-		data.layout.each(function(layout){
-			content += '<h2>' + layout.file + '</h2>';
-			content += '<em>' + layout.path + '</em>';
-			content += ' - <a target="devel-editor" href="' + layout.url 
-				+ '" onclick="DevelGlobals.PanelManager.get(\'dhmedia_devel_block_panel_editor\').open();">Edit</a>';
-			layout.xml.each(function(xml, i){
-
-				xml = xml.replace(/\[\[/g, '<');
-				xml = xml.replace(/\]\]/g, '>');
-				xml = xml.replace(/\'\'/g, '"');
-
-				var editorId = layout.file + '-' + i;
-				
-				content += '<textarea id="' + editorId +'">';
-				content += xml;
-				content += '</textarea>';
-
-				editorIds.push(editorId);
-			});
+		var data = this.getData();
+		
+		content += '<h1>Block Class: ' + data.className + '</h1>';
+		content += '<h2>Class Methods</h2>';
+		content += '<ul>';
+		data.classMethods.each(function(method) {
+			content += '<li>' + method + '</li>';
 		});
+		content += '</ul>';
+		/*
+		 * @todo Print localVars
+		 * 
+		 * It's an object, so we can't use ".each()".
+		 */
+		//content += '<h2>Local Vars</h2>';
+		//content += '<ul>';
+		//data.localVars.each(function(key, val) {
+		//	content += '<li>' + key + ': ' + val + '</li>';
+		//});
+		//content += '</ul>';
 		
-		DevelGlobals.PanelManager.get('dhmedia_devel_block_panel_block').setContent(content);
-
-		editorIds.each(function(editorId){
-			CodeMirror.fromTextArea(document.getElementById(editorId), {
-			    lineNumbers: true,
-			    matchBrackets: true,
-			    mode: "application/xml",
-			    indentUnit: 8,
-			    indentWithTabs: true,
-			    enterMode: "keep",
-			    tabMode: "shift",
-			    //readOnly: true
-			});
-		});
+		var blockXmlPanel = DevelGlobals.PanelManager.create('Browser', 'Block class')
+			.setContent(content).open();
 		
-		DevelGlobals.PanelManager.get('dhmedia_devel_block_panel_block').open();
-		
-		console.log('HINT BLOCK', name, data);
+		console.log('HINT BLOCK CLASS', name, data);
 		
 		Event.stop(e);
 	}
@@ -218,16 +209,12 @@ DevelHintTemplate.prototype = Object.extend(new DevelHint(),
 	click: function(e)
 	{	
 		var el = e.target;
-		
 		var name = el.title;
-		var data = {
-			'fileinfo': $(el).select('span[rel="fileinfo"]')[0].innerHTML.evalJSON(),
-			'editor': $(el).select('span[rel="editor"]')[0].innerHTML.evalJSON()
-		}
+		var data = this.getData();
 
-		DevelGlobals.PanelManager.get('dhmedia_devel_block_panel_editor').open(data.editor.url);
+		DevelGlobals.PanelManager.create('Browser', 'Block template').open(data.editorUrl);
 		
-		console.log('HINT TEMPLATE', name, data);
+		console.log('HINT BLOCK TEMPLATE', name, data);
 		
 		Event.stop(e);
 	}
@@ -245,18 +232,33 @@ DevelHintKrumo.prototype = Object.extend(new DevelHint(),
 	},
 	click: function(e)
 	{	
-		var el = e.target;
+		//var el = e.target;
 		
-		var name = el.title;
-		var data = {
-			'fileinfo': $(el).select('span[rel="fileinfo"]')[0].innerHTML.evalJSON(),
-			'editor': $(el).select('span[rel="editor"]')[0].innerHTML.evalJSON()
-		}
+		//var name = el.title;
+		//var data = {
+		//	'fileinfo': $(el).select('span[rel="fileinfo"]')[0].innerHTML.evalJSON(),
+		//	'editor': $(el).select('span[rel="editor"]')[0].innerHTML.evalJSON()
+		//}
 
-		DevelGlobals.PanelManager.get('dhmedia_devel_block_panel_editor').open(data.editor.url);
+		DevelGlobals.PanelManager.create('Browser', 'Block Vars').open()
+			.setContent(this.getData());
+		//DevelGlobals.PanelManager.get('dhmedia_devel_block_panel_editor').open(data.editor.url);
 		
-		console.log('HINT TEMPLATE', name, data);
+		//console.log('HINT BLOCK KRUMO', name, data);
 		
 		Event.stop(e);
+	}
+});
+
+/**
+ * DevelHintDocs
+ */
+var DevelHintDocs = Class.create();
+DevelHintDocs.prototype = Object.extend(new DevelHint(),
+{
+	click: function(e)
+	{	
+		//var el = e.target;
+		DevelGlobals.PanelManager.create('Browser', 'Block docs').open(this.getData().classDocsUrl);
 	}
 });

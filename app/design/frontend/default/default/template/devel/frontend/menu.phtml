@@ -1,0 +1,223 @@
+	<ul>
+		<li>
+			<a href="#" onclick="return false;">
+				Devel
+			</a>
+			<ul class="show-on-hover">
+				<li>
+					<a href="#" onclick="return false;" class="has-more">
+						Hints
+					</a>
+					<ul class="show-on-hover">
+						<li>
+							<a href="<?php echo $this->helper('devel/url')->getUrlReturn('command/hintson') ?>">
+								On
+							</a>
+						</li>
+						<li>
+							<a href="<?php echo $this->helper('devel/url')->getUrlReturn('command/hintsoff') ?>">
+								Off
+							</a>
+						</li>
+						<li>
+							<a href="#" class="disabled" onclick="return false;">
+								Toggle display (no page reload)
+							</a>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a href="#" onclick="return false;" class="has-more">
+						Page properties
+					</a>
+					<ul class="show-on-hover">
+						<li>
+							<a href="#" class="disabled" onclick="return false;">
+								View layout (xml)
+							</a>
+						</li>
+						<li>
+							<a href="#" class="disabled" onclick="return false;">
+								...
+							</a>
+						</li>
+						<li>
+							<a href="#" class="disabled" onclick="return false;">
+								...
+							</a>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a href="#" onclick="return false;" class="has-more">
+						Themes
+					</a>
+					<ul class="show-on-hover">
+						<li>
+							<a href="<?php echo $this->helper('devel/url')->getEditUrl('layout', 'local.xml') ?>"
+								onclick="DevelGlobals.PanelManager.create('Browser', 'local.xml', ['icon-edit']).open(this.href); return false;">
+								Edit local.xml
+							</a>
+						</li>
+						<li>
+							<a href="#" onclick="return false;" class="disabled">
+								Switch
+							</a>
+						</li>
+						<li>
+							<a href="#" onclick="return false;" class="has-more">
+								Theme info
+							</a>
+							<div class="show-on-hover">
+								<table>
+									<tr>
+										<th>Store</th>
+										<td><?php echo Mage::getDesign()->getStore()->getId() ?></td>
+									</tr>
+									<tr>	
+										<th>Area</th>
+										<td><?php echo Mage::getDesign()->getArea() ?></td>
+									</tr>
+									<tr>	
+										<th>Package</th>
+										<td><?php echo Mage::getDesign()->getPackageName() ?></td>
+									</tr>
+									<tr>
+										<th>Theme</th>
+										<td><?php echo Mage::getDesign()->getTheme('frontend') ?></td>
+									</tr>
+									<tr>
+										<th>Theme list</th>
+										<td><pre><?php print_r(Mage::getDesign()->getThemeList()) ?></pre></td>
+									</tr>
+									<tr>	
+										<th>Base dir</th>
+										<td><?php echo Mage::getBaseDir('design') ?></td>
+									</tr>
+									<tr>
+										<th>Skin url</th>
+										<td><?php echo $this->getSkinUrl('') ?></td>
+									</tr>
+								</table>
+							</div>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a href="#" onclick="return false;" class="has-more">
+						Tools
+					</a>
+					<ul class="show-on-hover">
+						<li>
+							<a href="#" onclick="return false;" class="has-more">
+								Execute PHP
+							</a>
+							<div class="show-on-hover">
+								<form action="<?php echo $this->helper('devel/url')->getUrl('command/execphp') ?>">
+									<textarea name="php"></textarea>
+									<input type="submit" value="Execute" />
+									<div class="clear-fix"></div>
+									<div class="result"></div>
+								</form>
+							</div>
+						</li>
+						<li>
+							<a href="#" class="disabled"
+								onclick="return false;"
+								_onclick="DevelGlobals.PanelManager.create('Browser', this.innerText).open(this.href); return false;">
+								View phpinfo.php
+							</a>
+						</li>
+						<li>
+							<a href="#" class="disabled"
+								onclick="return false;"
+								_onclick="DevelGlobals.PanelManager.create('Browser', this.innerText).open(this.href); return false;">
+								Edit .htaccess
+							</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</li>
+		<li>
+			<a href="#" onclick="return false;">
+				Admin
+			</a>
+			<ul class="show-on-hover">
+				<li>
+					<a href="<?php echo Mage::getBaseUrl() . $this->getAdminPath() ?>"
+						onclick="DevelGlobals.PanelManager.create('Browser', this.innerText).open(this.href); return false;">
+						Admin Panel
+					</a>
+				</li>
+				</li>
+				<li>
+					<a href="<?php echo $this->helper('devel/url')->getUrlReturn('command/clearcache') ?>">
+						Clear cache
+					</a>
+				</li>
+				<li>
+					<a href="<?php echo $this->helper('devel/url')->getUrlReturn('command/reindex') ?>">
+						Re-index
+					</a>
+				</li>
+				<li>
+					<a href="#" onclick="return false;" class="has-more">
+						Config
+					</a>
+					<ul class="show-on-hover">
+						<li>
+							<a href="#" class="disabled" onclick="return false;">Diff</a>
+						</li>
+						<li>
+							<a href="#" class="disabled" onclick="return false;">Profiles</a>
+						</li>
+						<li>
+							<a href="#" class="disabled" onclick="return false;">...</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</li>
+		<li>
+			<a href="#" onclick="return false;">
+				Help
+			</a>
+			<ul class="show-on-hover">
+				<li>
+					<a href="http://docs.magentocommerce.com"
+						onclick="DevelGlobals.PanelManager.create('Browser', this.innerText).open(this.href); return false;">
+						Magento Docs
+					</a>
+				</li>
+				<li>
+					<a href="#" onclick="return false;" class="has-more">
+						Devel Docs
+					</a>
+					<ul class="show-on-hover">
+						<li>
+							<a href="#" class="disabled"
+								onclick="return false;"
+								_onclick="DevelGlobals.PanelManager.create('Browser', this.innerText).open(this.href); return false;">
+								Topic ...
+							</a>
+						</li>
+						<li>
+							<a href="#" class="disabled"
+								onclick="return false;"
+								_onclick="DevelGlobals.PanelManager.create('Browser', this.innerText).open(this.href); return false;">
+								Topic ...
+							</a>
+						</li>
+						<li>
+							<a href="#" class="disabled"
+								onclick="return false;"
+								_onclick="DevelGlobals.PanelManager.create('Browser', this.innerText).open(this.href); return false;">
+								Topic ...
+							</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</li>
+	</ul>

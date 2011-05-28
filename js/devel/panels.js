@@ -15,6 +15,10 @@ DevelPanelManager.prototype =
 
 		panelManager.container = $$(selector)[0];
 		
+		panelManager.grippie = document.createElement('div');
+		$(panelManager.grippie).addClassName('devel-grippie');
+		panelManager.container.appendChild(panelManager.grippie);
+		
 		panelManager.buttonContainer = document.createElement('div');
 		$(panelManager.buttonContainer).addClassName('devel-panel-buttons');
 		panelManager.container.appendChild(panelManager.buttonContainer);
@@ -242,7 +246,12 @@ DevelPanel.prototype =
 	},
 	setContent: function(content) {
 		this.setType('content');
-		$(this.panelDom).innerHTML = content;
+		
+		if (typeof(content) == 'object') {
+			$(this.panelDom).appendChild(content);
+		} else {
+			$(this.panelDom).innerHTML = content;
+		}
 		
 		return this; // chainable
 	},
