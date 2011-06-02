@@ -55,7 +55,7 @@ document.observe("dom:loaded", function()
 {
 	new DevelForms('#dhmedia_devel_block_frontend form');
 
-	new DevelHints('.devel-hint .hints');
+	DevelGlobals.DevelHints = new DevelHints('.devel-hint', '.devel-hint .hints');
 	
 	DevelGlobals.PanelManager = new DevelPanelManager('#dhmedia_devel_block_panels', {
 		container: {

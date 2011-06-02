@@ -53,4 +53,12 @@ class Dhmedia_Devel_Helper_Url extends Mage_Core_Helper_Url
 
 		return $url;
 	}
+	public function getAdminUrl()
+	{
+		return Mage::getBaseUrl() . (
+			Mage::getStoreConfig('admin/url/use_custom') ? 
+				Mage::getStoreConfig('admin/url/custom') :
+				'admin'
+		);
+	}
 }

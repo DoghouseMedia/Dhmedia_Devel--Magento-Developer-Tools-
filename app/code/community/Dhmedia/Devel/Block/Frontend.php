@@ -56,11 +56,4 @@ class Dhmedia_Devel_Block_Frontend extends Mage_Core_Block_Template
 	{
 		return false;
 	}
-	
-	public function getAdminPath()
-	{
-		return Mage::getStoreConfig('admin/url/use_custom') ? 
-			Mage::getStoreConfig('admin/url/custom') :
-			'admin';
-	}
 }

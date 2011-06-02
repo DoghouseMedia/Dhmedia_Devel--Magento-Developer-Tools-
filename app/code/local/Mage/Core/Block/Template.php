@@ -295,6 +295,13 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
             endif;
             
             /*
+             * Remove wizard
+             */  
+            //echo $this->getDevelHintAsHtml('WizardRemove', 'Remove block', array(
+            	//'classDocsUrl' => $this->getDocsUrl()
+            //));
+            
+            /*
              * Close HINTS
              */
             echo '</div>'; // close .hints
@@ -442,7 +449,25 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
             );
 
             foreach($res->xpath($xpathQueries['relativeRefs']) as $resXml) {
-				$_data['xml'][] = $this->getDevelProtectedXmlInJson($resXml->asXML());
+            	/*
+            	 * Get Parent tag
+            	 */
+            	$parentsXml = $resXml->xpath('./..');
+            	$parentXml = $parentsXml[0];
+            	$parentTagOpen = '<' . $parentXml->getName();
+            	foreach($parentXml->attributes() as $k => $v) {
+            		$parentTagOpen .= ' ' . $k . '=' . '"' . $v . '"';
+            	}
+            	$parentTagOpen .= '>';
+            	$parentTagClose = '</' . $parentXml->getName() . '>';
+            	
+				$_data['xml'][] = $this->getDevelProtectedXmlInJson(
+					$parentTagOpen . "\n"
+					 . "\n\t" . '...' . "\n\n"
+					 . "\t" . $resXml->asXML() . "\n"
+					 . "\n\t" . '...' . "\n\n"
+					 . $parentTagClose
+				);
             }
                
            	$data[] = $_data;

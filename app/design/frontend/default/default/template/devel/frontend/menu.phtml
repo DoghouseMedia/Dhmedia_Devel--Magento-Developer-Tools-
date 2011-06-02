@@ -20,7 +20,9 @@
 							</a>
 						</li>
 						<li>
-							<a href="#" class="disabled" onclick="return false;">
+							<a href="#" 
+								onclick="DevelGlobals.DevelHints.toggle(); return false;"
+								class="">
 								Toggle display (no page reload)
 							</a>
 						</li>
@@ -145,7 +147,7 @@
 			</a>
 			<ul class="show-on-hover">
 				<li>
-					<a href="<?php echo Mage::getBaseUrl() . $this->getAdminPath() ?>"
+					<a href="<?php echo $this->helper('devel/url')->getAdminUrl() ?>"
 						onclick="DevelGlobals.PanelManager.create('Browser', this.innerText).open(this.href); return false;">
 						Admin Panel
 					</a>

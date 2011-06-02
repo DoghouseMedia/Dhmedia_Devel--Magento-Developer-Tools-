@@ -4,13 +4,30 @@
 var DevelHints = Class.create();
 DevelHints.prototype =
 {
-	initialize: function(selector)
+	initialize: function(rootSelector, hintsSelector)
 	{
-		this.selector = selector;
+		var hints = this;
+		hints.rootSelector = rootSelector;
+		hints.hintsSelector = hintsSelector;
+		hints.containers = [];
 		
-		$$(this.selector).each(function(domHintContainer){
-			new DevelHintContainer(domHintContainer);
+		$$(hints.hintsSelector).each(function(domHintContainer){
+			hints.containers.push(new DevelHintContainer(domHintContainer));
 		});
+		
+		$$(hints.rootSelector).invoke('addClassName', 'active');
+	},
+	toggleStateOn: true,
+	toggle: function() {
+		if (this.toggleStateOn) {
+			//this.dom.removeClassName('active');
+			$$(this.rootSelector).invoke('removeClassName', 'active');
+			this.toggleStateOn=false;
+		} else {
+			//this.dom.addClassName('active');
+			$$(this.rootSelector).invoke('addClassName', 'active');
+			this.toggleStateOn=true;
+		}
 	}
 };
 
@@ -36,6 +53,8 @@ DevelHintContainer.prototype =
 			eval("var hint = new " + className + "(domHint);");
 			hintContainer.hints.push(hint);
 		});
+		
+		hintContainer.dom.addClassName('active');
 	},
 	clickTooltip: function(e)
 	{
@@ -145,7 +164,7 @@ DevelHintLayout.prototype = Object.extend(new DevelHint(),
 			    indentWithTabs: true,
 			    enterMode: "keep",
 			    tabMode: "shift",
-			    //readOnly: true
+			    //readOnly: true // read-only prevents selection
 			});
 		});
 		
@@ -232,19 +251,11 @@ DevelHintKrumo.prototype = Object.extend(new DevelHint(),
 	},
 	click: function(e)
 	{	
-		//var el = e.target;
-		
+		//var el = e.target;		
 		//var name = el.title;
-		//var data = {
-		//	'fileinfo': $(el).select('span[rel="fileinfo"]')[0].innerHTML.evalJSON(),
-		//	'editor': $(el).select('span[rel="editor"]')[0].innerHTML.evalJSON()
-		//}
 
 		DevelGlobals.PanelManager.create('Browser', 'Block Vars').open()
 			.setContent(this.getData());
-		//DevelGlobals.PanelManager.get('dhmedia_devel_block_panel_editor').open(data.editor.url);
-		
-		//console.log('HINT BLOCK KRUMO', name, data);
 		
 		Event.stop(e);
 	}
@@ -260,5 +271,30 @@ DevelHintDocs.prototype = Object.extend(new DevelHint(),
 	{	
 		//var el = e.target;
 		DevelGlobals.PanelManager.create('Browser', 'Block docs').open(this.getData().classDocsUrl);
+	}
+});
+
+/**
+ * DevelHintWizardRemove
+ */
+var DevelHintWizardRemove = Class.create();
+DevelHintWizardRemove.prototype = Object.extend(new DevelHint(),
+{
+	click: function(e)
+	{	
+		var el = e.target;
+		
+//		new Ajax.Request('devel/layout/remove', {
+//			method:'post',
+//			parameters: {
+//				'reference': ''
+//				'name': ''
+//			}
+//			onSuccess: function(transport) {
+//				console.log(transport.responseText);
+//				alert('DONE');
+//			}
+//		});
+		//this.getData();
 	}
 });

@@ -27,6 +27,7 @@
 				<rewrite>
 					<file_template>Dhmedia_Devel_Model_File_Template</file_template>
 					<file_layout>Dhmedia_Devel_Model_File_Layout</file_layout>
+					<writer_localxml>Dhmedia_Devel_Model_Writer_Localxml</writer_localxml>
 				</rewrite>
 			</devel>
 			<core>

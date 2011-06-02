@@ -74,6 +74,28 @@ DevelPanelManager.prototype =
 	},
 	remove: function(panelId)
 	{
+		/*
+		 * Open the previous tab if this one is open
+		 */
+		if (this.panels[panelId].isOpen()) {
+			var foundPrevious = false;
+			var previousPanelId;
+			
+			for(var _panelId in this.panels) {
+				if (this.panels[_panelId].className && this.panels[_panelId].className == 'DevelPanel') {
+					if (_panelId == panelId && previousPanelId > 0) {
+						this.panels[previousPanelId].open();
+						foundPrevious = true;
+					}
+					previousPanelId = _panelId;
+				}
+			}
+			
+			if (! foundPrevious) {
+				this.closeAll();
+			}
+		}
+		
 		delete this.panels[panelId];
 	},
 	closeAll: function() {
@@ -123,8 +145,10 @@ DevelPanelManager.prototype =
 	},
 	closeContainer: function()
 	{
-		this.container.setStyle({left: String($$('body')[0].getWidth()) + 'px'});
-		
+		this.container.setStyle({
+			left: String($$('body')[0].getWidth()) + 'px'
+		});
+
 		$(this.container).removeClassName('active');
 	}
 };
@@ -267,7 +291,7 @@ DevelPanel.prototype =
 		return this; // chainable
 	},
 	remove: function() {
-		this.panelManager.remove();
+		this.panelManager.remove(this.panelId);
 		$(this.panelDom).remove();
 		this.button.remove();
 		delete this;
@@ -311,12 +335,12 @@ DevelPanelButton.prototype =
 	},
 	onCloseClick: function(e)
 	{
-		if (this.panel.isOpen()) {
-			this.panel.toggle();
-		} else {
+		//if (this.panel.isOpen()) {
+		//	this.panel.toggle();
+		//} else {
 			this.panel.remove();
-		}
-
+		//}
+			
 		Event.stop(e); // stop the click
 	},
 	getDom: function()
