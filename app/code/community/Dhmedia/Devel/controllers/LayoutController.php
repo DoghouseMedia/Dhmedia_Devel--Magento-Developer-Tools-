@@ -8,7 +8,9 @@ class Dhmedia_Devel_LayoutController extends Mage_Core_Controller_Front_Action
 		$form->setMethod('post');
 		$form->setAction('');
 		$form->setAttrib('class', 'devel');
-		$form->setAttrib('title', 'Remove wizard');
+		$form->setAttrib('title', 'Remove wizard - ' 
+			. $this->getRequest()->getParam('name')
+		);
 		
 		$handleOptions = explode(',', $this->getRequest()->getParam('handles'));
 		$referenceOptions = explode(',', $this->getRequest()->getParam('references'));
@@ -68,7 +70,7 @@ class Dhmedia_Devel_LayoutController extends Mage_Core_Controller_Front_Action
 			
 			$localXmlWriter->save();
 			
-			die('DONE');
+			die('DONE. You need to reload to see changes!');
 			
 		} else {
 			$this->loadLayout();

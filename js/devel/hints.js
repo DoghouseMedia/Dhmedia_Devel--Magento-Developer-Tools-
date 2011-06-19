@@ -49,10 +49,19 @@ DevelHintContainer.prototype =
 		);
 		hintContainer.data = $(hintContainer.dom).select('.data')[0].innerHTML.evalJSON();
 		
-		$(hintContainer.dom).select('.hint').each(function(domHint) {
-			var className = 'DevelHint' + domHint.readAttribute('rel');
-			eval("var hint = new " + className + "(domHint, hintContainer.data);");
+		var hintsOptions = [
+			{className: 'DevelHintTemplate', title: "Template (.phtml)", description: "Change the HTML Code of the template."},
+			{className: 'DevelHintLayout', title: "Layout (xml)", description: "Understand what xml code is responsible for this block."},
+			{className: 'DevelHintWizardRemove', title: "Remove block", description: "Smart Wizard - Remove this block from the layout"},
+			{className: 'DevelHintClass', title: "Class info", description: "View class methods"},
+			{className: 'DevelHintDocs', title: "Class documentation", description: "View official class documentation"},
+			{className: 'DevelHintKrumo', title: "Captured vars", description: "Vars that were defined in the block during rendering", dom: $(hintContainer.dom).select('.hint[rel="Krumo"]')[0]}
+		];
+
+		hintsOptions.each(function(hintOptions) {
+			eval("var hint = new " + hintOptions.className + "(hintOptions, hintContainer.data);");
 			hintContainer.hints.push(hint);
+			hintContainer.dom.appendChild(hint.dom);
 		});
 		
 		hintContainer.dom.addClassName('active');
@@ -61,18 +70,24 @@ DevelHintContainer.prototype =
 	{
 		var div = document.createElement('div');
 		var h1 = document.createElement('h1');
-			h1.innerHTML = this.dom.title;
+			h1.innerHTML = this.data.nameInLayout
+				+ ' - ' + this.dom.title;
 		var ul = document.createElement('ul');
 		
 		$(this.hints).each(function(hint){
 			var li = document.createElement('li');
 			var a = document.createElement('a');
+			var p = document.createElement('p');
 			
 			a.innerHTML = hint.getTitle();
 			a.href = '#';
 			$(a).observe('click', hint.click.bind(hint));
 			
+			p.innerHTML = hint.getDescription();
+			
 			li.appendChild(a);
+			li.appendChild(p);
+			
 			ul.appendChild(li);
 		});
 		
@@ -91,23 +106,34 @@ DevelHintContainer.prototype =
 var DevelHint = Class.create();
 DevelHint.prototype =
 {
-	initialize: function(dom, data)
+	initialize: function(options, data)
 	{
-		if (!dom) return;
+		if (! options) return;
 		
-		this.dom = dom;
+		this.options = options;
 		this.data = data;
+		
+		if (! this.options.dom) {
+			this.options.dom = document.createElement('div');
+			$(this.options.dom).addClassName('hint')
+				.writeAttribute('rel', this.options.className);
+		}
+		
+		this.dom = this.options.dom;
 		
 		$(this.dom).hide();
 	},
 	getTitle: function()
 	{
-		return $(this.dom).readAttribute('title');
+		return this.options.title;
+	},
+	getDescription: function()
+	{
+		return this.options.description;
 	},
 	getData: function()
 	{
 		return this.data;
-		//return $(this.dom).select('.devel-data-json')[0].innerHTML.evalJSON();
 	}
 };
 
@@ -241,9 +267,6 @@ DevelHintKrumo.prototype = Object.extend(new DevelHint(),
 	},
 	click: function(e)
 	{	
-		//var el = e.target;		
-		//var name = el.title;
-
 		DevelGlobals.PanelManager.create('Browser', 'Block Vars').open()
 			.setContent(this.getData());
 		

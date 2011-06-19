@@ -228,7 +228,7 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
         		. get_class($this) 
         		. '" style="display:none;">';
             
-        	echo '<div class="tooltip">Inspect ' . get_class($this) . '</div>';
+        	echo '<div class="tooltip">Inspect &laquo;' . $this->getNameInLayout() . '&raquo;</div>';
         	
         	/*
         	 * Devel DATA
@@ -271,22 +271,7 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
            		),
             	'handles' => $this->getLayout()->getUpdate()->getHandles()
             ));
-        	
-            /* Template hint */
-            echo $this->getDevelHintAsHtml('Template', 'Template (.phtml)');
-            
-            /* Layout hint */  
-            echo $this->getDevelHintAsHtml('Layout', 'Layout (xml)');
-            
-            /* Class hint */
-            echo $this->getDevelHintAsHtml('Class', 'Class info');
-            
-            /* Docs hint */  
-            echo $this->getDevelHintAsHtml('Docs', 'Class documentation');
 
-            /* Remove wizard */  
-            echo $this->getDevelHintAsHtml('WizardRemove', 'Remove block');
-            
             /*
              * Krump hint
              * 
@@ -295,8 +280,7 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
              * whether or not it was already on.
              */
             if (function_exists('krumo')) :  
-	            echo '<div class="hint" rel="Krumo" title="Captured Vars">';
-	            	echo 'Captures Vars';
+	            echo '<div class="hint" rel="Krumo">';
 	            	echo '<span class="devel-data-json">';
 	            	krumo($this->_viewVars);
 	            	echo '</span>';
@@ -504,23 +488,6 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
         		default:
         		case 'json': $o .= Zend_Json::encode($data); break; 
         	}
-        $o .= '</div>';
-        
-        return $o;
-    }
-    
-    public function getDevelHintAsHtml($type, $title, $data=array(), $dataType='json')
-    {
-    	$o  = '<div class="hint" rel="' . $type . '" title="' . $title . '">';
-        	$o .= $title;
-        	$o .= '<span class="devel-data-json">';
-        		/*
-        		 * @todo Override add data to main devel data
-        		 */
-    			if (count($data)) {
-    				throw new Exception("Not implemented!");
-    			}
-	        $o .= '</span>';
         $o .= '</div>';
         
         return $o;
