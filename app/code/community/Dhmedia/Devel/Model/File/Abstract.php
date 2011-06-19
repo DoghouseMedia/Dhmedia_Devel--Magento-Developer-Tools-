@@ -10,9 +10,13 @@ abstract class Dhmedia_Devel_Model_File_Abstract
 	abstract public function getUseThemeError();
 	abstract public function getDefaultContents();
 	
-	public function __construct($shortPath)
+	public function __construct()
 	{
-		$this->shortPath = $shortPath;
+		$this->shortPath = func_get_arg(0);
+		
+		if (! $this->shortPath) {
+			throw new Exception("Missing shortpath in constructor");
+		}
 		
 		$this->isEditable(); // run here to populate errors
 	}

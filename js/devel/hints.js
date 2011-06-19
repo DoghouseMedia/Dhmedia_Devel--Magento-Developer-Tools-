@@ -47,10 +47,11 @@ DevelHintContainer.prototype =
 		$(hintContainer.tooltip).observe('click', 
 			hintContainer.clickTooltip.bindAsEventListener(this)
 		);
+		hintContainer.data = $(hintContainer.dom).select('.data')[0].innerHTML.evalJSON();
 		
 		$(hintContainer.dom).select('.hint').each(function(domHint) {
 			var className = 'DevelHint' + domHint.readAttribute('rel');
-			eval("var hint = new " + className + "(domHint);");
+			eval("var hint = new " + className + "(domHint, hintContainer.data);");
 			hintContainer.hints.push(hint);
 		});
 		
@@ -90,11 +91,12 @@ DevelHintContainer.prototype =
 var DevelHint = Class.create();
 DevelHint.prototype =
 {
-	initialize: function(dom)
+	initialize: function(dom, data)
 	{
 		if (!dom) return;
 		
 		this.dom = dom;
+		this.data = data;
 		
 		$(this.dom).hide();
 	},
@@ -104,7 +106,8 @@ DevelHint.prototype =
 	},
 	getData: function()
 	{
-		return $(this.dom).select('.devel-data-json')[0].innerHTML.evalJSON();
+		return this.data;
+		//return $(this.dom).select('.devel-data-json')[0].innerHTML.evalJSON();
 	}
 };
 
@@ -126,6 +129,7 @@ DevelHintLayout.prototype = Object.extend(new DevelHint(),
 		content += '<h1>Block XML</h1>';
 		data.xmlLayout.each(function(layout) {
 			content += '<h2>' + layout.file + '</h2>';
+			content += '<strong>' + layout.handle + '</strong><br />';
 			content += '<em>' + layout.path + '</em>';
 			content += ' - <a target="devel-editor" href="' + layout.url 
 				+ '" onclick="DevelGlobals.PanelManager.create(\'Browser\', this.innerHTML).open(this.href);">Edit</a>';
@@ -143,7 +147,7 @@ DevelHintLayout.prototype = Object.extend(new DevelHint(),
 				 */
 				var editorId = 'editor-' + layout.file + '-' + i + '-' + Math.random(0,999);
 				
-				content += '<textarea id="' + editorId +'">';
+				content += '<textarea class="devel-editor" id="' + editorId +'">';
 				content += xml;
 				content += '</textarea>';
 
@@ -151,22 +155,8 @@ DevelHintLayout.prototype = Object.extend(new DevelHint(),
 			});
 		});
 		
-		
 		var blockXmlPanel = DevelGlobals.PanelManager.create('Browser', 'Block XML')
 			.setContent(content);
-
-		editorIds.each(function(editorId){
-			CodeMirror.fromTextArea(document.getElementById(editorId), {
-			    lineNumbers: true,
-			    matchBrackets: true,
-			    mode: "application/xml",
-			    indentUnit: 8,
-			    indentWithTabs: true,
-			    enterMode: "keep",
-			    tabMode: "shift",
-			    //readOnly: true // read-only prevents selection
-			});
-		});
 		
 		blockXmlPanel.open();
 		
@@ -269,7 +259,6 @@ DevelHintDocs.prototype = Object.extend(new DevelHint(),
 {
 	click: function(e)
 	{	
-		//var el = e.target;
 		DevelGlobals.PanelManager.create('Browser', 'Block docs').open(this.getData().classDocsUrl);
 	}
 });
@@ -281,20 +270,32 @@ var DevelHintWizardRemove = Class.create();
 DevelHintWizardRemove.prototype = Object.extend(new DevelHint(),
 {
 	click: function(e)
-	{	
-		var el = e.target;
+	{
+		var handles = [];
+		var references = [];
+		this.getData().xmlLayout.each(function(layout){
+			handles.push(layout.handle);
+			layout.references.each(function(reference){
+				references.push(reference);
+			});
+		});
+		this.getData().wizardRemove.params.handles_used = handles.uniq();
+		this.getData().wizardRemove.params.references = references.uniq();
+		this.getData().wizardRemove.params.handles = this.getData().handles;
 		
-//		new Ajax.Request('devel/layout/remove', {
-//			method:'post',
-//			parameters: {
-//				'reference': ''
-//				'name': ''
-//			}
-//			onSuccess: function(transport) {
-//				console.log(transport.responseText);
-//				alert('DONE');
-//			}
-//		});
-		//this.getData();
+		console.log(this.getData().wizardRemove.params);
+		
+		var url = this.getData().wizardRemove.url + '?';
+		for(var key in this.getData().wizardRemove.params) {
+			var val = this.getData().wizardRemove.params[key];
+			url += key + '=' + encodeURIComponent(val) + '&';
+		};
+		
+		DevelGlobals.PanelManager.create('Browser', this.getData().wizardRemove.title)
+			.open(url);
+		
+		console.log('HINT REMOVE WIZ', this.getData());
+		
+		Event.stop(e);
 	}
 });

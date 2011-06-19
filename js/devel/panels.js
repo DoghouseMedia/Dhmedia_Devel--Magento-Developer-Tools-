@@ -253,11 +253,28 @@ DevelPanel.prototype =
 		if (url) {
 			this.load(url);
 			this.setType('url');
+		} else {
+			this.initEditors();
 		}
 		
 		this.panelManager.openContainers();
 		
 		return this; // chainable
+	},
+	initEditors: function() {
+		$(this.panelDom).select('.devel-editor').each(this.initEditor);
+	},
+	initEditor: function(el) {
+		CodeMirror.fromTextArea(el, {
+		    lineNumbers: true,
+		    matchBrackets: true,
+		    mode: "application/xml",
+		    indentUnit: 8,
+		    indentWithTabs: true,
+		    enterMode: "keep",
+		    tabMode: "shift",
+		    //readOnly: true // read-only prevents selection
+		});
 	},
 	setType: function(type) {
 		if (type == 'content') {

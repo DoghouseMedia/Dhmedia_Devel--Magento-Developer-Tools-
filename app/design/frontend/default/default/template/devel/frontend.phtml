@@ -15,6 +15,18 @@
 	
 	<div class="clear-fix"></div>
 	
+	<div class="devel-data" rel="layoutXml" title="Xml">
+<!--
+You can't tab or space the following textarea without 
+creating problems with the editor. Putting in all on
+one line works too.
+-->
+<textarea id="layout-xml" name="layout-xml" class="devel-editor">
+<?php echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n" ?>
+<?php echo $this->getLayoutXml() ?>
+</textarea>
+	</div>
+	
 </div>
 
 <div id="dhmedia_devel_block_panels">
@@ -33,19 +45,6 @@
 		<iframe id="devel-block"
 			src="<?php echo $this->helper('devel/url')->getHelpUrl('panels/block/usage') ?>">
 		</iframe>
-	</div>
-	
-	<div id="dhmedia_devel_block_panel_xml" class="devel-panel" title="Xml" 
-		data-button-class="sprite-small icon-layoutxml">
-<!--
-You can't tab or space the following textarea without 
-creating problems with the editor. Putting in all on
-one line works too.
--->
-<textarea id="layout-xml" name="layout-xml">
-<?php echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n" ?>
-<?php echo $this->getLayoutXml() ?>
-</textarea>
 	</div>
 </div>
 
@@ -70,6 +69,9 @@ document.observe("dom:loaded", function()
 	);
 
 	new DevelSprites('.has-sprite');
+
+	DevelGlobals.DevelData = new DevelData('#dhmedia_devel_block_frontend .devel-data');
+	DevelGlobals.Data = DevelGlobals.DevelData.getData();
 });
 
 var DevelGlobals = {};

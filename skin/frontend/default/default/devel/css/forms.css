@@ -1,0 +1,61 @@
+@CHARSET "UTF-8";
+
+form.devel dt {
+	float: left;
+	clear: both;
+	border-top: 1px solid silver;
+	width: 23%;
+	padding: 1%;
+	text-align: right;
+	line-height: 22px;	
+}
+form.devel dt label:after {
+	content: ":";
+}
+form.devel dd {
+	float: right;
+	width: 73%;
+	padding: 1%;
+	border-top: 1px solid silver;
+}
+form.devel dd input:not([type='submit']):not([type='radio']),
+form.devel dd select,
+form.devel dd textarea {
+	margin-right: 1em;
+	width: 15em;
+	
+	padding: 1px; 
+	font-size: 14px;
+}
+form.devel dd input[type='radio'] {
+	margin-right: 1ex;
+}
+form.devel dd label + ul.errors {
+	margin-top: 1ex;
+	display: block;
+}
+form.devel dd input[type='submit'] {
+	margin-top: 1ex;
+	background-color: #f9f9f9;
+	border: 2px solid #ccc;
+	padding: 5px 15px;
+	
+	box-shadow: 2px 2px 5px #ccc;
+}
+form.devel dd input[type='submit']:hover {
+	background-color: #fff;
+	box-shadow: 2px 2px 5px #999;
+	border-color: #ccc;
+	border-style: outset;
+	cursor: pointer;
+}
+form.devel dd input[type='submit']:active {
+	border-style: inset;
+}
+form.devel dd ul.errors {
+	display: inline-block;
+	color: #cc3333;
+}
+form.devel dd ul.errors li {
+	display: inline;
+}

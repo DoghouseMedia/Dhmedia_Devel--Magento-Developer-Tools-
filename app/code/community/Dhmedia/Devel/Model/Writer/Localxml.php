@@ -1,48 +1,54 @@
 <?php
 
-class Dhmedia_Devel_Model_Writer_Localxml extends Dhmedia_Devel_Model_Writer_Abstract
+class Dhmedia_Devel_Model_Writer_Localxml extends Dhmedia_Devel_Model_File_Layout
 {
 	protected $sxe;
 	
-	public function __construct($path=null)
+	public function __construct()
 	{
-		if ($path) {
-			$this->path = $path;
-		} else {
-			$this->path = '';
-		}
+		parent::__construct('local.xml');
 	}
 	
 	protected function getAsSxe() {
-		if (! $this->sxe instanceof SimpleXMLElement) {
-			$this->sxe = new SimpleXMLElement($this->getContents());
+		if (! $this->sxe instanceof Varien_Simplexml_Element) {
+			$this->sxe = new Varien_Simplexml_Element($this->getContents());
 		}
 		
 		return $this->sxe;
 	}
 	
-	public function addReference($referenceName) {
-		$rootXml = $this->getAsSxe();
-		$refsXml = $rootXml->xpath('reference[@name="' . $referenceName . '"]');
+	public function getHandle($handleName) {
+		$xmls = $this->getAsSxe()
+			->xpath($handleName);
 		
-		if (isset($refsXml[0]) AND $refsXml instanceof SimpleXMLElement) {
-			$refXml = $refsXml[0];
+		if (isset($xmls[0]) AND $xmls[0] instanceof SimpleXMLElement) {
+			$xml = $xmls[0];
 		} else {
-			$refXml = $rootXml->addChild('reference');
-			$refXml->addAttribute('name', $referenceName);
+			$xml = $this->getAsSxe()->addChild($handleName);
 		}
 		
-		echo $refXml->asXML();
-		return $this;
+		return $xml;
 	}
 	
-	public function addRemove($referenceName, $name)
-	{
-		$this->addReference($referenceName);
+	public function getReference(SimpleXMLElement $handle, $referenceName) {
+		$xmls = $handle->xpath('reference[@name="' . $referenceName . '"]');
 		
-		$rootXml = $this->getAsSxe();
-		$refsXml = $rootXml->xpath('reference[@name="' . $referenceName . '"]');
-		$removeXml = $refsXml[0]->addChild('remove');
+		if (isset($xmls[0]) AND $xmls[0] instanceof SimpleXMLElement) {
+			$xml = $xmls[0];
+		} else {
+			$xml = $handle->addChild('reference');
+			$xml->addAttribute('name', $referenceName);
+		}
+		
+		return $xml;
+	}
+	
+	public function addRemove($handleName, $referenceName, $name)
+	{
+		$handle = $this->getHandle($handleName);
+		$reference = $this->getReference($handle, $referenceName);
+		
+		$removeXml = $reference->addChild('remove');
 		$removeXml->addAttribute('name', $name);
 		
 		return $this;
@@ -50,6 +56,6 @@ class Dhmedia_Devel_Model_Writer_Localxml extends Dhmedia_Devel_Model_Writer_Abs
 	
 	public function save()
 	{
-		return $this->setContents($this->sxe->asXML());
+		return $this->putContents($this->sxe->asNiceXml());
 	}
 }

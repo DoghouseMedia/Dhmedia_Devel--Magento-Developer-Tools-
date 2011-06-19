@@ -6,6 +6,7 @@
     		<action method="removeItem"><type>js</type><name>varien/js.js</name></action>
     		<action method="addJs"><script>devel/varien/js.js</script></action>
     		
+    		<action method="addJs"><script>devel/data.js</script></action>
     		<action method="addJs"><script>devel/helpers.js</script></action>
     		<action method="addJs"><script>devel/toolbar.js</script></action>
 			<action method="addJs"><script>devel/hints.js</script></action>
@@ -13,12 +14,14 @@
 			<action method="addJs"><script>devel/sprites.js</script></action>
 			
     		<!--<action method="addItem"><type>skin_css</type><name>css/styles-ie.css</name><params/><if>lt IE 8</if></action>-->
+    		<action method="addCss"><stylesheet>devel/css/data.css</stylesheet></action>
     		<action method="addCss"><stylesheet>devel/css/animations.css</stylesheet></action>
     		<action method="addCss"><stylesheet>devel/css/krumo.css</stylesheet></action>
 			<action method="addCss"><stylesheet>devel/css/toolbar.css</stylesheet></action>
 			<action method="addCss"><stylesheet>devel/css/panels.css</stylesheet></action>
 			<action method="addCss"><stylesheet>devel/css/hints.css</stylesheet></action>
 			<action method="addCss"><stylesheet>devel/css/sprites.css</stylesheet></action>
+			<action method="addCss"><stylesheet>devel/css/forms.css</stylesheet></action>
     	</reference>
         <reference name="after_body_start">
             <block type="devel/frontend" name="devel_frontend" before="-" />
@@ -69,4 +72,16 @@
             <block type="devel/help_view" name="help_view" />
         </reference>
     </devel_help_view>
+    
+    <devel_layout_wizard>
+    	<reference name="root">
+            <action method="setTemplate"><template>page/empty.phtml</template></action>
+        </reference>
+        <reference name="after_body_start">
+    		<remove name="devel_frontend"/>
+    	</reference>
+        <reference name="content">
+            <block type="devel/frontend_form" name="devel_wizard_form" />
+        </reference>
+    </devel_layout_wizard>
 </layout>

@@ -34,7 +34,12 @@
 					</a>
 					<ul class="show-on-hover">
 						<li>
-							<a href="#" class="disabled" onclick="return false;">
+							<a href="#"
+								onclick="
+									DevelGlobals.PanelManager.create('Browser', 'Layout XML', ['icon-xml'])
+										.setContent(DevelGlobals.Data.layoutXml.innerHTML);
+									return false;
+								">
 								View layout (xml)
 							</a>
 						</li>

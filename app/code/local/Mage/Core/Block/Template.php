@@ -230,30 +230,20 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
             
         	echo '<div class="tooltip">Inspect ' . get_class($this) . '</div>';
         	
-            /*
-             * Template hint
-             */
-            echo $this->getDevelHintAsHtml('Template', 'Template (.phtml)', array(
+        	/*
+        	 * Devel DATA
+        	 */
+        	echo $this->getDevelHintDataAsHtml(array(
             	'filename' => $fileName,
             	'template' => $this->getTemplate(),
             	'viewPath' => $this->_viewDir,
             	'path' => $includeFilePath,
             	'editorUrl'=> Mage::getBaseUrl() 
             		. 'devel/filesystem/edit/type/template?template=' 
-            		. urlencode($this->getTemplate())
-            ));
-            
-            /*
-             * Layout hint
-             */  
-            echo $this->getDevelHintAsHtml('Layout', 'Layout (xml)', array(
-            	'xmlLayout' => $this->getDevelDataXmlLayout()
-            ));
-            
-            /*
-             * Class hint
-             */
-            echo $this->getDevelHintAsHtml('Class', 'Class info', array(
+            		. urlencode($this->getTemplate()),
+            		
+            	'xmlLayout' => $this->getDevelDataXmlLayout(),
+            		
             	'className' => get_class($this),
             	'classMethods' => $this->getDevelDataClassMethods(),
             	/*
@@ -263,21 +253,40 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
             	 */
             	//'classVars' => get_object_vars($this),
             	'localVars' => get_defined_vars(),
+            	'classDocsUrl' => $this->getDocsUrl(),
             	/*
             	 * Was trying to recurse all object/properties/methods of block.
             	 * Never worked.  Start by figuring out what's in 'classVars'.
             	 * @see self::getDevelDataClassReflectAll()
             	 */
-            	//'classReflectAll' => $this->getDevelDataClassReflectAll()
+            	//'classReflectAll' => $this->getDevelDataClassReflectAll(),
+            	
+            	'nameInLayout' => $this->getNameInLayout(),
+            	'wizardRemove' => array(
+            		'url' => '/devel/layout/remove',
+            		'params' => array(
+            			'name' => $this->getNameInLayout()
+            		),
+            		'title' => 'Remove ' . $this->getNameInLayout()
+           		),
+            	'handles' => $this->getLayout()->getUpdate()->getHandles()
             ));
+        	
+            /* Template hint */
+            echo $this->getDevelHintAsHtml('Template', 'Template (.phtml)');
             
-            /*
-             * Docs hint
-             */  
-            echo $this->getDevelHintAsHtml('Docs', 'Class documentation', array(
-            	'classDocsUrl' => $this->getDocsUrl()
-            ));
+            /* Layout hint */  
+            echo $this->getDevelHintAsHtml('Layout', 'Layout (xml)');
+            
+            /* Class hint */
+            echo $this->getDevelHintAsHtml('Class', 'Class info');
+            
+            /* Docs hint */  
+            echo $this->getDevelHintAsHtml('Docs', 'Class documentation');
 
+            /* Remove wizard */  
+            echo $this->getDevelHintAsHtml('WizardRemove', 'Remove block');
+            
             /*
              * Krump hint
              * 
@@ -293,13 +302,6 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
 	            	echo '</span>';
 	            echo '</div>';
             endif;
-            
-            /*
-             * Remove wizard
-             */  
-            //echo $this->getDevelHintAsHtml('WizardRemove', 'Remove block', array(
-            	//'classDocsUrl' => $this->getDocsUrl()
-            //));
             
             /*
              * Close HINTS
@@ -435,45 +437,76 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
 
         $xpathQueries = array(
         	'develRefs' => '//devel[xml//@name="' . $this->getNameInLayout() . '"]',
-        	'relativeRefs' => 'xml//*[@name="' . $this->getNameInLayout() . '"]'
+        	'keyRefs' => 'xml/*[.//@name="' . $this->getNameInLayout() . '"]',
+        	'relativeRefs' => './/*[@name="' . $this->getNameInLayout() . '"]'
         );
 
-        foreach($xml->xpath($xpathQueries['develRefs']) as $res) {
-            $_data = array(
-            	'file' => (string) $res->file,
-               	'path' => (string) $res->filename,
-              	'url' => Mage::getBaseUrl() 
-            		. 'devel/filesystem/edit/type/layout?layout=' 
-					. urlencode($res->file),
-               	'xml' => array()
-            );
-
-            foreach($res->xpath($xpathQueries['relativeRefs']) as $resXml) {
-            	/*
-            	 * Get Parent tag
-            	 */
-            	$parentsXml = $resXml->xpath('./..');
-            	$parentXml = $parentsXml[0];
-            	$parentTagOpen = '<' . $parentXml->getName();
-            	foreach($parentXml->attributes() as $k => $v) {
-            		$parentTagOpen .= ' ' . $k . '=' . '"' . $v . '"';
-            	}
-            	$parentTagOpen .= '>';
-            	$parentTagClose = '</' . $parentXml->getName() . '>';
-            	
-				$_data['xml'][] = $this->getDevelProtectedXmlInJson(
-					$parentTagOpen . "\n"
-					 . "\n\t" . '...' . "\n\n"
-					 . "\t" . $resXml->asXML() . "\n"
-					 . "\n\t" . '...' . "\n\n"
-					 . $parentTagClose
-				);
-            }
-               
-           	$data[] = $_data;
+        foreach($xml->xpath($xpathQueries['develRefs']) as $resDevel) {
+        	//$data[] = $resDevel->getName();
+	        foreach($resDevel->xpath($xpathQueries['keyRefs']) as $resKey) {
+	            $_data = array(
+	            	'file' => (string) $resDevel->file,
+	               	'path' => (string) $resDevel->filename,
+	              	'url' => Mage::getBaseUrl() 
+	            		. 'devel/filesystem/edit/type/layout?layout=' 
+						. urlencode($resDevel->file),
+	               	'xml' => array(),
+					'handle' => $resKey->getName(),
+					'references' => array()
+	            );
+ 
+	            foreach($resKey->xpath($xpathQueries['relativeRefs']) as $resXml) {
+	            	/*
+	            	 * Get Parent tag
+	            	 */
+	            	$parentTagNameAttr = false;
+	            	$parentsXml = $resXml->xpath('./..');
+	            	$parentXml = $parentsXml[0];
+	            	$parentTagOpen = '<' . $parentXml->getName();
+	            	foreach($parentXml->attributes() as $k => $v) {
+	            		if ($k == 'name') {
+	            			$parentTagNameAttr = (string) $v;
+	            		}
+	            		$parentTagOpen .= ' ' . $k . '=' . '"' . $v . '"';
+	            	}
+	            	$parentTagOpen .= '>';
+	            	$parentTagClose = '</' . $parentXml->getName() . '>';
+	            	
+	            	if (
+	            		$parentTagNameAttr AND
+	            		in_array($parentXml->getName(), array('reference','block'))
+	            	) {
+	            		$_data['references'][] = $parentTagNameAttr;
+	            	}
+	            	
+					$_data['xml'][] = $this->getDevelProtectedXmlInJson(
+						$parentTagOpen . "\n"
+						 . "\n\t" . '...' . "\n\n"
+						 . "\t" . $resXml->asXML() . "\n"
+						 . "\n\t" . '...' . "\n\n"
+						 . $parentTagClose
+					);
+	            }
+	               
+	           	$data[] = $_data;
+	        }
         }
                 
         return $data;
+    }
+    
+	public function getDevelHintDataAsHtml($data=array(), $dataType='json')
+    {
+        $o = '<div class="data">';
+        	switch($dataType) {
+        		case 'html': $o .= $data; break;
+        		
+        		default:
+        		case 'json': $o .= Zend_Json::encode($data); break; 
+        	}
+        $o .= '</div>';
+        
+        return $o;
     }
     
     public function getDevelHintAsHtml($type, $title, $data=array(), $dataType='json')
@@ -481,12 +514,12 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
     	$o  = '<div class="hint" rel="' . $type . '" title="' . $title . '">';
         	$o .= $title;
         	$o .= '<span class="devel-data-json">';
-        		switch($dataType) {
-        			case 'html': $o .= $data; break;
-        			
-        			default:
-        			case 'json': $o .= Zend_Json::encode($data); break; 
-        		}
+        		/*
+        		 * @todo Override add data to main devel data
+        		 */
+    			if (count($data)) {
+    				throw new Exception("Not implemented!");
+    			}
 	        $o .= '</span>';
         $o .= '</div>';
         

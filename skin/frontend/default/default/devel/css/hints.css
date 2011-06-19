@@ -28,7 +28,8 @@
 	display: inline-block !important;
 	z-index: 999;
 }
-.devel-hint .hint {
+.devel-hint .hint,
+.devel-hint .data {
 	display: none;
 }
 .devel-hint .tooltip {
