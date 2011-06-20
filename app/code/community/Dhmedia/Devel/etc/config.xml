@@ -16,6 +16,11 @@
 					<html_head>Dhmedia_Devel_Block_Page_Html_Head</html_head>
 				</rewrite>
 			</page>
+			<cms>
+				<rewrite>
+					<page>Dhmedia_Devel_Block_Cms_Page</page>
+				</rewrite>
+			</cms>
 		</blocks>
 		<helpers>
 			<devel>
@@ -63,5 +68,17 @@
 				</devel>
 			</updates>
 		</layout>
+		<acl>
+			<resources>
+				<admin>
+                    <children>
+                        <devel translate="title">
+                            <title>Devel - Advanced Developer Tools</title> 
+                            <sort_order>9999</sort_order>
+                        </devel>
+                    </children>
+                </admin>
+			</resources>
+		</acl>
 	</adminhtml>
 </config>
