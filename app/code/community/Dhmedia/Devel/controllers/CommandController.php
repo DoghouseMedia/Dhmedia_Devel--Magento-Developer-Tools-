@@ -71,6 +71,12 @@ class Dhmedia_Devel_CommandController extends Mage_Core_Controller_Front_Action
 		);
 	}
 	
+	public function phpinfoAction()
+	{
+		phpinfo();
+		die();
+	}
+	
 	/* -----| Protected LIB functions |----- */
 	
 	protected function setHints($status=true)

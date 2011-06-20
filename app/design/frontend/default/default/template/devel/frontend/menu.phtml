@@ -129,9 +129,8 @@
 							</div>
 						</li>
 						<li>
-							<a href="#" class="disabled"
-								onclick="return false;"
-								_onclick="DevelGlobals.PanelManager.create('Browser', this.innerText).open(this.href); return false;">
+							<a href="<?php echo $this->helper('devel/url')->getUrl('command/phpinfo') ?>"
+								onclick="DevelGlobals.PanelManager.create('Browser', 'phpinfo()').open(this.href); return false;">
 								View phpinfo.php
 							</a>
 						</li>
