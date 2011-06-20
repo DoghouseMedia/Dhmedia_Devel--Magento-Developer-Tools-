@@ -16,11 +16,6 @@
 					<html_head>Dhmedia_Devel_Block_Page_Html_Head</html_head>
 				</rewrite>
 			</page>
-			<cms>
-				<rewrite>
-					<page>Dhmedia_Devel_Block_Cms_Page</page>
-				</rewrite>
-			</cms>
 		</blocks>
 		<helpers>
 			<devel>
