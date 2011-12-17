@@ -1,0 +1,14 @@
+app/code/community/Dhmedia/Devel/
+app/code/local/Mage/Core/Block/Template.php
+app/code/local/Mage/Core/Model/Config.php
+app/design/frontend/default/default/template/devel/
+app/design/frontend/default/default/layout/devel/
+app/etc/modules/Dhmedia_Devel.xml
+js/codemirror/
+js/devel/
+lib/krumo/
+js/devel/
+shell/devel/
+skin/frontend/default/default/devel/
+.gitignore
+devel.sh

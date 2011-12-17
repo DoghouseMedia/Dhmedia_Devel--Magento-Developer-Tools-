@@ -8,7 +8,7 @@ class Dhmedia_Devel_SelfController extends Mage_Core_Controller_Front_Action
 	{
 		chdir('downloader');
 
-		require_once 'Maged/Pear.php';
+		require_once './Maged/Pear.php';
 		
 		$pearModel = new Maged_Model_Pear();
 		
