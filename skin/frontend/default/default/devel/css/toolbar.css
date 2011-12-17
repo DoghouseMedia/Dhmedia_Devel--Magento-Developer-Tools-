@@ -115,6 +115,12 @@ body{ padding-top: 4.5ex; }
 	text-decoration: line-through;
 }
 
+#dhmedia_devel_block_frontend ul li a span.shortcut {
+	margin-left: 2em;
+	color: #999;
+	font-style: oblique;
+}
+
 /* "Show on hover" */
 #dhmedia_devel_block_frontend ul li .show-on-hover {
 	position: absolute;

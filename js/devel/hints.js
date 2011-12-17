@@ -16,15 +16,19 @@ DevelHints.prototype =
 		});
 		
 		$$(hints.rootSelector).invoke('addClassName', 'active');
+		
+		$(document).observe('keydown', function(event) {
+			if (event.ctrlKey && event.keyCode == 72) {
+				DevelGlobals.DevelHints.toggle();
+			}
+		});
 	},
 	toggleStateOn: true,
 	toggle: function() {
 		if (this.toggleStateOn) {
-			//this.dom.removeClassName('active');
 			$$(this.rootSelector).invoke('removeClassName', 'active');
 			this.toggleStateOn=false;
 		} else {
-			//this.dom.addClassName('active');
 			$$(this.rootSelector).invoke('addClassName', 'active');
 			this.toggleStateOn=true;
 		}
