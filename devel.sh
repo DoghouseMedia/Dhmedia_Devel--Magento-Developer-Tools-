@@ -23,14 +23,26 @@ fi
 # Path
 #
 DEVEL_SH_PATH="./shell/devel/$DEVEL_SH_HANDLER/$DEVEL_SH_COMMAND.sh"
+DEVEL_PHP_PATH="./shell/devel/$DEVEL_SH_HANDLER/$DEVEL_SH_COMMAND.php"
 
-if [ ! -f $DEVEL_SH_PATH ]
+if [ -f $DEVEL_SH_PATH ]
 then
-	echo "ERROR: Handler or command doesn't exist! ($DEVEL_SH_PATH)"
-	exit
+	#
+	# Source the include to use current shell
+	#
+	. $DEVEL_SH_PATH; exit
+fi
+
+if [ -f $DEVEL_PHP_PATH ]
+then
+	#
+	# Source the include to use current shell
+	#
+	php $DEVEL_PHP_PATH; exit
 fi
 
 #
-# Source the include to use current shell
+# ERROR
 #
-. $DEVEL_SH_PATH
+echo "ERROR: Handler or command doesn't exist! ($DEVEL_SH_PATH)"
+exit
