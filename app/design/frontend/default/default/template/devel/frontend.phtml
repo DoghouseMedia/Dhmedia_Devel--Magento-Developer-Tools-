@@ -1,3 +1,33 @@
+<!-- 
+	To ensure the JS and CSS files only get loaded when Devel
+	is allowed to run, we've moved them from the frontend.xml file
+	to here.
+	@todo At some point, we should move them somewhere else, in
+	order to get them out of the template.
+ -->
+
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl() ?>js/devel/data.js"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl() ?>js/devel/helpers.js"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl() ?>js/devel/toolbar.js"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl() ?>js/devel/panels.js"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl() ?>js/devel/hints.js"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl() ?>js/devel/sprites.js"></script>
+
+<style>
+/*@import url(<?php echo Mage::getBaseUrl() ?>skin/frontend/default/default/devel/css/styles-ie.css);*/
+@import url(<?php echo Mage::getBaseUrl() ?>skin/frontend/default/default/devel/css/data.css);
+@import url(<?php echo Mage::getBaseUrl() ?>skin/frontend/default/default/devel/css/animations.css);
+@import url(<?php echo Mage::getBaseUrl() ?>skin/frontend/default/default/devel/css/krumo.css);
+@import url(<?php echo Mage::getBaseUrl() ?>skin/frontend/default/default/devel/css/toolbar.css);
+@import url(<?php echo Mage::getBaseUrl() ?>skin/frontend/default/default/devel/css/panels.css);
+@import url(<?php echo Mage::getBaseUrl() ?>skin/frontend/default/default/devel/css/hints.css);
+@import url(<?php echo Mage::getBaseUrl() ?>skin/frontend/default/default/devel/css/sprites.css);
+@import url(<?php echo Mage::getBaseUrl() ?>skin/frontend/default/default/devel/css/forms.css);
+</style>	
+
+<!-- 
+	Main block
+ -->
 <div id="dhmedia_devel_block_frontend">
 	
 	<a
@@ -17,10 +47,10 @@
 	
 	<div class="devel-data" rel="layoutXml" title="Xml">
 <!--
-You can't tab or space the following textarea without 
-creating problems with the editor. Putting in all on
-one line works too.
--->
+	You can't tab or space the following textarea without 
+	creating problems with the editor. Putting in all on
+	one line works too.
+ -->
 <textarea id="layout-xml" name="layout-xml" class="devel-editor">
 <?php echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n" ?>
 <?php echo $this->getLayoutXml() ?>
@@ -29,6 +59,9 @@ one line works too.
 	
 </div>
 
+<!-- 
+	Panel
+ -->
 <div id="dhmedia_devel_block_panels">
 	
 	<!--  These blocks are only here for reference. Remove when panel refactoring is done. -->

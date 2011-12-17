@@ -8,7 +8,7 @@ class Dhmedia_Devel_Block_Frontend extends Mage_Core_Block_Template
 		 * Check Devel is allowed to run
 		 */
 		if (! Mage::helper('devel/config')->isDevelMode()) {
-			//return false;
+			return false;
 		}
 		
 		/*

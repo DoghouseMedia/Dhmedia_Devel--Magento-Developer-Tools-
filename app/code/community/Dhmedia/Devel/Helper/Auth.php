@@ -8,7 +8,7 @@ class Dhmedia_Devel_Helper_Auth extends Mage_Core_Helper_Abstract
 		 * If there are IP restictions, check remote IP against them.
 		 * Deny if IP is restricted.
 		 */
-		$restrictedIpString = Mage::app()->getStore()->getConfig('dev/restrict/allow/ips');
+		$restrictedIpString = Mage::app()->getStore()->getConfig('dev/restrict/allow_ips');
 		if ($restrictedIpString) {
 			$restrictedIps = explode(',', str_replace(' ','', $restrictedIpString));
 			if (! in_array(Mage::app()->getRequest()->getServer('REMOTE_ADDR'), $restrictedIps)) {
