@@ -61,27 +61,62 @@ DevelUpdateNotifier.prototype =
 	},
 	getStatus: function(el)
 	{
+		var span = document.createElement('span');
+		el.appendChild(span);
+		span.innerHTML = "Checking for updates...";
+		span.className = 'devel-notification-label';
+		
 		new Ajax.Request(this.hasUpdateUrl, {
 			method:'get',
 			onSuccess: function(transport) {
-				/* @todo: when backend implements JSON for notifiers, use something like this: */
-				//el.innerHtml = transport.responseJSON.text;
-				//transport.responseJSON.classes.each(function(classname){
-				//	el.addClassName(classname);
-				//});
-				if (transport.responseText == 'Y') {
-					var html = '<font style="color:orange;">Update available!</font>';
-					el.addClassName('has-update');
-				} else if (transport.responseText == 'N') {
-					var html = '<font style="color:green;">Latest and greatest!</font>';
+				var labelHtml = false;
+				var contentHtml = false;
+
+				if (transport.responseJSON["list-upgrades"]) {
+					var data = transport
+						.responseJSON["list-upgrades"]
+						.data;
+					
+					span.innerHTML = 'Updates available!';
+					contentHtml = '<table>';
+					for (var channelKey in data) {
+						contentHtml += '<thead>';
+						contentHtml += '<tr>';
+						contentHtml += '<th colspan="3">' + channelKey + '</th>';
+						contentHtml += '</tr>';
+						contentHtml += '<tr>';
+						contentHtml += '<th>Extension name</th>';
+						contentHtml += '<th>From</th>';
+						contentHtml += '<th>To</th>';
+						contentHtml += '</tr>';
+						contentHtml += '</thead>';
+						contentHtml += '<tbody>';
+						for (var extensionKey in data[channelKey]) {
+							contentHtml += '<tr>';
+							contentHtml += '<td>';
+							contentHtml += extensionKey;
+							contentHtml += '</td>';
+							contentHtml += '<td>';
+							contentHtml += data[channelKey][extensionKey].from
+							contentHtml += '</td>';
+							contentHtml += '<td>';
+							contentHtml += data[channelKey][extensionKey].to;
+							contentHtml += '</td>';
+							contentHtml += '</tr>';
+						}
+						contentHtml += '</tbody>';
+					}
+					contentHtml += '</table>';
 				} else {
-					var html = '<font style="color:grey;">Could not check for updates...</font>';
+					span.innerHTML = 'No updates';
 				}
 				
-				var span = document.createElement('span');
-				span.innerHTML = html;
-				el.appendChild(span);
-				//el.innerHTML = html;
+				if (contentHtml) {
+					var div = document.createElement('div');
+					div.innerHTML = contentHtml;
+					div.className = 'devel-notification-content';
+					el.appendChild(div);
+				}
 			}
 		});
 	}

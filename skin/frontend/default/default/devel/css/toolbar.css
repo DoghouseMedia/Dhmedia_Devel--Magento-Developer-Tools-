@@ -270,6 +270,32 @@ body{ padding-top: 4.5ex; }
 	margin-right: 0.5ex;
 }
 
+#dhmedia_devel_block_frontend .update-notifier-box .devel-notification-label {
+	
+}
+
+#dhmedia_devel_block_frontend .update-notifier-box .devel-notification-content {
+	position: absolute;
+	z-index: 99999;
+	display: none;
+
+	top: 2.5em;
+	right: 0.5em;
+
+	background-color: #000;
+	background-color: rgba(0,0,0,0.7);
+	padding: 1em;
+	text-align: left; 
+
+	border-radius: 0 0 5px 5px;
+
+	box-shadow: 0 0 5px #333;
+}
+#dhmedia_devel_block_frontend .update-notifier-box:hover .devel-notification-content {
+	display: block;
+}
+
+
 /* Clear fix */
 #dhmedia_devel_block_frontend .clear-fix{
 	clear:both;

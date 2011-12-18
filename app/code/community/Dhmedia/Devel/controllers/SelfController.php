@@ -2,30 +2,27 @@
 
 class Dhmedia_Devel_SelfController extends Mage_Core_Controller_Front_Action
 {
-	const CHANEL_PACKAGE = 'connect.magentocommerce.com/community/Dhmedia_Devel';
-	
 	public function hasupdateAction()
 	{
-		chdir('downloader');
-
-		require_once './Maged/Pear.php';
+		chdir(Mage::getBaseDir() . '/downloader/');
 		
-		$pearModel = new Maged_Model_Pear();
+		if (version_compare(Mage::getVersion(), '1.5.0.0') >= 0) {
+			require_once './Maged/Connect.php';
+			$connectModel = new Maged_Model_Connect();
+			$connect = $connectModel->connect();
+		}
+		else {
+			require_once './Maged/Pear.php';
+			$connectModel = new Maged_Model_Pear();
+			$connect = $connectModel->pear();
+		}
 		
-		$pearModel->pear()->run('remote-info', array(), array(self::CHANEL_PACKAGE));
-        $output = $pearModel->pear()->getOutput();
-        
-        if (!isset($output[0]['output'])) {
-        	echo 'ERROR';
-        	return;
-        }
-        
-        $versionLatest = $output[0]['output']['stable'];
-        $versionInstalled = $output[0]['output']['installed'];
-        
-        $hasUpdate = version_compare($versionLatest, $versionInstalled);
-        
-        echo $hasUpdate ? 'Y' : 'N';
-		return;
+		$connect->run('list-upgrades', array(
+			'channel'=>'connect.magentocommerce.com/community'
+		));
+		
+		$this->getResponse()
+			->setHeader('Content-type', 'application/json')
+			->setBody(Zend_Json::encode($connect->getOutput()));
 	}
 }
