@@ -60,7 +60,6 @@ class Dhmedia_Devel_LayoutController extends Mage_Core_Controller_Front_Action
 		));
 		
 		if ($form->isValid($this->getRequest()->getParams())) {
-			
 			$localXmlWriter = Mage::getModel('devel/writer_localxml');
 			$localXmlWriter->addRemove(
 				$form->handle->getValue(),
@@ -71,8 +70,8 @@ class Dhmedia_Devel_LayoutController extends Mage_Core_Controller_Front_Action
 			$localXmlWriter->save();
 			
 			die('DONE. You need to reload to see changes!');
-			
-		} else {
+		}
+		else {
 			$this->loadLayout();
 			$this->getLayout()->getUpdate()
 				->load('devel_layout_wizard');
@@ -81,7 +80,7 @@ class Dhmedia_Devel_LayoutController extends Mage_Core_Controller_Front_Action
 			
 			$this->getLayout()->getBlock('devel_wizard_form')
 				->setForm($form);
-			$this->renderLayout();	
+			$this->renderLayout();
 		}
 	}
 }

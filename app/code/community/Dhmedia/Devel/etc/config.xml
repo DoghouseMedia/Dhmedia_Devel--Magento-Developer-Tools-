@@ -76,4 +76,11 @@
 			</resources>
 		</acl>
 	</adminhtml>
+	<default>
+		<dev>
+			<dhmedia_devel>
+				<allow_valid_ip_only>0</allow_valid_ip_only>
+			</dhmedia_devel>
+		</dev>
+	</default>
 </config>
