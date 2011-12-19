@@ -60,6 +60,9 @@
     	<reference name="root">
             <action method="setTemplate"><template>page/empty.phtml</template></action>
         </reference>
+        <reference name="head">
+    		<action method="addCss"><script>devel/css/forms.css</script></action>
+    	</reference>
         <reference name="after_body_start">
     		<remove name="devel_frontend"/>
     	</reference>
