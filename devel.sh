@@ -35,9 +35,6 @@ fi
 
 if [ -f $DEVEL_PHP_PATH ]
 then
-	#
-	# Source the include to use current shell
-	#
 	php $DEVEL_PHP_PATH; exit
 fi
 

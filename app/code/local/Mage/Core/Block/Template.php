@@ -244,6 +244,8 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
             		
             	'xmlLayout' => $this->getDevelDataXmlLayout(),
             		
+            	'regions' => $this->getDevelDataRegions(),
+            		
             	'className' => get_class($this),
             	'classMethods' => $this->getDevelDataClassMethods(),
             	/*
@@ -268,6 +270,13 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
             			'name' => $this->getNameInLayout()
             		),
             		'title' => 'Remove ' . $this->getNameInLayout()
+           		),
+           		'wizardMove' => array(
+            		'url' => '/devel/layout/move',
+            		'params' => array(
+            			'name' => $this->getNameInLayout()
+            		),
+            		'title' => 'Move ' . $this->getNameInLayout()
            		),
             	'handles' => $this->getLayout()->getUpdate()->getHandles()
             ));
@@ -411,6 +420,42 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
     	}
     }
     
+    protected function _processDataXmlExtract(SimpleXMLElement $xml, array $data = array())
+    {
+    	/*
+         * Get Parent tag
+         */
+        $parentTagNameAttr = false;
+        $parentsXml = $xml->xpath('./..');
+        $parentXml = $parentsXml[0];
+        $parentTagOpen = '<' . $parentXml->getName();
+        foreach($parentXml->attributes() as $k => $v) {
+        	if ($k == 'name') {
+        		$parentTagNameAttr = (string) $v;
+            }
+            $parentTagOpen .= ' ' . $k . '=' . '"' . $v . '"';
+        }
+        $parentTagOpen .= '>';
+        $parentTagClose = '</' . $parentXml->getName() . '>';
+            
+        if (
+            $parentTagNameAttr AND
+            in_array($parentXml->getName(), array('reference','block'))
+        ) {
+            $data['references'][] = $parentTagNameAttr;
+        }
+            
+		$data['xml'][] = $this->getDevelProtectedXmlInJson(
+			$parentTagOpen . "\n"
+			 . "\n\t" . '...' . "\n\n"
+			 . "\t" . $xml->asXML() . "\n"
+			 . "\n\t" . '...' . "\n\n"
+			 . $parentTagClose
+		);
+		
+		return $data;
+    }
+    
     public function getDevelDataXmlLayout()
     {
     	$xml = Mage::getSingleton('core/layout')
@@ -420,64 +465,84 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
         $data = array();
 
         $xpathQueries = array(
-        	'develRefs' => '//devel[xml//@name="' . $this->getNameInLayout() . '"]',
-        	'keyRefs' => 'xml/*[.//@name="' . $this->getNameInLayout() . '"]',
-        	'relativeRefs' => './/*[@name="' . $this->getNameInLayout() . '"]'
+        	'develRefs' => '//devel',
+        	'keyRefs' => 'xml/*',
+        	'relativeRefs' => './/*[@name="' . $this->getNameInLayout() . '"]',
+        	'insertActionRefs' => './/action[@method!="" and name[contains(.,"' . $this->getNameInLayout() . '")]]'
         );
-
+        
         foreach($xml->xpath($xpathQueries['develRefs']) as $resDevel) {
-        	//$data[] = $resDevel->getName();
-	        foreach($resDevel->xpath($xpathQueries['keyRefs']) as $resKey) {
-	            $_data = array(
-	            	'file' => (string) $resDevel->file,
-	               	'path' => (string) $resDevel->filename,
-	              	'url' => Mage::getBaseUrl() 
-	            		. 'devel/filesystem/edit/type/layout?layout=' 
-						. urlencode($resDevel->file),
-	               	'xml' => array(),
-					'handle' => $resKey->getName(),
-					'references' => array()
-	            );
- 
-	            foreach($resKey->xpath($xpathQueries['relativeRefs']) as $resXml) {
-	            	/*
-	            	 * Get Parent tag
-	            	 */
-	            	$parentTagNameAttr = false;
-	            	$parentsXml = $resXml->xpath('./..');
-	            	$parentXml = $parentsXml[0];
-	            	$parentTagOpen = '<' . $parentXml->getName();
-	            	foreach($parentXml->attributes() as $k => $v) {
-	            		if ($k == 'name') {
-	            			$parentTagNameAttr = (string) $v;
-	            		}
-	            		$parentTagOpen .= ' ' . $k . '=' . '"' . $v . '"';
-	            	}
-	            	$parentTagOpen .= '>';
-	            	$parentTagClose = '</' . $parentXml->getName() . '>';
-	            	
-	            	if (
-	            		$parentTagNameAttr AND
-	            		in_array($parentXml->getName(), array('reference','block'))
-	            	) {
-	            		$_data['references'][] = $parentTagNameAttr;
-	            	}
-	            	
-					$_data['xml'][] = $this->getDevelProtectedXmlInJson(
-						$parentTagOpen . "\n"
-						 . "\n\t" . '...' . "\n\n"
-						 . "\t" . $resXml->asXML() . "\n"
-						 . "\n\t" . '...' . "\n\n"
-						 . $parentTagClose
-					);
-	            }
-	               
-	           	$data[] = $_data;
+        	foreach($resDevel->xpath($xpathQueries['keyRefs']) as $resKey) {
+	        	foreach($resKey->xpath($xpathQueries['insertActionRefs']) as $resInsertAction) {
+		        	$_data = array(
+			            'file' => (string) $resDevel->file,
+			            'path' => (string) $resDevel->filename,
+			            'url' => Mage::getBaseUrl() 
+			            	. 'devel/filesystem/edit/type/layout?layout=' 
+							. urlencode($resDevel->file),
+			            'xml' => array(),
+						'handle' => $resKey->getName(),
+						'references' => array()
+			        );
+			            
+		        	$_data = $this->_processDataXmlExtract($resInsertAction, $_data);
+		        	
+		        	$data[] = $_data;
+		        }
+	            
+		        if (($relativeRefs = $resKey->xpath($xpathQueries['relativeRefs']))) {
+		            $_data = array(
+		            	'file' => (string) $resDevel->file,
+		               	'path' => (string) $resDevel->filename,
+		              	'url' => Mage::getBaseUrl() 
+		            		. 'devel/filesystem/edit/type/layout?layout=' 
+							. urlencode($resDevel->file),
+		               	'xml' => array(),
+						'handle' => $resKey->getName(),
+						'references' => array()
+		            );
+	 
+		            foreach($relativeRefs as $resXml) {
+		            	$_data = $this->_processDataXmlExtract($resXml, $_data);
+		            }
+		               
+		           	$data[] = $_data;
+		        }
 	        }
         }
                 
         return $data;
     }
+    
+	public function getDevelDataRegions()
+	{
+		$regions = array();
+		
+		$design = Mage::getSingleton('core/design_package');
+		$elementClass = $this->getLayout()->getUpdate()->getElementClass();
+
+		$file = Mage::app()->getConfig()
+			->getNode($design->getArea() . '/layout/updates')
+			->page
+			->file;
+
+		$filename = $design->getLayoutFilename($file, array(
+			'_area'    => $design->getArea(),
+			'_package' => $design->getPackageName(),
+			'_theme'   => $design->getTheme('layout')
+		));
+            
+		$fileStr = file_get_contents($filename);
+        $fileXml = simplexml_load_string($fileStr, $elementClass);
+        
+        $blocksXml = $fileXml->xpath('//block[@name]');
+        
+        foreach($blocksXml as $blockXml) {
+        	$regions[] = (string) $blockXml['name'];
+        }
+        
+        return $regions;
+	}
     
 	public function getDevelHintDataAsHtml($data=array(), $dataType='json')
     {

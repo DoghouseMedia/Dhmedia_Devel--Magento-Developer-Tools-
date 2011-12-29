@@ -30,6 +30,11 @@ class Dhmedia_Devel_Model_Writer_Localxml extends Dhmedia_Devel_Model_File_Layou
 		return $xml;
 	}
 	
+	/**
+	 * Get Reference SimplXMLElement object
+	 * 
+	 * @return SimpleXMLElement
+	 */
 	public function getReference(SimpleXMLElement $handle, $referenceName) {
 		$xmls = $handle->xpath('reference[@name="' . $referenceName . '"]');
 		
@@ -50,6 +55,49 @@ class Dhmedia_Devel_Model_Writer_Localxml extends Dhmedia_Devel_Model_File_Layou
 		
 		$removeXml = $reference->addChild('remove');
 		$removeXml->addAttribute('name', $name);
+		
+		return $this;
+	}
+	
+	public function addMove($handleName, array $referenceNamesFrom = array(), $referenceNameTo, $name)
+	{
+		$handle = $this->getHandle($handleName);
+		$referenceFrom = $this->getReference($handle, $referenceNamesFrom[0]);
+		$referenceTo = $this->getReference($handle, $referenceNameTo);
+		
+		if ($referenceNamesFrom[0] !== $referenceNameTo) {
+			$unsetXml = $referenceFrom->addChild('action');
+			$unsetXml->addAttribute('method', 'unsetChild');
+			$unsetXml->addChild('name');
+			$unsetXml->name = $name;
+			
+			$insertXml = $referenceTo->addChild('action');
+			$insertXml->addAttribute('method', 'insert');
+			$insertXml->addChild('name');
+			$insertXml->name = $name;
+		}
+		
+		return $this;
+	}
+	
+	public function removeMove($handleName, array $referenceNames = array(), $name)
+	{
+		$handle = $this->getHandle($handleName);
+		
+		foreach($referenceNames as $referenceName) {
+			$reference = $this->getReference($handle, $referenceName);
+			
+			foreach ($reference->action as $action) {
+				if ($action['method'] == 'unsetChild' AND $action->name == $name) {
+					$dom = dom_import_simplexml($action);
+					$dom->parentNode->removeChild($dom);
+				}
+				elseif ($action['method'] == 'insert' AND $action->name == $name) {
+					$dom = dom_import_simplexml($action);
+					$dom->parentNode->removeChild($dom);
+				}
+			}
+		}
 		
 		return $this;
 	}

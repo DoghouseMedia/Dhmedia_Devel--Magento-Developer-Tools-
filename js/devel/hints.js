@@ -56,6 +56,7 @@ DevelHintContainer.prototype =
 		var hintsOptions = [
 			{className: 'DevelHintTemplate', title: "Template (.phtml)", description: "Change the HTML Code of the template."},
 			{className: 'DevelHintLayout', title: "Layout (xml)", description: "Understand what xml code is responsible for this block."},
+			{className: 'DevelHintWizardMove', title: "Move block", description: "Smart Wizard - Move this block to a different region"},
 			{className: 'DevelHintWizardRemove', title: "Remove block", description: "Smart Wizard - Remove this block from the layout"},
 			{className: 'DevelHintClass', title: "Class info", description: "View class methods"},
 			{className: 'DevelHintDocs', title: "Class documentation", description: "View official class documentation"},
@@ -322,6 +323,44 @@ DevelHintWizardRemove.prototype = Object.extend(new DevelHint(),
 			.open(url);
 		
 		console.log('HINT REMOVE WIZ', this.getData());
+		
+		Event.stop(e);
+	}
+});
+
+/**
+ * DevelHintWizardMove
+ */
+var DevelHintWizardMove = Class.create();
+DevelHintWizardMove.prototype = Object.extend(new DevelHint(),
+{
+	click: function(e)
+	{
+		var handles = [];
+		var references = [];
+		this.getData().xmlLayout.each(function(layout){
+			handles.push(layout.handle);
+			layout.references.each(function(reference){
+				references.push(reference);
+			});
+		});
+		this.getData().wizardMove.params.handles_used = handles.uniq();
+		this.getData().wizardMove.params.references = references.uniq();
+		this.getData().wizardMove.params.handles = this.getData().handles;
+		this.getData().wizardMove.params.regions = this.getData().regions;
+		
+		console.log(this.getData().wizardMove.params);
+		
+		var url = this.getData().wizardMove.url + '?';
+		for(var key in this.getData().wizardMove.params) {
+			var val = this.getData().wizardMove.params[key];
+			url += key + '=' + encodeURIComponent(val) + '&';
+		};
+		
+		DevelGlobals.PanelManager.create('Browser', this.getData().wizardMove.title)
+			.open(url);
+		
+		console.log('HINT MOVE WIZ', this.getData());
 		
 		Event.stop(e);
 	}
