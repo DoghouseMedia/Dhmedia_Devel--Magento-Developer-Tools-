@@ -25,6 +25,9 @@
 	-o-transition: all 0.7s ease-in-out;
 	transition: all 0.7s ease-in-out;
 }
+#dhmedia_devel_block_panels:hover {
+	opacity: 1;
+}
 #dhmedia_devel_block_panels.resizing{
 	-webkit-transition: none;
 	-moz-transition: none;

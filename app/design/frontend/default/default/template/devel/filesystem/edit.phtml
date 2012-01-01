@@ -1,7 +1,35 @@
 <style>
-.CodeMirror { height: auto; clear:both; }
-.toolbar{ padding: 1ex; background-color: #eee; line-height: normal; border-bottom: 1px solid #ccc; }
-.toolbar span { margin: 0 1ex 0 0; }
+
+.CodeMirror {
+	height: auto;
+	clear:both; 
+}
+
+#code-form { 
+	background-color: #f7f7f7; 
+	line-height: normal; 
+	border-top: 1px solid #ccc;
+	display: block;
+}
+
+#code-form .toolbar {
+	padding: 1ex;
+	overflow: auto;
+	border-bottom: 1px solid #ccc;
+}
+
+#code-form table.info {
+	margin: 1em;
+}
+
+.prerequisite {
+	display: block;
+	margin: 0 0 1em 0;
+	padding: 1em;
+	border: 1px solid #ccc;
+	background-color: #f0f0f0;
+}
+
 </style>
 
 <h1><?php echo $this->getFile()->getShortPath() ?></h1>
@@ -16,24 +44,49 @@
 
 <?php if ($this->getFile()->exists()) : ?>
 	<?php if (! $this->getFile()->isThemeFile()) : ?>
-	<form action="<?php echo Mage::getUrl('*/*/copy') ?>" method="post">
+	<form action="<?php echo Mage::getUrl('*/*/copy') ?>" method="post" class="prerequisite">
 		<input type="hidden" name="type" value="<?php echo $this->getFile()->getType() ?>" />
 		<input type="hidden" name="<?php echo $this->getFile()->getType() ?>" value="<?php echo $this->getFile()->getShortPath() ?>" />
 		<input type="hidden" name="destination" value="<?php echo $this->getFile()->getThemePath() ?>" />
-		<div class="toolbar">
-			<span><input type="submit" value="Copy to theme" /></span>
-			<span><?php echo $this->getFile()->getThemePath() ?></span>
+		<div class="">
+			<div><input type="submit" value="Copy template to your theme" /></div>
+			<div><em>Destination:</em> <?php echo $this->getFile()->getThemePath() ?></div>
 		</div>
 	</form>
 	<?php endif ?>
 	
 	<form id="code-form" method="POST">
+		<table class="info">
+			<tr>
+				<th>Path</th>
+				<td><?php echo $this->getFile()->getPath() ?></td>
+			</tr>
+			<tr>
+				<th>Uid</th>
+				<td><?php echo $this->getFile()->getUid() ?></td>
+			</tr>
+			<tr>
+				<th>Mode</th>
+				<td><?php echo $this->getFile()->getMode() ?></td>
+			</tr>
+			<tr>
+				<th>Status</th>
+				<td>
+					<?php if ($this->getFile()->isEditable()) : ?>
+					<span class="writable">writable</span>
+					<?php else : ?>
+					<span class="read-only">read only</span>
+					<?php endif ?>
+				</td>
+			</tr>
+		</table>
+			
 		<div class="toolbar">
-			<?php if ($this->getFile()->isEditable()) : ?>
-			<span><input type="submit" value="Save" /></span>
-			<?php endif ?>
-			<span><em><?php echo $this->getFile()->getPath() ?></em></span>
-			<span>(uid: <?php echo $this->getFile()->getUid() ?> - mode: <?php echo $this->getFile()->getMode() ?>)</span>
+			<div class="tools">
+				<?php if ($this->getFile()->isEditable()) : ?>
+				<input class="submit" type="submit" value="Save" />
+				<?php endif ?>
+			</div>
 		</div>
 		
 		<textarea id="code" name="code"><?php echo $this->getFile()->getContents() ?></textarea>
